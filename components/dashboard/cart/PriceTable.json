@@ -1,0 +1,712 @@
+{
+    "materails": [
+        {
+            "materialName": "MossGreenSolid",
+            "materialStructure": {
+                "name": "MossGreenSolid",
+                "material": "/Script/Engine.MaterialInstanceConstant'/Game/Assets/WallLibrary/Marble/MaterialInstance/MI_Marble_MossGreenSolid.MI_Marble_MossGreenSolid'",
+                "materialIcon": "/Script/Engine.Texture2D'/Game/Assets/WallLibrary/Marble/icon/T_Marble_MossGreenSolid_icon.T_Marble_MossGreenSolid_icon'",
+                "price": 7800
+            },
+            "materialImplants": {
+                "SM_Floor": {
+                    "actor": "None",
+                    "implantName": "SM_Floor",
+                    "materialName": "MossGreenSolid",
+                    "areaSize": 65.014795759528084,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Floor_Wood.MI_Floor_Wood'"
+                    ]
+                }
+            },
+            "materialAreaSize": 65.014795759528084,
+            "singlePrice": 7800
+        },
+        {
+            "materialName": "Cement E",
+            "materialStructure": {
+                "name": "Cement E",
+                "material": "/Script/Engine.MaterialInstanceConstant'/Game/Assets/WallLibrary/Concrete/MaterialInstance/MI_Concrete_Cement_E.MI_Concrete_Cement_E'",
+                "materialIcon": "/Script/Engine.Texture2D'/Game/Assets/WallLibrary/Concrete/icon/T_Concrete_Cement_E_icon.T_Concrete_Cement_E_icon'",
+                "price": 2400
+            },
+            "materialImplants": {
+                "SM_Room_Walls_7": {
+                    "actor": "None",
+                    "implantName": "SM_Room_Walls_7",
+                    "materialName": "Cement E",
+                    "areaSize": 3.4512541159877945,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_WallsBlack_9": {
+                    "actor": "None",
+                    "implantName": "SM_Room_WallsBlack_9",
+                    "materialName": "Cement E",
+                    "areaSize": 7.6783661725824484,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_Walls_3": {
+                    "actor": "None",
+                    "implantName": "SM_Room_Walls_3",
+                    "materialName": "Cement E",
+                    "areaSize": 3.9420010372758827,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_WallsBlack_18": {
+                    "actor": "None",
+                    "implantName": "SM_Room_WallsBlack_18",
+                    "materialName": "Cement E",
+                    "areaSize": 14.280638161322061,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_WallsBlack_15": {
+                    "actor": "None",
+                    "implantName": "SM_Room_WallsBlack_15",
+                    "materialName": "Cement E",
+                    "areaSize": 14.579450470714248,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_OutWall_008": {
+                    "actor": "None",
+                    "implantName": "SM_Room_OutWall_008",
+                    "materialName": "Cement E",
+                    "areaSize": 21.558144749455028,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_WallsBlack_6": {
+                    "actor": "None",
+                    "implantName": "SM_Room_WallsBlack_6",
+                    "materialName": "Cement E",
+                    "areaSize": 6.723000546603763,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_Walls_4": {
+                    "actor": "None",
+                    "implantName": "SM_Room_Walls_4",
+                    "materialName": "Cement E",
+                    "areaSize": 3.4528364454419949,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                }
+            },
+            "materialAreaSize": 75.665691699383203,
+            "singlePrice": 2400
+        }
+    ],
+    "models": [
+        {
+            "modelName": "Cabinet H",
+            "modelStructure": {
+                "name": "Cabinet H",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Cabinet/Actor/BP_Cabinet_H.BP_Cabinet_H_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Cabinet/icon/T_Cabinet_H_icon.T_Cabinet_H_icon'",
+                "price": 1300
+            },
+            "modelImplants": {
+                "38E65CA44713D402FA4566B637F701B3": {
+                    "actor": "None",
+                    "implantName": "38E65CA44713D402FA4566B637F701B3",
+                    "modelName": "Cabinet H",
+                    "transform": {
+                        "rotation": {
+                            "x": 6.7637779986990973e-6,
+                            "y": 0.00010522377205487529,
+                            "z": -0.72088713010210859,
+                            "w": 0.6930524760329152
+                        },
+                        "translation": {
+                            "x": 57.911426058570051,
+                            "y": 223.48705185000355,
+                            "z": 0.15037526288103464
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 1300
+        },
+        {
+            "modelName": "LedLight",
+            "modelStructure": {
+                "name": "LedLight",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_LedLight.BP_LedLight_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Light/icon/T_LedLight_icon.T_LedLight_icon'",
+                "price": 1500
+            },
+            "modelImplants": {
+                "0B9D3D0D40DA4DBAD11EACB646120B28": {
+                    "actor": "None",
+                    "implantName": "0B9D3D0D40DA4DBAD11EACB646120B28",
+                    "modelName": "LedLight",
+                    "transform": {
+                        "rotation": {
+                            "x": 8.6601590167929574e-5,
+                            "y": -2.6935516693956635e-5,
+                            "z": 0.70490693582252117,
+                            "w": 0.70929979811356647
+                        },
+                        "translation": {
+                            "x": -75.483942936591433,
+                            "y": -327.57830083838013,
+                            "z": 272.75947896439544
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 1500
+        },
+        {
+            "modelName": "SquareLamp",
+            "modelStructure": {
+                "name": "SquareLamp",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_SquareLamp.BP_SquareLamp_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Light/icon/T_SquareLamp_icon.T_SquareLamp_icon'",
+                "price": 2500
+            },
+            "modelImplants": {
+                "EDD0BC3C423F10E27B3AD5B31BD5B433": {
+                    "actor": "None",
+                    "implantName": "EDD0BC3C423F10E27B3AD5B31BD5B433",
+                    "modelName": "SquareLamp",
+                    "transform": {
+                        "rotation": {
+                            "x": -1.126312962106812e-5,
+                            "y": 5.0353173652686202e-5,
+                            "z": -6.2562185039035762e-7,
+                            "w": 0.99999999866865408
+                        },
+                        "translation": {
+                            "x": -60.24318709600243,
+                            "y": -227.3010738816146,
+                            "z": 269.63385974967036
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 2500
+        },
+        {
+            "modelName": "KeepsTable",
+            "modelStructure": {
+                "name": "KeepsTable",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Table/Actor/BP_KeepsTable.BP_KeepsTable_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Table/icon/T_KeepsTable_icon.T_KeepsTable_icon'",
+                "price": 3500
+            },
+            "modelImplants": {
+                "3601D0B544757A10D2CD05B86B0951E2": {
+                    "actor": "None",
+                    "implantName": "3601D0B544757A10D2CD05B86B0951E2",
+                    "modelName": "KeepsTable",
+                    "transform": {
+                        "rotation": {
+                            "x": 9.7853072948880592e-5,
+                            "y": -3.3257187021393452e-5,
+                            "z": 0.7321771946727319,
+                            "w": 0.68111419374426774
+                        },
+                        "translation": {
+                            "x": -81.018406120030022,
+                            "y": -315.99419830381777,
+                            "z": 0.1565693039636642
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 3500
+        },
+        {
+            "modelName": "Washer B",
+            "modelStructure": {
+                "name": "Washer B",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Electric/Actor/BP_washer_B.BP_washer_B_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Electric/icon/T_washer_B_icon.T_washer_B_icon'",
+                "price": 28800
+            },
+            "modelImplants": {
+                "04894E864760B7066A5560B4246FDA06": {
+                    "actor": "None",
+                    "implantName": "04894E864760B7066A5560B4246FDA06",
+                    "modelName": "Washer B",
+                    "transform": {
+                        "rotation": {
+                            "x": -6.0679304926096977e-6,
+                            "y": -3.8903903806384543e-7,
+                            "z": 0.99928905570139404,
+                            "w": 0.037701234972408029
+                        },
+                        "translation": {
+                            "x": 101.30571536826764,
+                            "y": -57.052021585722251,
+                            "z": 0.0082651121554704332
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 28800
+        },
+        {
+            "modelName": "DiningChair",
+            "modelStructure": {
+                "name": "DiningChair",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Chair/Actor/BP_DiningChair.BP_DiningChair_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Chair/icon/T_DiningChair_icon.T_DiningChair_icon'",
+                "price": 2700
+            },
+            "modelImplants": {
+                "DAB96FE2424951FCB99E3294773750B7": {
+                    "actor": "None",
+                    "implantName": "DAB96FE2424951FCB99E3294773750B7",
+                    "modelName": "DiningChair",
+                    "transform": {
+                        "rotation": {
+                            "x": -4.1487655548437532e-5,
+                            "y": 0.00011001041926994485,
+                            "z": 1.3165990731005605e-6,
+                            "w": 0.99999999308737408
+                        },
+                        "translation": {
+                            "x": 82.765629174416546,
+                            "y": -124.85542788878084,
+                            "z": -2.4858641049307266
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 2700
+        },
+        {
+            "modelName": "Plant G",
+            "modelStructure": {
+                "name": "Plant G",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Plant/Actor/BP_Plant_G.BP_Plant_G_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Plant/icon/T_Plant_G_icon.T_Plant_G_icon'",
+                "price": 200
+            },
+            "modelImplants": {
+                "91D71BB140BCD46F23C417BB6942D3FD": {
+                    "actor": "None",
+                    "implantName": "91D71BB140BCD46F23C417BB6942D3FD",
+                    "modelName": "Plant G",
+                    "transform": {
+                        "rotation": {
+                            "x": -1.3497678707999795e-7,
+                            "y": -4.3148869366202452e-8,
+                            "z": -3.0613809938716122e-6,
+                            "w": 0.99999999999530387
+                        },
+                        "translation": {
+                            "x": -120.86953572659145,
+                            "y": -299.60302155750753,
+                            "z": 84.276129171749602
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 200
+        },
+        {
+            "modelName": "Plant M",
+            "modelStructure": {
+                "name": "Plant M",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Plant/Actor/BP_Plant_M.BP_Plant_M_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Plant/icon/T_Plant_M_icon.T_Plant_M_icon'",
+                "price": 1100
+            },
+            "modelImplants": {
+                "C1DBDB7F4E512D212C3C5CB6DC685E8C": {
+                    "actor": "None",
+                    "implantName": "C1DBDB7F4E512D212C3C5CB6DC685E8C",
+                    "modelName": "Plant M",
+                    "transform": {
+                        "rotation": {
+                            "x": 6.0850856116594414e-5,
+                            "y": -1.2565857988373369e-5,
+                            "z": 1.7563681430822909e-5,
+                            "w": 0.99999999791539462
+                        },
+                        "translation": {
+                            "x": 63.599624548967128,
+                            "y": 218.99751505413121,
+                            "z": 67.579918078113408
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 1100
+        },
+        {
+            "modelName": "Bookcase A",
+            "modelStructure": {
+                "name": "Bookcase A",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Cabinet/Actor/BP_Bookcase_A.BP_Bookcase_A_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Cabinet/icon/T_Bookcase_A_icon.T_Bookcase_A_icon'",
+                "price": 3800
+            },
+            "modelImplants": {
+                "A05774F147DBDF3E6C1E2C9772479CAC": {
+                    "actor": "None",
+                    "implantName": "A05774F147DBDF3E6C1E2C9772479CAC",
+                    "modelName": "Bookcase A",
+                    "transform": {
+                        "rotation": {
+                            "x": 0.00020907877286162574,
+                            "y": 0.00043095965123508844,
+                            "z": -0.74221926243878267,
+                            "w": 0.67015694954590665
+                        },
+                        "translation": {
+                            "x": -175.78553712332842,
+                            "y": 257.8538747822688,
+                            "z": 0.77016998603228615
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                },
+                "2D4E61BF4E4DB66BA7072ABA3E59BB6F": {
+                    "actor": "None",
+                    "implantName": "2D4E61BF4E4DB66BA7072ABA3E59BB6F",
+                    "modelName": "Bookcase A",
+                    "transform": {
+                        "rotation": {
+                            "x": 2.0952350878256878e-5,
+                            "y": 7.0941108821271869e-5,
+                            "z": -0.73532424506235994,
+                            "w": 0.67771546326746035
+                        },
+                        "translation": {
+                            "x": -99.115608964963855,
+                            "y": 258.59952083514679,
+                            "z": 0.26943027251643059
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 2,
+            "singlePrice": 3800
+        },
+        {
+            "modelName": "Lamp C",
+            "modelStructure": {
+                "name": "Lamp C",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_Lamp_C.BP_Lamp_C_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Light/icon/T_Lamp_C_icon.T_Lamp_C_icon'",
+                "price": 2000
+            },
+            "modelImplants": {
+                "1897641942E70E1734DD82918158F4B0": {
+                    "actor": "None",
+                    "implantName": "1897641942E70E1734DD82918158F4B0",
+                    "modelName": "Lamp C",
+                    "transform": {
+                        "rotation": { "x": 0, "y": -0, "z": 0, "w": 1 },
+                        "translation": { "x": 0, "y": 0, "z": 0 },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 2000
+        },
+        {
+            "modelName": "CorridorLight C",
+            "modelStructure": {
+                "name": "CorridorLight C",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_CorridorLight_C.BP_CorridorLight_C_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Light/icon/T_CorridorLight_C_icon.T_CorridorLight_C_icon'",
+                "price": 1000
+            },
+            "modelImplants": {
+                "51DCD1294CE83B0052C20A8B6479D89B": {
+                    "actor": "None",
+                    "implantName": "51DCD1294CE83B0052C20A8B6479D89B",
+                    "modelName": "CorridorLight C",
+                    "transform": {
+                        "rotation": { "x": 0, "y": -0, "z": 0, "w": 1 },
+                        "translation": { "x": 0, "y": 0, "z": 0 },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 1000
+        },
+        {
+            "modelName": "CorridorLight B",
+            "modelStructure": {
+                "name": "CorridorLight B",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_CorridorLight_B.BP_CorridorLight_B_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Light/icon/T_CorridorLight_B_icon.T_CorridorLight_B_icon'",
+                "price": 1700
+            },
+            "modelImplants": {
+                "3D081C6F46C65FC93EAFFCACA30A78E5": {
+                    "actor": "None",
+                    "implantName": "3D081C6F46C65FC93EAFFCACA30A78E5",
+                    "modelName": "CorridorLight B",
+                    "transform": {
+                        "rotation": { "x": 0, "y": -0, "z": 0, "w": 1 },
+                        "translation": {
+                            "x": -93.917856604740081,
+                            "y": 37.017994785291265,
+                            "z": 270.00002017347401
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 1700
+        },
+        {
+            "modelName": "Lamp B",
+            "modelStructure": {
+                "name": "Lamp B",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_Lamp_B.BP_Lamp_B_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Light/icon/T_Lamp_B_icon.T_Lamp_B_icon'",
+                "price": 2000
+            },
+            "modelImplants": {
+                "703470124422B92EEDBA24AD576F4379": {
+                    "actor": "None",
+                    "implantName": "703470124422B92EEDBA24AD576F4379",
+                    "modelName": "Lamp B",
+                    "transform": {
+                        "rotation": { "x": 0, "y": -0, "z": 0, "w": 1 },
+                        "translation": {
+                            "x": -107.86818775575188,
+                            "y": 220.30600477142039,
+                            "z": -0.44953049904705722
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 2000
+        },
+        {
+            "modelName": "BookCase C",
+            "modelStructure": {
+                "name": "BookCase C",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Cabinet/Actor/BP_BookCase_C.BP_BookCase_C_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Cabinet/icon/T_BookCase_C_icon.T_BookCase_C_icon'",
+                "price": 3800
+            },
+            "modelImplants": {
+                "738AC2C24F1845A378E3C3BB3954379F": {
+                    "actor": "None",
+                    "implantName": "738AC2C24F1845A378E3C3BB3954379F",
+                    "modelName": "BookCase C",
+                    "transform": {
+                        "rotation": {
+                            "x": -0.00020113051428908741,
+                            "y": -0.0006614634622448864,
+                            "z": 0.69448636442829814,
+                            "w": 0.71950553273464768
+                        },
+                        "translation": {
+                            "x": -493.75309798700954,
+                            "y": -158.275501326891,
+                            "z": 0.00051139300455815828
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 3800
+        },
+        {
+            "modelName": "Lamp A",
+            "modelStructure": {
+                "name": "Lamp A",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_Lamp_A.BP_Lamp_A_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Light/icon/T_Lamp_A_icon.T_Lamp_A_icon'",
+                "price": 1500
+            },
+            "modelImplants": {
+                "EA8E26144187AC92B4C96C9F9FECA31A": {
+                    "actor": "None",
+                    "implantName": "EA8E26144187AC92B4C96C9F9FECA31A",
+                    "modelName": "Lamp A",
+                    "transform": {
+                        "rotation": {
+                            "x": -3.8909791290628741e-5,
+                            "y": 2.0501018278246354e-5,
+                            "z": -3.3549147214070808e-6,
+                            "w": 0.99999999902724024
+                        },
+                        "translation": {
+                            "x": 7.9573455952313843,
+                            "y": 81.976082125624075,
+                            "z": 269.80032300290566
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 1500
+        },
+        {
+            "modelName": "Bowl",
+            "modelStructure": {
+                "name": "Bowl",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Decorate/Actor/BP_Bowl.BP_Bowl_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Decorate/icon/T_Bowl_icon.T_Bowl_icon'",
+                "price": 500
+            },
+            "modelImplants": {
+                "E692CA0E4270F707A178729D9742FB7B": {
+                    "actor": "None",
+                    "implantName": "E692CA0E4270F707A178729D9742FB7B",
+                    "modelName": "Bowl",
+                    "transform": {
+                        "rotation": {
+                            "x": -1.2906977989528321e-5,
+                            "y": -7.9456983560497437e-7,
+                            "z": 0.00042993922818146825,
+                            "w": 0.99999990749251488
+                        },
+                        "translation": {
+                            "x": 102.50805820146873,
+                            "y": -58.104827454148094,
+                            "z": 84.536863356730478
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 500
+        },
+        {
+            "modelName": "Clock A",
+            "modelStructure": {
+                "name": "Clock A",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Decorate/Actor/BP_Clock_A.BP_Clock_A_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Decorate/icon/T_Clock_A_icon.T_Clock_A_icon'",
+                "price": 200
+            },
+            "modelImplants": {
+                "C5AEF6404F3B5AC181D5A1B930C0FDCB": {
+                    "actor": "None",
+                    "implantName": "C5AEF6404F3B5AC181D5A1B930C0FDCB",
+                    "modelName": "Clock A",
+                    "transform": {
+                        "rotation": {
+                            "x": -1.6076777112051223e-5,
+                            "y": -1.5961993427798105e-5,
+                            "z": -0.70551154490651324,
+                            "w": 0.70869842633547364
+                        },
+                        "translation": {
+                            "x": -19.286569354210702,
+                            "y": 262.53119553157165,
+                            "z": 217.3672872249939
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 200
+        },
+        {
+            "modelName": "Puppet",
+            "modelStructure": {
+                "name": "Puppet",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Decorate/Actor/BP_Puppet.BP_Puppet_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Decorate/icon/T_Puppet_icon.T_Puppet_icon'",
+                "price": 250
+            },
+            "modelImplants": {
+                "FD32DCEC4891D69294E0D28DD5D7796A": {
+                    "actor": "None",
+                    "implantName": "FD32DCEC4891D69294E0D28DD5D7796A",
+                    "modelName": "Puppet",
+                    "transform": {
+                        "rotation": {
+                            "x": 3.7973880886444229e-5,
+                            "y": -2.1715053447679775e-5,
+                            "z": 0.93960320018848131,
+                            "w": 0.34226572174555453
+                        },
+                        "translation": {
+                            "x": -69.571052025302407,
+                            "y": -299.40062189252927,
+                            "z": 76.141562237435778
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 250
+        },
+        {
+            "modelName": "WallLamp",
+            "modelStructure": {
+                "name": "WallLamp",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_WallLamp.BP_WallLamp_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Light/icon/T_WallLamp_icon.T_WallLamp_icon'",
+                "price": 500
+            },
+            "modelImplants": {
+                "39729F8C4F5DD95BBF2BD2913ECDA875": {
+                    "actor": "None",
+                    "implantName": "39729F8C4F5DD95BBF2BD2913ECDA875",
+                    "modelName": "WallLamp",
+                    "transform": {
+                        "rotation": {
+                            "x": -0.00040011529088017242,
+                            "y": -0.00053179786822281654,
+                            "z": -0.6679323771589124,
+                            "w": 0.74422167170919284
+                        },
+                        "translation": {
+                            "x": -586.17637217081813,
+                            "y": 255.64892931799835,
+                            "z": 164.75119112603409
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 500
+        }
+    ]
+}
