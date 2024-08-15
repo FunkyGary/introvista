@@ -40,9 +40,22 @@ export function MainNav(): React.JSX.Element {
                         direction="row"
                         spacing={1}
                     >
-                        <IconButton>
-                            <CrownSimpleIcon />
-                        </IconButton>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                border: "1px solid #9900FF",
+                                borderRadius: "30px",
+                                paddingRight: "10px",
+                            }}
+                        >
+                            <IconButton>
+                                <CrownSimpleIcon color="#9900FF" />
+                            </IconButton>
+                            <Typography color="#9900FF" variant="h6">
+                                Premiere
+                            </Typography>
+                        </Box>
                         <Typography
                             color="var(--mui-palette-neutral-950)"
                             variant="h6"

@@ -204,7 +204,7 @@ export function Cart({ sx }: CartProps): React.JSX.Element {
                 </Box>
                 <Divider
                     sx={{
-                        borderColor: "var(--mui-palette-neutral-200)",
+                        borderColor: "var(--mui-palette-neutral-300)",
                         paddingTop: "20px",
                     }}
                 />
@@ -217,9 +217,9 @@ export function Cart({ sx }: CartProps): React.JSX.Element {
                 >
                     <Typography
                         color="var(--mui-palette-neutral-950)"
-                        variant="h5"
+                        variant="h6"
                     >
-                        總價： {Math.floor(calculateTotalSum(mockData))}
+                        總價： {Math.floor(calculateTotalSum(mockData))} NTD
                     </Typography>
                 </Stack>
             </CardContent>
