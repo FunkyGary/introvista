@@ -40,17 +40,15 @@ export function SideNav(): React.JSX.Element {
                     "var(--mui-palette-neutral-600)",
                 bgcolor: "var(--SideNav-background)",
                 color: "var(--SideNav-color)",
-                display: { xs: "none", lg: "flex" },
+                display: "flex",
                 flexDirection: "column",
                 height: "100%",
                 left: 0,
                 maxWidth: "100%",
                 position: "fixed",
-                scrollbarWidth: "none",
                 top: 0,
                 width: "var(--SideNav-width)",
                 zIndex: "var(--SideNav-zIndex)",
-                "&::-webkit-scrollbar": { display: "none" },
             }}
         >
             <Stack sx={{ p: 3 }}>
@@ -96,8 +94,27 @@ function renderNavItems({
     pathname: string;
 }): React.JSX.Element {
     const children = items.reduce(
-        (acc: React.ReactNode[], curr: NavItemConfig): React.ReactNode[] => {
+        (
+            acc: React.ReactNode[],
+            curr: NavItemConfig,
+            index: number
+        ): React.ReactNode[] => {
             const { key, ...item } = curr;
+            if (index === 0 || index === 3 || index === 7) {
+                acc.push(
+                    <Box
+                        sx={{
+                            display: "flex",
+                        }}
+                    >
+                        <Typography color="white" variant="body2">
+                            {index === 0 && "購買清單"}
+                            {index === 3 && "廠商後台"}
+                            {index === 7 && "系統設定"}
+                        </Typography>
+                    </Box>
+                );
+            }
 
             acc.push(<NavItem key={key} pathname={pathname} {...item} />);
 
@@ -195,7 +212,7 @@ function NavItem({
                 </Box>
                 <Box sx={{ flex: "1 1 auto" }}>
                     <Typography
-                        component="span"
+                        variant="h4"
                         sx={{
                             color: "inherit",
                             fontSize: "0.875rem",

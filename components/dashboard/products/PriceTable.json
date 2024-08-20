@@ -1,0 +1,148 @@
+{
+    "materails": [
+        {
+            "materialName": "MossGreenSolid",
+            "materialStructure": {
+                "name": "MossGreenSolid",
+                "material": "/Script/Engine.MaterialInstanceConstant'/Game/Assets/WallLibrary/Marble/MaterialInstance/MI_Marble_MossGreenSolid.MI_Marble_MossGreenSolid'",
+                "materialIcon": "/Script/Engine.Texture2D'/Game/Assets/WallLibrary/Marble/icon/T_Marble_MossGreenSolid_icon.T_Marble_MossGreenSolid_icon'",
+                "price": 7800
+            },
+            "materialImplants": {
+                "SM_Floor": {
+                    "actor": "None",
+                    "implantName": "SM_Floor",
+                    "materialName": "MossGreenSolid",
+                    "areaSize": 65.014795759528084,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Floor_Wood.MI_Floor_Wood'"
+                    ]
+                }
+            },
+            "materialAreaSize": 65.014795759528084,
+            "singlePrice": 7800
+        },
+        {
+            "materialName": "Cement E",
+            "materialStructure": {
+                "name": "Cement E",
+                "material": "/Script/Engine.MaterialInstanceConstant'/Game/Assets/WallLibrary/Concrete/MaterialInstance/MI_Concrete_Cement_E.MI_Concrete_Cement_E'",
+                "materialIcon": "/Script/Engine.Texture2D'/Game/Assets/WallLibrary/Concrete/icon/T_Concrete_Cement_E_icon.T_Concrete_Cement_E_icon'",
+                "price": 2400
+            },
+            "materialImplants": {
+                "SM_Room_Walls_7": {
+                    "actor": "None",
+                    "implantName": "SM_Room_Walls_7",
+                    "materialName": "Cement E",
+                    "areaSize": 3.4512541159877945,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_WallsBlack_9": {
+                    "actor": "None",
+                    "implantName": "SM_Room_WallsBlack_9",
+                    "materialName": "Cement E",
+                    "areaSize": 7.6783661725824484,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_Walls_3": {
+                    "actor": "None",
+                    "implantName": "SM_Room_Walls_3",
+                    "materialName": "Cement E",
+                    "areaSize": 3.9420010372758827,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_WallsBlack_18": {
+                    "actor": "None",
+                    "implantName": "SM_Room_WallsBlack_18",
+                    "materialName": "Cement E",
+                    "areaSize": 14.280638161322061,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_WallsBlack_15": {
+                    "actor": "None",
+                    "implantName": "SM_Room_WallsBlack_15",
+                    "materialName": "Cement E",
+                    "areaSize": 14.579450470714248,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_OutWall_008": {
+                    "actor": "None",
+                    "implantName": "SM_Room_OutWall_008",
+                    "materialName": "Cement E",
+                    "areaSize": 21.558144749455028,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_WallsBlack_6": {
+                    "actor": "None",
+                    "implantName": "SM_Room_WallsBlack_6",
+                    "materialName": "Cement E",
+                    "areaSize": 6.723000546603763,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                },
+                "SM_Room_Walls_4": {
+                    "actor": "None",
+                    "implantName": "SM_Room_Walls_4",
+                    "materialName": "Cement E",
+                    "areaSize": 3.4528364454419949,
+                    "originalMaterial": [
+                        "/Script/Engine.MaterialInstanceConstant'/Game/Maps/SmallRoomAssets/Materials/InstanceMaterial/MI_Wall_White.MI_Wall_White'"
+                    ]
+                }
+            },
+            "materialAreaSize": 75.665691699383203,
+            "singlePrice": 2400
+        }
+    ],
+    "models": [
+        {
+            "modelName": "Cabinet H",
+            "modelStructure": {
+                "name": "Cabinet H",
+                "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Cabinet/Actor/BP_Cabinet_H.BP_Cabinet_H_C'",
+                "modelIcon": "/Script/Engine.Texture2D'/Game/Assets/Cabinet/icon/T_Cabinet_H_icon.T_Cabinet_H_icon'",
+                "price": 1300
+            },
+            "modelImplants": {
+                "38E65CA44713D402FA4566B637F701B3": {
+                    "actor": "None",
+                    "implantName": "38E65CA44713D402FA4566B637F701B3",
+                    "modelName": "Cabinet H",
+                    "transform": {
+                        "rotation": {
+                            "x": 6.7637779986990973e-6,
+                            "y": 0.00010522377205487529,
+                            "z": -0.72088713010210859,
+                            "w": 0.6930524760329152
+                        },
+                        "translation": {
+                            "x": 57.911426058570051,
+                            "y": 223.48705185000355,
+                            "z": 0.15037526288103464
+                        },
+                        "scale3D": { "x": 1, "y": 1, "z": 1 }
+                    }
+                }
+            },
+            "number": 1,
+            "singlePrice": 1300,
+            "note": "尚無內文描述",
+            "sold": 100,
+            "id": "CJ-100"
+        }
+    ]
+}
