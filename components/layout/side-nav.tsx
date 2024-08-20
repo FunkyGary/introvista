@@ -40,17 +40,15 @@ export function SideNav(): React.JSX.Element {
                     "var(--mui-palette-neutral-600)",
                 bgcolor: "var(--SideNav-background)",
                 color: "var(--SideNav-color)",
-                display: { xs: "none", lg: "flex" },
+                display: "flex",
                 flexDirection: "column",
                 height: "100%",
                 left: 0,
                 maxWidth: "100%",
                 position: "fixed",
-                scrollbarWidth: "none",
                 top: 0,
                 width: "var(--SideNav-width)",
                 zIndex: "var(--SideNav-zIndex)",
-                "&::-webkit-scrollbar": { display: "none" },
             }}
         >
             <Stack sx={{ p: 3 }}>

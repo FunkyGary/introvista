@@ -12,6 +12,8 @@ export const paths = {
         product: "/admin/product",
         integrations: "/dashboard/integrations",
         settings: "/dashboard/settings",
+        orders: "/dashboard/orders",
+        reviews: "/dashboard/reviews",
     },
     errors: { notFound: "/errors/not-found" },
 } as const;

@@ -17,7 +17,7 @@ export const navItems = [
     {
         key: "vendor",
         title: "評價",
-        href: paths.dashboard.products,
+        href: paths.dashboard.reviews,
         icon: "users",
     },
     {
@@ -30,12 +30,12 @@ export const navItems = [
         key: "products",
         title: "產品列表",
         href: paths.dashboard.products,
-        icon: "plugs-connected",
+        icon: "bagSimple",
     },
     {
         key: "orders",
         title: "訂單",
-        href: paths.dashboard.products,
+        href: paths.dashboard.orders,
         icon: "plugs-connected",
     },
     {
