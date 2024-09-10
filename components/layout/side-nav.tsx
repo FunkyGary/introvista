@@ -9,31 +9,39 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { SignOut as SignOutIcon } from "@phosphor-icons/react/dist/ssr/SignOut";
+import { grey } from "@mui/material/colors";
 
 import type { NavItemConfig } from "@/types/nav";
 import { paths } from "@/paths";
 import { isNavItemActive } from "@/lib/is-nav-item-active";
 import { Logo } from "@/components/core/logo";
-
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { navItems } from "./config";
 import { navIcons } from "./nav-icons";
 
 export function SideNav(): React.JSX.Element {
     const pathname = usePathname();
+    const [age, setAge] = React.useState("10");
 
+    const handleChange = (event: SelectChangeEvent) => {
+        setAge(event.target.value as string);
+    };
     return (
         <Box
             sx={{
-                "--SideNav-background": "var(--mui-palette-neutral-950)",
+                "--SideNav-background": "#E3C9FF",
                 "--SideNav-color": "var(--mui-palette-common-white)",
-                "--NavItem-color": "var(--mui-palette-neutral-300)",
+                "--NavItem-color": grey[800],
                 "--NavItem-hover-background": "rgba(255, 255, 255, 0.04)",
                 "--NavItem-active-background":
                     "var(--mui-palette-primary-main)",
                 "--NavItem-active-color":
                     "var(--mui-palette-primary-contrastText)",
                 "--NavItem-disabled-color": "var(--mui-palette-neutral-500)",
-                "--NavItem-icon-color": "var(--mui-palette-neutral-400)",
+                "--NavItem-icon-color": grey[800],
                 "--NavItem-icon-active-color":
                     "var(--mui-palette-primary-contrastText)",
                 "--NavItem-icon-disabled-color":
@@ -51,11 +59,14 @@ export function SideNav(): React.JSX.Element {
                 zIndex: "var(--SideNav-zIndex)",
             }}
         >
-            <Stack sx={{ p: 3 }}>
+            <Stack sx={{ p: 1.6, background: "white" }}>
                 <Box
                     component={RouterLink}
                     href={paths.home}
-                    sx={{ display: "flex", alignItems: "center" }}
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                    }}
                 >
                     <Logo color="light" height={32} width={62} />
                     <Typography color="#9900FF" variant="h4">
@@ -66,8 +77,23 @@ export function SideNav(): React.JSX.Element {
             <Box component="nav" sx={{ flex: "1 1 auto", p: "12px" }}>
                 {renderNavItems({ pathname, items: navItems })}
             </Box>
-            <Divider sx={{ borderColor: "var(--mui-palette-neutral-700)" }} />
-            <Stack spacing={2} sx={{ p: "12px" }}>
+            <Stack sx={{ px: "15px", py: "20px" }}>
+                <FormControl fullWidth>
+                    <InputLabel id="lang-select-label">語言</InputLabel>
+                    <Select
+                        labelId="lang-select-label"
+                        value={age}
+                        label="語言"
+                        size="small"
+                        onChange={handleChange}
+                    >
+                        <MenuItem value={10}>中文</MenuItem>
+                        <MenuItem value={20}>English</MenuItem>
+                    </Select>
+                </FormControl>
+            </Stack>
+            <Divider sx={{ borderColor: grey[200] }} />
+            <Stack spacing={2} sx={{ px: "15px", py: "20px" }}>
                 <Button
                     component="a"
                     startIcon={
@@ -75,9 +101,9 @@ export function SideNav(): React.JSX.Element {
                     }
                     fullWidth
                     href="https://material-kit-pro-react.devias.io/"
-                    sx={{ mt: 2 }}
                     target="_blank"
                     variant="outlined"
+                    color="info"
                 >
                     登出
                 </Button>
@@ -107,7 +133,7 @@ function renderNavItems({
                             display: "flex",
                         }}
                     >
-                        <Typography color="white" variant="body2">
+                        <Typography sx={{ color: grey[700] }} variant="body2">
                             {index === 0 && "購買清單"}
                             {index === 3 && "廠商後台"}
                             {index === 7 && "系統設定"}
@@ -175,7 +201,7 @@ function NavItem({
                     display: "flex",
                     flex: "0 0 auto",
                     gap: 1,
-                    p: "6px 16px",
+                    p: "8px 16px",
                     position: "relative",
                     textDecoration: "none",
                     whiteSpace: "nowrap",
@@ -212,10 +238,9 @@ function NavItem({
                 </Box>
                 <Box sx={{ flex: "1 1 auto" }}>
                     <Typography
-                        variant="h4"
+                        variant="body1"
                         sx={{
                             color: "inherit",
-                            fontSize: "0.875rem",
                             fontWeight: 500,
                             lineHeight: "28px",
                         }}

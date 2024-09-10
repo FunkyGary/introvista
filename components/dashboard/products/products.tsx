@@ -24,7 +24,7 @@ import { MagnifyingGlass as MagnifyingGlassIcon } from "@phosphor-icons/react/di
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
+import { grey } from "@mui/material/colors";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 function noop(): void {
@@ -85,7 +85,7 @@ export function Products({
     };
 
     return (
-        <Card>
+        <Card sx={{ maxWidth: "1000px", width: "100%" }}>
             <Box
                 sx={{
                     borderBottom: 1,
@@ -167,8 +167,20 @@ export function Products({
                             <MenuItem value={3}>桌子</MenuItem>
                         </Select>
                         <Box>
-                            <Button variant="contained" sx={{ width: "70px" }}>
+                            <Button
+                                variant="outlined"
+                                sx={{ width: "70px", marginRight: "10px" }}
+                            >
                                 搜尋
+                            </Button>
+                        </Box>
+                        <Box>
+                            <Button
+                                variant="outlined"
+                                color="info"
+                                sx={{ width: "70px" }}
+                            >
+                                重設
                             </Button>
                         </Box>
                     </Box>

@@ -1,15 +1,10 @@
 "use client";
 
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
-import Tooltip from "@mui/material/Tooltip";
-import { Bell as BellIcon } from "@phosphor-icons/react/dist/ssr/Bell";
 import { CrownSimple as CrownSimpleIcon } from "@phosphor-icons/react/dist/ssr/CrownSimple";
-import { MagnifyingGlass as MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr/MagnifyingGlass";
 import Typography from "@mui/material/Typography";
 
 export function MainNav(): React.JSX.Element {
@@ -38,7 +33,7 @@ export function MainNav(): React.JSX.Element {
                     <Stack
                         sx={{ alignItems: "center" }}
                         direction="row"
-                        spacing={1}
+                        spacing={2}
                     >
                         <Box
                             sx={{
@@ -52,13 +47,13 @@ export function MainNav(): React.JSX.Element {
                             <IconButton>
                                 <CrownSimpleIcon color="#9900FF" />
                             </IconButton>
-                            <Typography color="#9900FF" variant="h6">
+                            <Typography color="#9900FF" variant="body1">
                                 Premiere
                             </Typography>
                         </Box>
                         <Typography
                             color="var(--mui-palette-neutral-950)"
-                            variant="h6"
+                            variant="body1"
                         >
                             54656406_Penny
                         </Typography>
