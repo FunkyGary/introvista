@@ -8,7 +8,6 @@ import GlobalStyles from "@mui/material/GlobalStyles";
 
 import { MainNav } from "@/components/layout/main-nav";
 import { SideNav } from "@/components/layout/side-nav";
-import { ThemeProvider } from "@/components/core/theme-provider/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 

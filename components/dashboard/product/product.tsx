@@ -7,12 +7,12 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import { ModelForm } from "./modelForm";
 import { MaterialForm } from "./materialForm";
+import { useForm, FormProvider } from "react-hook-form";
 
 import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Unstable_Grid2";
 
@@ -33,53 +33,58 @@ const modelCategories = [
 
 export function Product(): React.JSX.Element {
     const [category, setCategory] = React.useState("furnitureModel");
+    const methods = useForm(); // Initialize react-hook-form
+
+    const onSubmit = (data: any) => {
+        console.log(data);
+    };
     return (
-        <form
-            onSubmit={(event) => {
-                event.preventDefault();
-            }}
-        >
-            <Card>
-                <CardContent>
-                    <Grid container spacing={3}>
-                        <Grid md={6} xs={12}>
-                            <FormControl fullWidth>
-                                <InputLabel>新增品類</InputLabel>
-                                <Select
-                                    label="新增品類"
-                                    name="category"
-                                    variant="outlined"
-                                    value={category}
-                                    onChange={(e) =>
-                                        setCategory(e.target.value)
-                                    }
-                                >
-                                    {categories.map((option) => (
-                                        <MenuItem
-                                            key={option.value}
-                                            value={option.value}
-                                        >
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+        <FormProvider {...methods}>
+            <form onSubmit={methods.handleSubmit(onSubmit)}>
+                <Card>
+                    <CardContent>
+                        <Grid container spacing={3}>
+                            <Grid md={6} xs={12}>
+                                <FormControl fullWidth>
+                                    <InputLabel>新增品類</InputLabel>
+                                    <Select
+                                        label="新增品類"
+                                        name="category"
+                                        variant="outlined"
+                                        value={category}
+                                        onChange={(e) =>
+                                            setCategory(e.target.value)
+                                        }
+                                    >
+                                        {categories.map((option) => (
+                                            <MenuItem
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </CardContent>
-                <Divider />
-                <CardContent>
-                    {category === "furnitureModel" ? (
-                        <ModelForm />
-                    ) : (
-                        <MaterialForm />
-                    )}
-                </CardContent>
-                <Divider />
-                <CardActions sx={{ justifyContent: "flex-end" }}>
-                    <Button variant="contained">新增</Button>
-                </CardActions>
-            </Card>
-        </form>
+                    </CardContent>
+                    <Divider />
+                    <CardContent>
+                        {category === "furnitureModel" ? (
+                            <ModelForm />
+                        ) : (
+                            <MaterialForm />
+                        )}
+                    </CardContent>
+                    <Divider />
+                    <CardActions sx={{ justifyContent: "flex-end" }}>
+                        <Button variant="contained" type="submit">
+                            新增
+                        </Button>
+                    </CardActions>
+                </Card>
+            </form>
+        </FormProvider>
     );
 }
