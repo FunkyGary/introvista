@@ -44,7 +44,7 @@ function ImageUpload({ name }: { name: string }): React.JSX.Element {
                             </Button>
                             <Grid container spacing={2} sx={{ marginTop: 2 }}>
                                 {imageList.map((image, index) => (
-                                    <Grid item key={index} xs={4}>
+                                    <Grid key={index} xs={4}>
                                         <Box
                                             sx={{
                                                 position: "relative",
