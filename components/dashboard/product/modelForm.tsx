@@ -86,16 +86,12 @@ export function ModelForm(): React.JSX.Element {
                 </FormControl>
             </Grid>
             <Grid md={6} xs={12}>
-                <FormControl fullWidth>
-                    <Typography variant="body2">GLB路徑</Typography>
-                    <ImageUpload name="fileGLB" />
-                </FormControl>
+                <Typography variant="h6">fileGLB</Typography>
+                <ImageUpload name="fileGLB" />
             </Grid>
             <Grid md={6} xs={12}>
-                <FormControl fullWidth required>
-                    <Typography variant="body2">ModelFileUSD</Typography>
-                    <ImageUpload name="ModelFileUSD" />
-                </FormControl>
+                <Typography variant="h6">ModelFileUSD</Typography>
+                <ImageUpload name="ModelFileUSD" />
             </Grid>
             <Grid md={6} xs={12}>
                 <FormControl fullWidth required>

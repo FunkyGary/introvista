@@ -47,27 +47,27 @@ export function MaterialForm(): React.JSX.Element {
             </Grid>
             <Grid md={6} xs={12}>
                 <FormControl fullWidth>
-                    <Typography variant="body2">normalMap</Typography>
+                    <Typography variant="h6">normalMap</Typography>
                     <ImageUpload name="normalMap" />
                 </FormControl>
             </Grid>
             <Grid md={6} xs={12}>
                 <FormControl fullWidth>
-                    <Typography variant="body2">roughnessMap</Typography>
+                    <Typography variant="h6">roughnessMap</Typography>
                     <ImageUpload name="roughnessMap" />
                 </FormControl>
             </Grid>
             <Grid md={6} xs={12}>
                 <FormControl fullWidth>
                     <FormControl fullWidth>
-                        <Typography variant="body2">metallicMap</Typography>
+                        <Typography variant="h6">metallicMap</Typography>
                         <ImageUpload name="metallicMap" />
                     </FormControl>
                 </FormControl>
             </Grid>
             <Grid md={6} xs={12}>
                 <FormControl fullWidth>
-                    <Typography variant="body2">ambientOcclusionMap</Typography>
+                    <Typography variant="h6">ambientOcclusionMap</Typography>
                     <ImageUpload name="ambientOcclusionMap" />
                 </FormControl>
             </Grid>

@@ -2,9 +2,10 @@ import * as React from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import ImageUploading from "react-images-uploading";
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Unstable_Grid2";
+import Image from "next/image";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { Image as ImageIcon } from "@phosphor-icons/react/dist/ssr/Image";
 
 function ImageUpload({ name }: { name: string }): React.JSX.Element {
     const { control, setValue } = useFormContext(); // Access the form context provided by the parent
@@ -31,66 +32,48 @@ function ImageUpload({ name }: { name: string }): React.JSX.Element {
                         isDragging,
                         dragProps,
                     }) => (
-                        <Box>
-                            <Button
-                                variant="contained"
-                                style={
-                                    isDragging ? { color: "red" } : undefined
-                                }
-                                onClick={onImageUpload}
-                                {...dragProps}
-                            >
-                                上傳圖片
-                            </Button>
-                            <Grid container spacing={2} sx={{ marginTop: 2 }}>
-                                {imageList.map((image, index) => (
-                                    <Grid key={index} xs={4}>
-                                        <Box
-                                            sx={{
-                                                position: "relative",
-                                                textAlign: "center",
-                                            }}
-                                        >
-                                            <img
-                                                src={image.data_url}
-                                                alt=""
-                                                style={{
-                                                    width: "100%",
-                                                    height: "auto",
-                                                }}
-                                            />
-                                            <Box
-                                                sx={{
-                                                    position: "absolute",
-                                                    top: 8,
-                                                    right: 8,
-                                                    display: "flex",
-                                                    gap: 1,
-                                                }}
-                                            >
-                                                <Button
-                                                    size="small"
-                                                    variant="contained"
-                                                    onClick={() =>
-                                                        onImageUpdate(index)
-                                                    }
-                                                >
-                                                    Update
-                                                </Button>
-                                                <Button
-                                                    size="small"
-                                                    variant="outlined"
-                                                    onClick={() =>
-                                                        onImageRemove(index)
-                                                    }
-                                                >
-                                                    Remove
-                                                </Button>
-                                            </Box>
-                                        </Box>
-                                    </Grid>
-                                ))}
-                            </Grid>
+                        <Box sx={{ display: "flex" }}>
+                            {imageList.length > 0 ? (
+                                <Image
+                                    src={imageList[0].data_url}
+                                    alt=""
+                                    style={{
+                                        width: "100%",
+                                        height: "auto",
+                                    }}
+                                />
+                            ) : (
+                                <Box
+                                    sx={{
+                                        background: "#D9D9D9",
+                                        width: "120px",
+                                        height: "120px",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        borderRadius: "20px",
+                                    }}
+                                    onClick={onImageUpload}
+                                >
+                                    <ImageIcon size={100} color="white" />
+                                </Box>
+                            )}
+                            <Box>
+                                <Button
+                                    size="small"
+                                    variant="contained"
+                                    onClick={() => onImageUpdate(0)}
+                                >
+                                    更新
+                                </Button>
+                                <Button
+                                    size="small"
+                                    variant="outlined"
+                                    onClick={() => onImageRemove(0)}
+                                >
+                                    刪除
+                                </Button>
+                            </Box>
                         </Box>
                     )}
                 </ImageUploading>
