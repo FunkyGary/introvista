@@ -4,7 +4,6 @@ import ImageUploading from "react-images-uploading";
 import Button from "@mui/material/Button";
 import Image from "next/image";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import { Image as ImageIcon } from "@phosphor-icons/react/dist/ssr/Image";
 
 function ImageUpload({ name }: { name: string }): React.JSX.Element {
@@ -32,39 +31,56 @@ function ImageUpload({ name }: { name: string }): React.JSX.Element {
                         isDragging,
                         dragProps,
                     }) => (
-                        <Box sx={{ display: "flex" }}>
+                        <Box>
                             {imageList.length > 0 ? (
-                                <Image
-                                    src={imageList[0].data_url}
-                                    alt=""
-                                    style={{
-                                        width: "100%",
-                                        height: "auto",
-                                    }}
-                                />
-                            ) : (
                                 <Box
                                     sx={{
-                                        background: "#D9D9D9",
-                                        width: "120px",
-                                        height: "120px",
+                                        border: "1px solid #D9D9D9",
+                                        width: "200px",
+                                        height: "200px",
                                         display: "flex",
                                         justifyContent: "center",
                                         alignItems: "center",
                                         borderRadius: "20px",
                                     }}
-                                    onClick={onImageUpload}
                                 >
-                                    <ImageIcon size={100} color="white" />
+                                    <img
+                                        src={imageList[0].data_url}
+                                        alt=""
+                                        width="200"
+                                        height="200"
+                                    />
+                                </Box>
+                            ) : (
+                                <Box
+                                    sx={{
+                                        background: "#D9D9D9",
+                                        width: "200px",
+                                        height: "200px",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        borderRadius: "20px",
+                                    }}
+                                    // onClick={onImageUpload}
+                                >
+                                    <ImageIcon size={150} color="white" />
                                 </Box>
                             )}
-                            <Box>
+                            <Box
+                                sx={{
+                                    width: "100%",
+                                    textAlign: "center",
+                                    paddingTop: "10px",
+                                }}
+                            >
                                 <Button
                                     size="small"
                                     variant="contained"
                                     onClick={() => onImageUpdate(0)}
+                                    sx={{ marginRight: "10px" }}
                                 >
-                                    更新
+                                    上傳
                                 </Button>
                                 <Button
                                     size="small"

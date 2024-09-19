@@ -14,9 +14,10 @@ export interface Selection<T = string> {
 export function useSelection<T = string>(keys: T[] = []): Selection<T> {
     const [selected, setSelected] = React.useState<Set<T>>(new Set());
 
+    // Use useEffect to clear selected only when keys change
     React.useEffect(() => {
         setSelected(new Set());
-    }, [keys]);
+    }, [keys.length]); // Depend only on keys.length to avoid deep comparison
 
     const handleDeselectAll = React.useCallback(() => {
         setSelected(new Set());

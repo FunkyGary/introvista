@@ -34,50 +34,6 @@ export function MaterialForm(): React.JSX.Element {
                 </FormControl>
             </Grid>
             <Grid md={6} xs={12}>
-                <FormControl fullWidth required>
-                    <InputLabel>BaseColor路徑</InputLabel>
-                    <Controller
-                        name="baseColorMap"
-                        control={control}
-                        render={({ field }) => (
-                            <OutlinedInput {...field} label="BaseColor路徑" />
-                        )}
-                    />
-                </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
-                <FormControl fullWidth>
-                    <Typography variant="h6">normalMap</Typography>
-                    <ImageUpload name="normalMap" />
-                </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
-                <FormControl fullWidth>
-                    <Typography variant="h6">roughnessMap</Typography>
-                    <ImageUpload name="roughnessMap" />
-                </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
-                <FormControl fullWidth>
-                    <FormControl fullWidth>
-                        <Typography variant="h6">metallicMap</Typography>
-                        <ImageUpload name="metallicMap" />
-                    </FormControl>
-                </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
-                <FormControl fullWidth>
-                    <Typography variant="h6">ambientOcclusionMap</Typography>
-                    <ImageUpload name="ambientOcclusionMap" />
-                </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
-                <FormControl fullWidth>
-                    <Typography variant="body2">heightMap</Typography>
-                    <ImageUpload name="heightMap" />
-                </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
                 <FormControl fullWidth>
                     <InputLabel>價格</InputLabel>
                     <Controller

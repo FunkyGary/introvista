@@ -8,10 +8,6 @@ import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Unstable_Grid2";
-import ImageUpload from "./imageUpload";
-import Typography from "@mui/material/Typography";
-import { CloudArrowUp as CloudUploadIcon } from "@phosphor-icons/react/dist/ssr/CloudArrowUp";
-import { styled } from "@mui/material/styles";
 
 const materials = [
     { value: "furnitureModel", label: "木頭" },
@@ -84,14 +80,6 @@ export function ModelForm(): React.JSX.Element {
                         )}
                     />
                 </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
-                <Typography variant="h6">fileGLB</Typography>
-                <ImageUpload name="fileGLB" />
-            </Grid>
-            <Grid md={6} xs={12}>
-                <Typography variant="h6">ModelFileUSD</Typography>
-                <ImageUpload name="ModelFileUSD" />
             </Grid>
             <Grid md={6} xs={12}>
                 <FormControl fullWidth required>
