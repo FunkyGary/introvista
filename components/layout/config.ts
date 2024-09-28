@@ -12,19 +12,19 @@ export const navItems = [
         key: "cart",
         title: "訂單",
         href: paths.dashboard.overview,
-        icon: "shoppingCart",
+        icon: "fileText",
     },
     {
         key: "vendor",
         title: "評價",
         href: paths.dashboard.reviews,
-        icon: "users",
+        icon: "star",
     },
     {
         key: "createProduct",
         title: "產品上架",
         href: paths.dashboard.product,
-        icon: "plugs-connected",
+        icon: "boxArrowUp",
     },
     {
         key: "products",
@@ -36,13 +36,13 @@ export const navItems = [
         key: "orders",
         title: "訂單",
         href: paths.dashboard.orders,
-        icon: "plugs-connected",
+        icon: "fileText",
     },
     {
         key: "review",
         title: "評價",
         href: paths.dashboard.integrations,
-        icon: "plugs-connected",
+        icon: "star",
     },
     {
         key: "settings",
@@ -54,12 +54,12 @@ export const navItems = [
         key: "error",
         title: "系統設定",
         href: paths.errors.notFound,
-        icon: "x-square",
+        icon: "gear-six",
     },
     {
         key: "settings",
         title: "系統訂單",
         href: paths.dashboard.settings,
-        icon: "gear-six",
+        icon: "fileText",
     },
 ] satisfies NavItemConfig[];

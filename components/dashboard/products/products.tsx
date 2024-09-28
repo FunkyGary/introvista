@@ -27,6 +27,22 @@ import MenuItem from "@mui/material/MenuItem";
 import { grey } from "@mui/material/colors";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
+// Types for mock data structure
+interface Model {
+    id: string;
+    modelName: string;
+    number: number;
+    singlePrice: number;
+    sold: number;
+    note: string;
+}
+
+interface MockData {
+    models: Model[];
+}
+
+const mockDataTyped: MockData = mockData as MockData;
+
 function noop(): void {
     // do nothing
 }
@@ -56,10 +72,10 @@ function a11yProps(index: number) {
 }
 
 export function Products({
-    count = 0,
+    count = 5,
     rows = [],
-    page = 0,
-    rowsPerPage = 0,
+    page = 5,
+    rowsPerPage = 5,
 }: CustomersTableProps): React.JSX.Element {
     const rowIds = React.useMemo(() => {
         return rows.map((e) => e.id);
@@ -72,16 +88,16 @@ export function Products({
         (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < rows.length;
     const selectedAll = rows.length > 0 && selected?.size === rows.length;
 
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState<number>(1);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 
-    const [age, setAge] = React.useState("0");
+    const [age, setAge] = React.useState<string>("1");
 
     const handleSelectChange = (event: SelectChangeEvent) => {
-        setAge(event.target.value as string);
+        setAge(event.target.value);
     };
 
     return (
@@ -94,9 +110,9 @@ export function Products({
                 }}
             >
                 <Tabs value={value} onChange={handleChange}>
-                    <Tab label="全部商品" {...a11yProps(0)} />
-                    <Tab label="上架中商品" {...a11yProps(1)} />
-                    <Tab label="未上架商品" {...a11yProps(2)} />
+                    <Tab label="全部商品" {...a11yProps(1)} />
+                    <Tab label="上架中商品" {...a11yProps(2)} />
+                    <Tab label="未上架商品" {...a11yProps(3)} />
                 </Tabs>
             </Box>
             <CardContent>
@@ -142,34 +158,36 @@ export function Products({
                             fullWidth
                             sx={{ maxWidth: "200px", marginRight: "10px" }}
                         >
-                            <MenuItem value={0}>全選</MenuItem>
-                            <MenuItem value={1}>沙發</MenuItem>
-                            <MenuItem value={2}>椅子</MenuItem>
-                            <MenuItem value={3}>桌子</MenuItem>
+                            <MenuItem value="1">全選</MenuItem>
+                            <MenuItem value="2">沙發</MenuItem>
+                            <MenuItem value="3">椅子</MenuItem>
+                            <MenuItem value="4">桌子</MenuItem>
                         </Select>
-                        <InputLabel
-                            sx={{ minWidth: "55px" }}
-                            id="main-category"
-                        >
+                        <InputLabel sx={{ minWidth: "55px" }} id="sub-category">
                             子分類
                         </InputLabel>
                         <Select
-                            labelId="main-category"
+                            labelId="sub-category"
                             value={age}
                             onChange={handleSelectChange}
                             size="small"
                             fullWidth
                             sx={{ maxWidth: "200px", marginRight: "10px" }}
                         >
-                            <MenuItem value={0}>全選</MenuItem>
-                            <MenuItem value={1}>沙發</MenuItem>
-                            <MenuItem value={2}>椅子</MenuItem>
-                            <MenuItem value={3}>桌子</MenuItem>
+                            <MenuItem value="1">全選</MenuItem>
+                            <MenuItem value="2">沙發</MenuItem>
+                            <MenuItem value="3">椅子</MenuItem>
+                            <MenuItem value="4">桌子</MenuItem>
                         </Select>
                         <Box>
                             <Button
                                 variant="outlined"
-                                sx={{ width: "70px", marginRight: "10px" }}
+                                sx={{
+                                    width: "80px",
+                                    marginRight: "5px",
+                                    color: "#9900FF",
+                                    borderColor: "#9900FF",
+                                }}
                             >
                                 搜尋
                             </Button>
@@ -178,7 +196,7 @@ export function Products({
                             <Button
                                 variant="outlined"
                                 color="info"
-                                sx={{ width: "70px" }}
+                                sx={{ width: "80px" }}
                             >
                                 重設
                             </Button>
@@ -194,9 +212,13 @@ export function Products({
                     }}
                 >
                     <Typography variant="body1" gutterBottom>
-                        {mockData.models.length} 件商品
+                        {mockDataTyped.models.length} 件商品
                     </Typography>
-                    <Button variant="outlined" size="small">
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        sx={{ color: "#9900FF", borderColor: "#9900FF" }}
+                    >
                         匯出報表
                     </Button>
                 </Box>
@@ -227,7 +249,7 @@ export function Products({
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {mockData?.models.map((model, index) => {
+                            {mockDataTyped?.models.map((model, index) => {
                                 const isSelected = selected?.has(model.id);
                                 return (
                                     <TableRow hover key={index}>
@@ -236,13 +258,9 @@ export function Products({
                                                 checked={isSelected}
                                                 onChange={(event) => {
                                                     if (event.target.checked) {
-                                                        selectOne(
-                                                            model.modelName
-                                                        );
+                                                        selectOne(model.id);
                                                     } else {
-                                                        deselectOne(
-                                                            model.modelName
-                                                        );
+                                                        deselectOne(model.id);
                                                     }
                                                 }}
                                             />
@@ -262,9 +280,21 @@ export function Products({
                                                 variant="text"
                                                 size="small"
                                             >
-                                                <Button>預覽</Button>
-                                                <Button>編輯</Button>
-                                                <Button>推廣</Button>
+                                                <Button
+                                                    sx={{ color: "#9900FF" }}
+                                                >
+                                                    預覽
+                                                </Button>
+                                                <Button
+                                                    sx={{ color: "#9900FF" }}
+                                                >
+                                                    編輯
+                                                </Button>
+                                                <Button
+                                                    sx={{ color: "#9900FF" }}
+                                                >
+                                                    推廣
+                                                </Button>
                                             </ButtonGroup>
                                         </TableCell>
                                     </TableRow>

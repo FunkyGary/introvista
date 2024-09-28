@@ -7,6 +7,9 @@ import { Users as UsersIcon } from "@phosphor-icons/react/dist/ssr/Users";
 import { XSquare } from "@phosphor-icons/react/dist/ssr/XSquare";
 import { ShoppingCart } from "@phosphor-icons/react/dist/ssr/ShoppingCart";
 import { BagSimple } from "@phosphor-icons/react/dist/ssr/BagSimple";
+import { Files } from "@phosphor-icons/react/dist/ssr/Files";
+import { Star } from "@phosphor-icons/react/dist/ssr/Star";
+import { BoxArrowUp } from "@phosphor-icons/react/dist/ssr/BoxArrowUp";
 
 export const navIcons = {
     "chart-pie": ChartPieIcon,
@@ -17,4 +20,7 @@ export const navIcons = {
     users: UsersIcon,
     shoppingCart: ShoppingCart,
     bagSimple: BagSimple,
+    fileText: Files,
+    star: Star,
+    boxArrowUp: BoxArrowUp,
 } as Record<string, Icon>;
