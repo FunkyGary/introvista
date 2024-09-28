@@ -1,102 +1,132 @@
 "use client";
 
 import type { User } from "@/types/user";
+import FirebaseAuthProvider from "./firebase";
 
 function generateToken(): string {
-    const arr = new Uint8Array(12);
-    window.crypto.getRandomValues(arr);
-    return Array.from(arr, (v) => v.toString(16).padStart(2, "0")).join("");
+  const arr = new Uint8Array(12);
+  window.crypto.getRandomValues(arr);
+  return Array.from(arr, (v) => v.toString(16).padStart(2, "0")).join("");
 }
 
 const user = {
-    id: "USR-000",
-    avatar: "/assets/avatar.png",
-    firstName: "Sofia",
-    lastName: "Rivers",
-    email: "sofia@devias.io",
+  id: "USR-000",
+  avatar: "/assets/avatar.png",
+  firstName: "Sofia",
+  lastName: "Rivers",
+  email: "sofia@devias.io",
 } satisfies User;
 
 export interface SignUpParams {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
 }
 
 export interface SignInWithOAuthParams {
-    provider: "google" | "discord";
+  provider: "google" | "discord";
 }
 
 export interface SignInWithPasswordParams {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
 export interface ResetPasswordParams {
-    email: string;
+  email: string;
+}
+
+export interface UpdatePasswordParams {
+  oldPassword: string;
+  newPassword: string;
 }
 
 class AuthClient {
-    async signUp(_: SignUpParams): Promise<{ error?: string }> {
-        // Make API request
+  async signUp({
+    firstName,
+    lastName,
+    email,
+    password,
+  }: SignUpParams): Promise<{ error?: string }> {
+    // Make API request
+    const firebaseAuth = new FirebaseAuthProvider();
+    const result = await firebaseAuth.signUp({
+      firstName,
+      lastName,
+      email,
+      password,
+    });
 
-        // We do not handle the API, so we'll just generate a token and store it in localStorage.
-        const token = generateToken();
-        localStorage.setItem("custom-auth-token", token);
+    return {
+      error: result.error,
+    };
+  }
 
-        return {};
-    }
+  async signInWithOAuth(_: SignInWithOAuthParams): Promise<{ error?: string }> {
+    return { error: "Social authentication not implemented" };
+  }
 
-    async signInWithOAuth(
-        _: SignInWithOAuthParams
-    ): Promise<{ error?: string }> {
-        return { error: "Social authentication not implemented" };
-    }
+  async signInWithPassword(
+    params: SignInWithPasswordParams
+  ): Promise<{ error?: string }> {
+    const { email, password } = params;
 
-    async signInWithPassword(
-        params: SignInWithPasswordParams
-    ): Promise<{ error?: string }> {
-        const { email, password } = params;
+    // Make API request
+    const firebaseAuth = new FirebaseAuthProvider();
+    const result = await firebaseAuth.signInWithPassword({
+      email,
+      password,
+    });
 
-        // Make API request
+    return {
+      error: result.error,
+    };
+  }
 
-        // We do not handle the API, so we'll check if the credentials match with the hardcoded ones.
-        if (email !== "sofia@devias.io" || password !== "Secret1") {
-            return { error: "Invalid credentials" };
-        }
+  async resetPassword({
+    email,
+  }: ResetPasswordParams): Promise<{ error?: string }> {
+    const firebaseAuth = new FirebaseAuthProvider();
+    const result = await firebaseAuth.resetPassword({ email });
 
-        const token = generateToken();
-        localStorage.setItem("custom-auth-token", token);
+    return {
+      error: result.error,
+    };
+  }
 
-        return {};
-    }
+  async updatePassword({
+    oldPassword,
+    newPassword,
+  }: UpdatePasswordParams): Promise<{ error?: string }> {
+    const firebaseAuth = new FirebaseAuthProvider();
+    const result = await firebaseAuth.updatePassword({
+      oldPassword,
+      newPassword,
+    });
 
-    async resetPassword(_: ResetPasswordParams): Promise<{ error?: string }> {
-        return { error: "Password reset not implemented" };
-    }
+    return {
+      error: result.error,
+    };
+  }
 
-    async updatePassword(_: ResetPasswordParams): Promise<{ error?: string }> {
-        return { error: "Update reset not implemented" };
-    }
+  async getUser(): Promise<{ data?: User | null; error?: string }> {
+    // Make API request
+    const firebaseAuth = new FirebaseAuthProvider();
+    const result = await firebaseAuth.getUser();
+    return {
+      data: result.data,
+      error: result.error,
+    };
+  }
 
-    async getUser(): Promise<{ data?: User | null; error?: string }> {
-        // Make API request
-
-        // We do not handle the API, so just check if we have a token in localStorage.
-        const token = localStorage.getItem("custom-auth-token");
-
-        if (!token) {
-            return { data: null };
-        }
-
-        return { data: user };
-    }
-
-    async signOut(): Promise<{ error?: string }> {
-        localStorage.removeItem("custom-auth-token");
-
-        return {};
-    }
+  async signOut(): Promise<{ error?: string }> {
+    const firebaseAuth = new FirebaseAuthProvider();
+    const result = await firebaseAuth.signOut();
+    return {
+      error: result.error,
+    };
+  }
 }
 
 export const authClient = new AuthClient();
