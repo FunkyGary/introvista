@@ -131,6 +131,7 @@ function renderNavItems({
                         sx={{
                             display: "flex",
                         }}
+                        key={index}
                     >
                         <Typography sx={{ color: grey[700] }} variant="body2">
                             {index === 0 && "購買清單"}
@@ -180,7 +181,6 @@ function NavItem({
         pathname,
     });
     const Icon = icon ? navIcons[icon] : null;
-    console.log(href);
     return (
         <li>
             <Box
