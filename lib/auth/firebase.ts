@@ -17,6 +17,7 @@ import type {
   UpdatePasswordParams,
 } from "./client";
 import type { User } from "@/types/user";
+import { FirebaseError } from "firebase/app";
 
 class FirebaseAuthProvider {
   auth: Auth;
@@ -137,11 +138,37 @@ class FirebaseAuthProvider {
   }
 
   private getErrorMessage(error: unknown): string {
+    if (error instanceof FirebaseError) {
+      return this.formatFirebaseErrorCode(error.code);
+    }
     if (error instanceof Error) {
       return error.message;
     }
 
     return "Something went wrong";
+  }
+
+  private formatFirebaseErrorCode(errorCode: string): string {
+    switch (errorCode) {
+      case 'auth/invalid-credential':
+        return 'Email or password is invalid';
+      case "auth/email-already-in-use":
+        return "Email already in use";
+      case "auth/invalid-email":
+        return "Invalid email";
+      case "auth/operation-not-allowed":
+        return "Operation not allowed";
+      case "auth/weak-password":
+        return "Weak password";
+      case "auth/user-disabled":
+        return "User disabled";
+      case "auth/user-not-found":
+        return "User not found";
+      case "auth/wrong-password":
+        return "Wrong password";
+      default:
+        return "Something went wrong";
+    }
   }
 }
 
