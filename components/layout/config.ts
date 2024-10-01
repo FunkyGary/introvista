@@ -5,7 +5,7 @@ export const navItems = [
     {
         key: "cart",
         title: "購物車",
-        href: paths.dashboard.overview,
+        href: paths.dashboard.cart,
         icon: "shoppingCart",
     },
     {
