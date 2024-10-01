@@ -43,7 +43,7 @@ export const colorSchemes = {
             primary: {
                 ...neonBlue,
                 light: neonBlue[300],
-                main: neonBlue[400],
+                main: "#9900FF",
                 dark: neonBlue[500],
                 contrastText: "var(--mui-palette-common-black)",
             },
@@ -108,7 +108,7 @@ export const colorSchemes = {
             primary: {
                 ...neonBlue,
                 light: neonBlue[400],
-                main: neonBlue[500],
+                main: "#9900FF",
                 dark: neonBlue[600],
                 contrastText: "var(--mui-palette-common-white)",
             },

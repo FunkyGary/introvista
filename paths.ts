@@ -14,6 +14,7 @@ export const paths = {
         settings: "/dashboard/settings",
         orders: "/dashboard/orders",
         reviews: "/dashboard/reviews",
+        cart: "/admin/cart",
     },
     errors: { notFound: "/errors/not-found" },
 } as const;
