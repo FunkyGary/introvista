@@ -14,10 +14,11 @@ export function ModelImage(): React.JSX.Element {
     return (
         <Grid container spacing={3}>
             <Grid
-                md={6}
+                md={3}
                 xs={12}
                 sx={{
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
                 }}
             >
@@ -27,10 +28,11 @@ export function ModelImage(): React.JSX.Element {
                 <ImageUpload name="FileGLB" />
             </Grid>
             <Grid
-                md={6}
+                md={3}
                 xs={12}
                 sx={{
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
                 }}
             >

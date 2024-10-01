@@ -76,7 +76,7 @@ function ImageUpload({ name }: { name: string }): React.JSX.Element {
                             >
                                 <Button
                                     size="small"
-                                    variant="contained"
+                                    variant="outlined"
                                     onClick={() => onImageUpdate(0)}
                                     sx={{ marginRight: "10px" }}
                                 >
@@ -85,6 +85,7 @@ function ImageUpload({ name }: { name: string }): React.JSX.Element {
                                 <Button
                                     size="small"
                                     variant="outlined"
+                                    color="error"
                                     onClick={() => onImageRemove(0)}
                                 >
                                     刪除

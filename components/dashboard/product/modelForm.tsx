@@ -8,6 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Unstable_Grid2";
+import TextField from "@mui/material/TextField";
 
 const materials = [
     { value: "furnitureModel", label: "木頭" },
@@ -65,18 +66,6 @@ export function ModelForm(): React.JSX.Element {
                         control={control}
                         render={({ field }) => (
                             <OutlinedInput {...field} label="品牌名稱" />
-                        )}
-                    />
-                </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
-                <FormControl fullWidth required>
-                    <InputLabel>描述</InputLabel>
-                    <Controller
-                        name="description"
-                        control={control}
-                        render={({ field }) => (
-                            <OutlinedInput {...field} label="描述" />
                         )}
                     />
                 </FormControl>
@@ -146,6 +135,24 @@ export function ModelForm(): React.JSX.Element {
                         control={control}
                         render={({ field }) => (
                             <OutlinedInput {...field} label="價格" />
+                        )}
+                    />
+                </FormControl>
+            </Grid>
+            <Grid xs={12}>
+                <FormControl fullWidth>
+                    <Controller
+                        name="description"
+                        control={control}
+                        render={({ field }) => (
+                            <TextField
+                                required
+                                label="描述"
+                                multiline
+                                maxRows={4}
+                                minRows={2}
+                                {...field}
+                            />
                         )}
                     />
                 </FormControl>
