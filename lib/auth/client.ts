@@ -120,6 +120,11 @@ class AuthClient {
     };
   }
 
+  onUserChange(callback: (user: User | null) => void): void {
+    const firebaseAuth = new FirebaseAuthProvider();
+    firebaseAuth.onUserChange(callback);
+  }
+
   async signOut(): Promise<{ error?: string }> {
     const firebaseAuth = new FirebaseAuthProvider();
     const result = await firebaseAuth.signOut();

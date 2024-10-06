@@ -6,6 +6,8 @@ import {
   sendPasswordResetEmail,
   updateProfile,
   updatePassword,
+  getIdTokenResult,
+  onAuthStateChanged,
   signOut,
   getAuth,
 } from "firebase/auth";
@@ -53,7 +55,8 @@ class FirebaseAuthProvider {
     password,
   }: SignInWithPasswordParams): Promise<{ error?: string }> {
     try {
-      await signInWithEmailAndPassword(this.auth, email, password);
+      const user = await signInWithEmailAndPassword(this.auth, email, password);
+      console.log(user);
     } catch (error) {
       console.error(error);
       return { error: this.getErrorMessage(error) };
@@ -64,7 +67,13 @@ class FirebaseAuthProvider {
 
   async getUser(): Promise<{ data?: User | null; error?: string }> {
     try {
-      const currentFirebaseUser = this.auth.currentUser;
+      const currentFirebaseUser = await new Promise<FirebaseUser | null>(
+        (resolve, reject) => {
+          onAuthStateChanged(this.auth, (user) => {
+            return resolve(user);
+          });
+        }
+      );
       if (!currentFirebaseUser) {
         return { data: null };
       }
@@ -76,6 +85,17 @@ class FirebaseAuthProvider {
       console.error(error);
       return { error: this.getErrorMessage(error) };
     }
+  }
+
+  onUserChange(callback: (user: User | null) => void): void {
+    onAuthStateChanged(this.auth, (user) => {
+      if (!user) {
+        callback(null);
+        return;
+      }
+
+      callback(this.mapFirebaseUserToUser(user));
+    });
   }
 
   async resetPassword({
@@ -150,8 +170,8 @@ class FirebaseAuthProvider {
 
   private formatFirebaseErrorCode(errorCode: string): string {
     switch (errorCode) {
-      case 'auth/invalid-credential':
-        return 'Email or password is invalid';
+      case "auth/invalid-credential":
+        return "Email or password is invalid";
       case "auth/email-already-in-use":
         return "Email already in use";
       case "auth/invalid-email":

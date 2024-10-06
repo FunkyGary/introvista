@@ -8,6 +8,8 @@ import { CrownSimple as CrownSimpleIcon } from "@phosphor-icons/react/dist/ssr/C
 import Typography from "@mui/material/Typography";
 
 export function MainNav(): React.JSX.Element {
+    
+
     return (
         <React.Fragment>
             <Box
