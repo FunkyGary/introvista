@@ -11,7 +11,7 @@ import {
   signOut,
   getAuth,
 } from "firebase/auth";
-import firebaseApp from "../config";
+import firebaseApp from "../firebase-config";
 import type {
   ResetPasswordParams,
   SignInWithPasswordParams,
