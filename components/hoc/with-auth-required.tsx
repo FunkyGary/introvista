@@ -9,7 +9,6 @@ import React from "react";
 export default function withAuthRequired(
   WrappedComponent: React.FC<any> | React.ComponentClass<any, any>,
   options?: {
-    beforeLoginPath?: string;
     afterLoginPath?: string;
   }
 ) {
@@ -23,7 +22,6 @@ export default function withAuthRequired(
     React.useEffect(() => {
       if (!session.isLoading && !session.user) {
         const authGuardRedirectPath = AuthRedirect.formatAuthRedirectPath({
-          beforeLogin: options?.beforeLoginPath,
           afterLogin: options?.afterLoginPath,
         });
 
