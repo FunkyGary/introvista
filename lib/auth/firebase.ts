@@ -55,8 +55,7 @@ class FirebaseAuthProvider {
     password,
   }: SignInWithPasswordParams): Promise<{ error?: string }> {
     try {
-      const user = await signInWithEmailAndPassword(this.auth, email, password);
-      console.log(user);
+      await signInWithEmailAndPassword(this.auth, email, password);
     } catch (error) {
       console.error(error);
       return { error: this.getErrorMessage(error) };
@@ -150,6 +149,7 @@ class FirebaseAuthProvider {
 
     return {
       id: firebaseUser.uid,
+      name: `${firstName} ${lastName}`,
       avatar,
       firstName,
       lastName,
