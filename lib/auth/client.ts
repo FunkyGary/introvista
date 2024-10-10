@@ -2,6 +2,7 @@
 
 import type { User } from "@/types/user";
 import FirebaseAuthProvider from "./firebase";
+import { UserRole } from "@/types/user-role";
 
 function generateToken(): string {
   const arr = new Uint8Array(12);
@@ -114,6 +115,14 @@ class AuthClient {
   async getUser(): Promise<{ data?: User | null; error?: string }> {
     // Make API request
     const result = await this.provider.getUser();
+    return {
+      data: result.data,
+      error: result.error,
+    };
+  }
+
+  async getUserRole(): Promise<{ data?: UserRole | null; error?: string }> {
+    const result = await this.provider.getUserRole();
     return {
       data: result.data,
       error: result.error,

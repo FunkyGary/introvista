@@ -20,6 +20,7 @@ import type {
 } from "./client";
 import type { User } from "@/types/user";
 import { FirebaseError } from "firebase/app";
+import { UserRole } from "@/types/user-role";
 
 class FirebaseAuthProvider {
   auth: Auth;
@@ -79,6 +80,34 @@ class FirebaseAuthProvider {
 
       return {
         data: this.mapFirebaseUserToUser(currentFirebaseUser),
+      };
+    } catch (error) {
+      console.error(error);
+      return { error: this.getErrorMessage(error) };
+    }
+  }
+
+  async getUserRole(): Promise<{ data?: UserRole | null; error?: string }> {
+    try {
+      const currentFirebaseUser = await new Promise<FirebaseUser | null>(
+        (resolve, reject) => {
+          onAuthStateChanged(this.auth, (user) => {
+            return resolve(user);
+          });
+        }
+      );
+      if (!currentFirebaseUser) {
+        return { data: null };
+      }
+
+      const idTokenResult = await currentFirebaseUser.getIdTokenResult();
+      const userRole = {
+        manufacturer: !!idTokenResult.claims.manufacturer,
+        admin: !!idTokenResult.claims.admin,
+      } satisfies UserRole;
+
+      return {
+        data: userRole,
       };
     } catch (error) {
       console.error(error);

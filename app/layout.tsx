@@ -4,6 +4,7 @@ import "./globals.css";
 import * as React from "react";
 import { ThemeProvider } from "@/components/core/theme-provider/theme-provider";
 import { UserProvider } from "@/contexts/user-context";
+import { UserRoleProvider } from "@/contexts/user-role-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
     <html>
       <body>
         <ThemeProvider>
-          <UserProvider>{children}</UserProvider>
+          <UserProvider>
+            <UserRoleProvider>{children}</UserRoleProvider>
+          </UserProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -22,6 +22,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { navItems } from "./config";
 import { navIcons } from "./nav-icons";
 import { authClient } from "@/lib/auth/client";
+import { useUserRole } from "@/hooks/user-user-role";
 
 export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
@@ -36,6 +37,10 @@ export function SideNav(): React.JSX.Element {
     await authClient.signOut();
     router.refresh();
   };
+
+  const sessionRole = useUserRole();
+  // TODO: Implement user role related logic
+  // sessionRole.userRole
 
   return (
     <Box
