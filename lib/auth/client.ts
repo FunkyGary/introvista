@@ -43,6 +43,11 @@ export interface UpdatePasswordParams {
 }
 
 class AuthClient {
+  provider: FirebaseAuthProvider;
+  constructor(provider: FirebaseAuthProvider) {
+    this.provider = provider;
+  }
+
   async signUp({
     firstName,
     lastName,
@@ -50,8 +55,7 @@ class AuthClient {
     password,
   }: SignUpParams): Promise<{ error?: string }> {
     // Make API request
-    const firebaseAuth = new FirebaseAuthProvider();
-    const result = await firebaseAuth.signUp({
+    const result = await this.provider.signUp({
       firstName,
       lastName,
       email,
@@ -73,8 +77,7 @@ class AuthClient {
     const { email, password } = params;
 
     // Make API request
-    const firebaseAuth = new FirebaseAuthProvider();
-    const result = await firebaseAuth.signInWithPassword({
+    const result = await this.provider.signInWithPassword({
       email,
       password,
     });
@@ -87,8 +90,7 @@ class AuthClient {
   async resetPassword({
     email,
   }: ResetPasswordParams): Promise<{ error?: string }> {
-    const firebaseAuth = new FirebaseAuthProvider();
-    const result = await firebaseAuth.resetPassword({ email });
+    const result = await this.provider.resetPassword({ email });
 
     return {
       error: result.error,
@@ -99,8 +101,7 @@ class AuthClient {
     oldPassword,
     newPassword,
   }: UpdatePasswordParams): Promise<{ error?: string }> {
-    const firebaseAuth = new FirebaseAuthProvider();
-    const result = await firebaseAuth.updatePassword({
+    const result = await this.provider.updatePassword({
       oldPassword,
       newPassword,
     });
@@ -112,8 +113,7 @@ class AuthClient {
 
   async getUser(): Promise<{ data?: User | null; error?: string }> {
     // Make API request
-    const firebaseAuth = new FirebaseAuthProvider();
-    const result = await firebaseAuth.getUser();
+    const result = await this.provider.getUser();
     return {
       data: result.data,
       error: result.error,
@@ -121,17 +121,16 @@ class AuthClient {
   }
 
   onUserChange(callback: (user: User | null) => void): void {
-    const firebaseAuth = new FirebaseAuthProvider();
-    firebaseAuth.onUserChange(callback);
+    this.provider.onUserChange(callback);
   }
 
   async signOut(): Promise<{ error?: string }> {
     const firebaseAuth = new FirebaseAuthProvider();
-    const result = await firebaseAuth.signOut();
+    const result = await this.provider.signOut();
     return {
       error: result.error,
     };
   }
 }
 
-export const authClient = new AuthClient();
+export const authClient = new AuthClient(new FirebaseAuthProvider());
