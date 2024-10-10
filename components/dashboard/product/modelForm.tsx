@@ -9,10 +9,14 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Unstable_Grid2";
 import TextField from "@mui/material/TextField";
+import { FileUpload } from "./FileUpload";
+import { MaterialFile } from "./materialFile";
+import { Card, CardContent, Typography } from "@mui/material";
+import { stringValidation, numberValidation } from "./validationRules";
 
 const materials = [
-    { value: "furnitureModel", label: "木頭" },
-    { value: "material", label: "金屬" },
+    { value: "wood", label: "木頭" },
+    { value: "metal", label: "金屬" },
 ] as const;
 
 const modelCategories = [
@@ -31,6 +35,7 @@ export function ModelForm(): React.JSX.Element {
                     <Controller
                         name="modelName"
                         control={control}
+                        rules={stringValidation}
                         render={({ field }) => (
                             <OutlinedInput {...field} label="名稱" />
                         )}
@@ -64,6 +69,7 @@ export function ModelForm(): React.JSX.Element {
                     <Controller
                         name="brand"
                         control={control}
+                        rules={stringValidation}
                         render={({ field }) => (
                             <OutlinedInput {...field} label="品牌名稱" />
                         )}
@@ -76,6 +82,7 @@ export function ModelForm(): React.JSX.Element {
                     <Controller
                         name="dimensions"
                         control={control}
+                        rules={stringValidation}
                         render={({ field }) => (
                             <OutlinedInput {...field} label="尺寸" />
                         )}
@@ -88,8 +95,16 @@ export function ModelForm(): React.JSX.Element {
                     <Controller
                         name="weight"
                         control={control}
+                        rules={numberValidation}
                         render={({ field }) => (
-                            <OutlinedInput {...field} label="重量" />
+                            <OutlinedInput
+                                {...field}
+                                label="重量"
+                                type="number"
+                                onChange={(e) =>
+                                    field.onChange(Number(e.target.value))
+                                }
+                            />
                         )}
                     />
                 </FormControl>
@@ -121,8 +136,16 @@ export function ModelForm(): React.JSX.Element {
                     <Controller
                         name="stockQuantity"
                         control={control}
+                        rules={numberValidation}
                         render={({ field }) => (
-                            <OutlinedInput {...field} label="庫存數量" />
+                            <OutlinedInput
+                                {...field}
+                                label="庫存數量"
+                                type="number"
+                                onChange={(e) =>
+                                    field.onChange(Number(e.target.value))
+                                }
+                            />
                         )}
                     />
                 </FormControl>
@@ -133,8 +156,16 @@ export function ModelForm(): React.JSX.Element {
                     <Controller
                         name="price"
                         control={control}
+                        rules={numberValidation}
                         render={({ field }) => (
-                            <OutlinedInput {...field} label="價格" />
+                            <OutlinedInput
+                                {...field}
+                                label="價格"
+                                type="number"
+                                onChange={(e) =>
+                                    field.onChange(Number(e.target.value))
+                                }
+                            />
                         )}
                     />
                 </FormControl>
@@ -144,6 +175,7 @@ export function ModelForm(): React.JSX.Element {
                     <Controller
                         name="description"
                         control={control}
+                        rules={stringValidation}
                         render={({ field }) => (
                             <TextField
                                 required

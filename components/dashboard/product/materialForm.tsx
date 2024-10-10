@@ -10,6 +10,8 @@ import Select from "@mui/material/Select";
 import Grid from "@mui/material/Unstable_Grid2";
 import ImageUpload from "./imageUpload";
 import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import { stringValidation, numberValidation } from "./validationRules";
 
 const materials = [
     { value: "wood", label: "木頭" },
@@ -26,6 +28,7 @@ export function MaterialForm(): React.JSX.Element {
                     <InputLabel>名稱</InputLabel>
                     <Controller
                         name="materialName"
+                        rules={stringValidation}
                         control={control}
                         render={({ field }) => (
                             <OutlinedInput {...field} label="名稱" />
@@ -38,21 +41,17 @@ export function MaterialForm(): React.JSX.Element {
                     <InputLabel>價格</InputLabel>
                     <Controller
                         name="materialPrice"
+                        rules={numberValidation}
                         control={control}
                         render={({ field }) => (
-                            <OutlinedInput {...field} label="價格" />
-                        )}
-                    />
-                </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
-                <FormControl fullWidth>
-                    <InputLabel>描述</InputLabel>
-                    <Controller
-                        name="materialDescription"
-                        control={control}
-                        render={({ field }) => (
-                            <OutlinedInput {...field} label="描述" />
+                            <OutlinedInput
+                                {...field}
+                                label="價格"
+                                type="number"
+                                onChange={(e) =>
+                                    field.onChange(Number(e.target.value))
+                                }
+                            />
                         )}
                     />
                 </FormControl>
@@ -74,6 +73,25 @@ export function MaterialForm(): React.JSX.Element {
                                     </MenuItem>
                                 ))}
                             </Select>
+                        )}
+                    />
+                </FormControl>
+            </Grid>
+            <Grid md={12}>
+                <FormControl fullWidth>
+                    <Controller
+                        name="materialDescription"
+                        control={control}
+                        rules={stringValidation}
+                        render={({ field }) => (
+                            <TextField
+                                required
+                                label="描述"
+                                multiline
+                                maxRows={4}
+                                minRows={2}
+                                {...field}
+                            />
                         )}
                     />
                 </FormControl>

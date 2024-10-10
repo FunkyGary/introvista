@@ -9,40 +9,78 @@ import CardHeader from "@mui/material/CardHeader";
 import { ModelForm } from "./modelForm";
 import { MaterialForm } from "./materialForm";
 import { useForm, FormProvider } from "react-hook-form";
-import Typography from "@mui/material/Typography";
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Unstable_Grid2";
-import ImageUpload from "./imageUpload";
 import { ModelImage } from "./modelImage";
 import { MaterialImage } from "./materialImage";
+import { MaterialFile } from "./materialFile";
+import { ModalFile } from "./modalFile";
 
 const categories = [
     { value: "furnitureModel", label: "家具" },
     { value: "material", label: "材質" },
 ] as const;
 
-const materials = [
-    { value: "furnitureModel", label: "木頭" },
-    { value: "material", label: "金屬" },
-] as const;
+const fileSchema = z.instanceof(File).nullable().optional();
 
-const modelCategories = [
-    { value: "furnitureModel", label: "家具" },
-    { value: "material", label: "材質" },
-] as const;
+// Define Zod schemas for ModelForm and MaterialForm
+const modelSchema = z.object({
+    modelName: z.string().min(1, "Name is required"),
+    modelCategory: z.string().min(1, "Category is required"),
+    brand: z.string().min(1, "Brand is required"),
+    dimensions: z.string().min(1, "Dimensions are required"),
+    weight: z.number().positive("Weight must be positive"),
+    material: z.string().optional(),
+    stockQuantity: z
+        .number()
+        .int()
+        .nonnegative("Stock quantity must be non-negative"),
+    price: z.number().positive("Price must be positive"),
+    description: z.string().min(1, "Description is required"),
+    modelFile: fileSchema,
+    thumbnailImage: fileSchema,
+});
+
+const materialSchema = z.object({
+    materialName: z.string().min(1, "Name is required"),
+    materialPrice: z.number().positive("Price must be positive"),
+    category: z.string().min(1, "Category is required"),
+    materialDescription: z.string().min(1, "Description is required"),
+    BaseColorMap: fileSchema,
+    NormalMap: fileSchema,
+    RoughnessMap: fileSchema,
+    MetallicMap: fileSchema,
+    AmbientOcclusionMap: fileSchema,
+    HeightMap: fileSchema,
+});
+
+// Create a union type for the form data
+type FormData = z.infer<typeof modelSchema> | z.infer<typeof materialSchema>;
 
 export function Product(): React.JSX.Element {
     const [category, setCategory] = React.useState("furnitureModel");
-    const methods = useForm(); // Initialize react-hook-form
+    const methods = useForm<FormData>({
+        resolver: zodResolver(
+            category === "furnitureModel" ? modelSchema : materialSchema
+        ),
+        mode: "onBlur",
+    });
 
-    const onSubmit = (data: any) => {
-        console.log(data);
+    const onSubmit = (data: FormData) => {
+        console.log("Form submitted with data:", data);
+        // Here you can add your logic to handle the form submission
     };
+
+    React.useEffect(() => {
+        methods.reset(); // Reset form when category changes
+    }, [category, methods]);
+
     return (
         <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -90,6 +128,20 @@ export function Product(): React.JSX.Element {
                                     <ModelImage />
                                 ) : (
                                     <MaterialImage />
+                                )}
+                            </CardContent>
+                            <Divider />
+                        </Card>
+                    </Grid>
+                    <Grid sx={{ width: "100%" }}>
+                        <Card>
+                            <CardHeader title="檔案" />
+                            <Divider />
+                            <CardContent>
+                                {category === "furnitureModel" ? (
+                                    <ModalFile />
+                                ) : (
+                                    <MaterialFile />
                                 )}
                             </CardContent>
                             <Divider />

@@ -2,7 +2,6 @@ import * as React from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import ImageUploading from "react-images-uploading";
 import Button from "@mui/material/Button";
-import Image from "next/image";
 import Box from "@mui/material/Box";
 import { Image as ImageIcon } from "@phosphor-icons/react/dist/ssr/Image";
 
