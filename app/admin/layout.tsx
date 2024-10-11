@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+'use client';
+
 import "@/styles/global.css";
 import * as React from "react";
 import Box from "@mui/material/Box";
@@ -8,15 +8,9 @@ import GlobalStyles from "@mui/material/GlobalStyles";
 
 import { MainNav } from "@/components/layout/main-nav";
 import { SideNav } from "@/components/layout/side-nav";
+import withAuthRequired from "@/components/hoc/with-auth-required";
 
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-    title: "IntroVista",
-    description: "IntroVista",
-};
-
-export default function RootLayout({
+function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
@@ -64,3 +58,5 @@ export default function RootLayout({
         </>
     );
 }
+
+export default withAuthRequired(RootLayout);

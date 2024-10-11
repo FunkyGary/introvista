@@ -29,7 +29,7 @@ export default function withAuthRequired(
       }
     }, [router, session.isLoading, session.user]);
 
-    if (session.isLoading) {
+    if (session.isLoading || !session.user) {
       return (
         <Backdrop open>
           <CircularProgress color="inherit" />

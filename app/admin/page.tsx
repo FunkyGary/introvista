@@ -1,7 +1,10 @@
-'use client';
-
 import { Products } from "@/components/dashboard/products/products";
-import withAuthRequired from "@/components/hoc/with-auth-required";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "IntroVista",
+    description: "IntroVista",
+};
 
 function Page() {
     return (
@@ -11,4 +14,4 @@ function Page() {
     );
 }
 
-export default withAuthRequired(Page);
+export default Page;
