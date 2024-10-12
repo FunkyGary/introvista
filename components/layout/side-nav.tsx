@@ -21,8 +21,8 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { navItems } from "./config";
 import { navIcons } from "./nav-icons";
-import { authClient } from "@/lib/auth/client";
 import { useUserRole } from "@/hooks/user-user-role";
+import { useAuthClient } from "@/hooks/use-auth-client";
 
 export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
@@ -32,6 +32,7 @@ export function SideNav(): React.JSX.Element {
     setAge(event.target.value as string);
   };
 
+  const authClient = useAuthClient();
   const router = useRouter();
   const handleLogout = async () => {
     await authClient.signOut();

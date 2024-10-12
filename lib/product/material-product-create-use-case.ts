@@ -14,7 +14,7 @@ class MaterialProductCreateUseCase {
   ) {}
 
   async execute(data: MaterialProductCreateDto): Promise<{ error?: string }> {
-    const userId = this.authApi.auth.currentUser?.uid;
+    const userId = this.authApi.user?.id;
     if (!userId) {
       return { error: "Not logged in" };
     }

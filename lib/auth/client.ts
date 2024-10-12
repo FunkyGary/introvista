@@ -1,8 +1,9 @@
 "use client";
 
 import type { User } from "@/types/user";
-import FirebaseAuthProvider from "./firebase";
 import { UserRole } from "@/types/user-role";
+import { inject, injectable } from "inversify";
+import AuthApi from "./auth-api";
 
 function generateToken(): string {
   const arr = new Uint8Array(12);
@@ -43,11 +44,9 @@ export interface UpdatePasswordParams {
   newPassword: string;
 }
 
+@injectable()
 class AuthClient {
-  provider: FirebaseAuthProvider;
-  constructor(provider: FirebaseAuthProvider) {
-    this.provider = provider;
-  }
+  constructor(@inject(AuthApi) private authApi: AuthApi) {}
 
   async signUp({
     firstName,
@@ -56,7 +55,7 @@ class AuthClient {
     password,
   }: SignUpParams): Promise<{ error?: string }> {
     // Make API request
-    const result = await this.provider.signUp({
+    const result = await this.authApi.signUp({
       firstName,
       lastName,
       email,
@@ -78,7 +77,7 @@ class AuthClient {
     const { email, password } = params;
 
     // Make API request
-    const result = await this.provider.signInWithPassword({
+    const result = await this.authApi.signInWithPassword({
       email,
       password,
     });
@@ -91,7 +90,7 @@ class AuthClient {
   async resetPassword({
     email,
   }: ResetPasswordParams): Promise<{ error?: string }> {
-    const result = await this.provider.resetPassword({ email });
+    const result = await this.authApi.resetPassword({ email });
 
     return {
       error: result.error,
@@ -102,7 +101,7 @@ class AuthClient {
     oldPassword,
     newPassword,
   }: UpdatePasswordParams): Promise<{ error?: string }> {
-    const result = await this.provider.updatePassword({
+    const result = await this.authApi.updatePassword({
       oldPassword,
       newPassword,
     });
@@ -112,9 +111,17 @@ class AuthClient {
     };
   }
 
+  async updateProfile(data: Partial<User>): Promise<{ error?: string }> {
+    const result = await this.authApi.updateProfile(data);
+
+    return {
+      error: result.error,
+    };
+  }
+
   async getUser(): Promise<{ data?: User | null; error?: string }> {
     // Make API request
-    const result = await this.provider.getUser();
+    const result = await this.authApi.getUser();
     return {
       data: result.data,
       error: result.error,
@@ -122,7 +129,7 @@ class AuthClient {
   }
 
   async getUserRole(): Promise<{ data?: UserRole | null; error?: string }> {
-    const result = await this.provider.getUserRole();
+    const result = await this.authApi.getUserRole();
     return {
       data: result.data,
       error: result.error,
@@ -130,16 +137,15 @@ class AuthClient {
   }
 
   onUserChange(callback: (user: User | null) => void): void {
-    this.provider.onUserChange(callback);
+    this.authApi.onUserChange(callback);
   }
 
   async signOut(): Promise<{ error?: string }> {
-    const firebaseAuth = new FirebaseAuthProvider();
-    const result = await this.provider.signOut();
+    const result = await this.authApi.signOut();
     return {
       error: result.error,
     };
   }
 }
 
-export const authClient = new AuthClient(new FirebaseAuthProvider());
+export default AuthClient;

@@ -25,8 +25,13 @@ import { injectable } from "inversify";
 @injectable()
 class AuthApi {
   auth: Auth;
+  user: User | null;
   constructor() {
     this.auth = getAuth(firebaseApp);
+    this.user = null;
+    this.onUserChange((user) => {
+      this.user = user;
+    });
   }
 
   async signUp({
@@ -64,6 +69,23 @@ class AuthApi {
     }
 
     return {};
+  }
+
+  async updateProfile(data: Partial<User>): Promise<{ error?: string }> {
+    if (!this.auth.currentUser) {
+      return { error: "Not logged in" };
+    }
+
+    try {
+      await updateProfile(this.auth.currentUser, {
+        displayName: data.name,
+        photoURL: data.avatar,
+      });
+      return {};
+    } catch (error) {
+      console.error(error);
+      return { error: this.getErrorMessage(error) };
+    }
   }
 
   async getUser(): Promise<{ data?: User | null; error?: string }> {

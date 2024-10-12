@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import type { UserRole } from "@/types/user-role";
-import { authClient } from "@/lib/auth/client";
+import { useAuthClient } from "@/hooks/use-auth-client";
 
 export interface UserRoleContextValue {
   userRole: UserRole | null;
@@ -33,6 +33,7 @@ export function UserRoleProvider({
     isLoading: true,
   });
 
+  const authClient = useAuthClient();
   const checkSessionRole = React.useCallback(async (): Promise<void> => {
     try {
       const { data, error } = await authClient.getUserRole();

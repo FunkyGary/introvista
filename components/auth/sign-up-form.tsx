@@ -19,7 +19,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z as zod } from "zod";
 
 import { paths } from "@/paths";
-import { authClient } from "@/lib/auth/client";
+import { useAuthClient } from "@/hooks/use-auth-client";
 
 const schema = zod.object({
   firstName: zod.string().min(1, { message: "First name is required" }),
@@ -55,6 +55,7 @@ export function SignUpForm(): React.JSX.Element {
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
+  const authClient = useAuthClient();
   const onSubmit = React.useCallback(
     async (values: Values): Promise<void> => {
       setIsPending(true);
