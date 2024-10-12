@@ -20,7 +20,7 @@ export function MaterialImage(): React.JSX.Element {
                 <Typography variant="h6" sx={{ paddingBottom: "10px" }}>
                     ThumbnailImage
                 </Typography>
-                <ImageUpload name="MaterialThumbnailImage" />
+                <ImageUpload name="thumbnailImages" />
             </Grid>
         </Grid>
     );

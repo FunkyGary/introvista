@@ -9,8 +9,8 @@ export function ModalFile() {
     const { control } = useFormContext();
 
     const fileTypes = [
-        { name: "ModelFileGLB", label: "ModelFileGLB" },
-        { name: "ModelFileUSD", label: "ModelFileUSD" },
+        { name: "modelFileGLB", label: "ModelFileGLB" },
+        { name: "modelFileUSD", label: "ModelFileUSD" },
     ];
 
     return (

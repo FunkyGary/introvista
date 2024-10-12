@@ -20,8 +20,10 @@ import type {
 import type { User } from "@/types/user";
 import { FirebaseError } from "firebase/app";
 import { UserRole } from "@/types/user-role";
+import { injectable } from "inversify";
 
-class FirebaseAuthProvider {
+@injectable()
+class AuthApi {
   auth: Auth;
   constructor() {
     this.auth = getAuth(firebaseApp);
@@ -220,4 +222,4 @@ class FirebaseAuthProvider {
   }
 }
 
-export default FirebaseAuthProvider;
+export default AuthApi;

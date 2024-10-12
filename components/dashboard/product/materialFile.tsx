@@ -9,12 +9,12 @@ export function MaterialFile() {
     const { control } = useFormContext();
 
     const fileTypes = [
-        { name: "BaseColorMap", label: "BaseColorMap" },
-        { name: "NormalMap", label: "Normal Map" },
-        { name: "RoughnessMap", label: "Roughness Map" },
-        { name: "MetallicMap", label: "MetallicMap" },
-        { name: "AmbientOcclusionMap", label: "AmbientOcclusionMap" },
-        { name: "HeightMap", label: "HeightMap" },
+        { name: "baseColorMap", label: "BaseColorMap" },
+        { name: "normalMap", label: "Normal Map" },
+        { name: "roughnessMap", label: "Roughness Map" },
+        { name: "metallicMap", label: "MetallicMap" },
+        { name: "ambientOcclusionMap", label: "AmbientOcclusionMap" },
+        { name: "heightMap", label: "HeightMap" },
     ];
 
     return (

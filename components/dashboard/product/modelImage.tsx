@@ -21,7 +21,7 @@ export function ModelImage(): React.JSX.Element {
                 <Typography variant="h6" sx={{ paddingBottom: "10px" }}>
                     ThumbnailImage
                 </Typography>
-                <ImageUpload name="ModalThumbnailImage" />
+                <ImageUpload name="thumbnailImages" />
             </Grid>
         </Grid>
     );
