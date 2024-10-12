@@ -33,6 +33,8 @@ import MaterialProductCreateUseCase from "@/lib/product/material-product-create-
 import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useProductCreation } from "@/hooks/use-product-creation";
+import { paths } from "@/paths";
+import { enqueueSnackbar } from "notistack";
 
 const categories = [
   { value: "furnitureModel", label: "家具" },
@@ -55,7 +57,10 @@ export function Product(): React.JSX.Element {
     if (error) {
       console.error("Error submitting form:", error);
     } else {
-      router.push("/admin/products");
+      enqueueSnackbar("產品上架成功！", {
+        variant: "success",
+      });
+      router.push(paths.dashboard.products);
     }
   };
 
