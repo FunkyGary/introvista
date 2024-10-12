@@ -4,9 +4,9 @@ export interface FurnitureModel {
   CategoryID: string;
   Brand: string;
   ModelDescription: string;
-  ModelFileGLB: string | null
-  ModelFileUSD: string | null
-  ThumbnailImage: string | null
+  ModelFileGLB: string | null;
+  ModelFileUSD: string | null;
+  ThumbnailImage: string | null;
   Dimensions: string;
   Weight: number;
   MaterialIDs: string | null;
@@ -14,5 +14,6 @@ export interface FurnitureModel {
   StockQuantity: number;
   CreatedDate: Date;
   LastUpdated: Date;
+  PublishedAt: Date | null;
   UserID: string;
 }

@@ -7,7 +7,7 @@ import {
 import AuthApi from "../auth/auth-api";
 
 @injectable()
-class ModelProductCreateUseCase {
+class FurnitureModelProductCreateUseCase {
   constructor(
     @inject(ProductApi) private productApi: ProductApi,
     @inject(AuthApi) private authApi: AuthApi
@@ -28,4 +28,4 @@ class ModelProductCreateUseCase {
   }
 }
 
-export default ModelProductCreateUseCase;
+export default FurnitureModelProductCreateUseCase;

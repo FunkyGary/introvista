@@ -1,12 +1,12 @@
 import MaterialProductCreateUseCase from "@/lib/product/material-product-create-use-case";
-import ModelProductCreateUseCase from "@/lib/product/model-product-create-use-case";
+import FurnitureModelProductCreateUseCase from "@/lib/product/furniture-model-product-create-use-case";
 import { ProductCreateDto } from "@/lib/product/product-create.dto";
 import { useInjection } from "inversify-react";
 import React from "react";
 
 export const useProductCreation = () => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const modelProductCreateUseCase = useInjection(ModelProductCreateUseCase);
+  const furnitureModelProductCreateUseCase = useInjection(FurnitureModelProductCreateUseCase);
   const materialProductCreateUseCase = useInjection(
     MaterialProductCreateUseCase
   );
@@ -18,7 +18,7 @@ export const useProductCreation = () => {
     setIsSubmitting(true);
     try {
       if (category === "furnitureModel") {
-        await modelProductCreateUseCase.execute(data as any);
+        await furnitureModelProductCreateUseCase.execute(data as any);
       } else {
         await materialProductCreateUseCase.execute(data as any);
       }

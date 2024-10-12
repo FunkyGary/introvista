@@ -15,5 +15,6 @@ export interface Material {
   PreviewImage: string | null;
   CreatedDate: Date;
   LastUpdated: Date;
+  PublishedAt: Date | null;
   UserID: string;
 }

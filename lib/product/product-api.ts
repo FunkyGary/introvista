@@ -4,6 +4,7 @@ import {
   collection,
   addDoc,
   serverTimestamp,
+  getDocs,
 } from "firebase/firestore";
 import {
   FirebaseStorage,
@@ -36,13 +37,66 @@ class ProductApi {
     this.storage = getStorage(firebaseApp);
   }
 
-  // async getProducts(): Promise<Product[]> {
-  //   const products = await getDocs(collection(this.db, this.collectionName));
-  //   return products.docs.map((doc) => ({
-  //     id: doc.id,
-  //     ...doc.data(),
-  //   }));
-  // }
+  async getFurnitureModels(): Promise<FurnitureModel[]> {
+    const furnitureModels = await getDocs(
+      collection(this.db, this.furnitureModelCollectionName)
+    );
+    return furnitureModels.docs.map((doc) => {
+      const data = doc.data();
+      const furnitureModel: FurnitureModel = {
+        ModelID: doc.id,
+        ModelName: data.ModelName,
+        CategoryID: data.CategoryID,
+        Brand: data.Brand,
+        ModelDescription: data.ModelDescription,
+        ModelFileGLB: data.ModelFileGLB,
+        ModelFileUSD: data.ModelFileUSD,
+        ThumbnailImage: data.ThumbnailImage,
+        Dimensions: data.Dimensions,
+        Weight: data.Weight,
+        MaterialIDs: data.MaterialIDs,
+        Price: data.Price,
+        StockQuantity: data.StockQuantity,
+        CreatedDate: data.CreatedDate,
+        LastUpdated: data.LastUpdated,
+        PublishedAt: data.PublishedAt,
+        UserID: data.UserID,
+      };
+
+      return furnitureModel;
+    });
+  }
+
+  async getMaterials(): Promise<Material[]> {
+    const materials = await getDocs(
+      collection(this.db, this.materialCollectionName)
+    );
+    return materials.docs.map((doc) => {
+      const data = doc.data();
+      const material: Material = {
+        MaterialID: doc.id,
+        MaterialName: data.MaterialName,
+        BaseColorMap: data.BaseColorMap,
+        NormalMap: data.NormalMap,
+        RoughnessMap: data.RoughnessMap,
+        MetallicMap: data.MetallicMap,
+        AmbientOcclusionMap: data.AmbientOcclusionMap,
+        ThumbnailImage: data.ThumbnailImage,
+        HeightMap: data.HeightMap,
+        MaterialPrice: data.MaterialPrice,
+        CategoryID: data.CategoryID,
+        Brand: data.Brand,
+        MaterialDescription: data.MaterialDescription,
+        PreviewImage: data.PreviewImage,
+        CreatedDate: data.CreatedDate,
+        LastUpdated: data.LastUpdated,
+        PublishedAt: data.PublishedAt,
+        UserID: data.UserID,
+      };
+
+      return material;
+    });
+  }
 
   async createFurnitureModelProduct(
     {
@@ -65,7 +119,7 @@ class ProductApi {
 
       const furnitureModel: Omit<
         FurnitureModel,
-        "ModelID" | "CreatedDate" | "LastUpdated"
+        "ModelID" | "CreatedDate" | "LastUpdated" | "PublishedAt"
       > = {
         ModelName: data.modelName,
         CategoryID: data.modelCategory,
@@ -88,6 +142,7 @@ class ProductApi {
           ...furnitureModel,
           CreatedDate: serverTimestamp(),
           LastUpdated: serverTimestamp(),
+          PublishedAt: null,
         }
       );
       return {
@@ -144,7 +199,7 @@ class ProductApi {
 
       const material: Omit<
         Material,
-        "MaterialID" | "CreatedDate" | "LastUpdated"
+        "MaterialID" | "CreatedDate" | "LastUpdated" | "PublishedAt"
       > = {
         MaterialName: data.materialName,
         BaseColorMap: baseColorMapUrl,
@@ -168,6 +223,7 @@ class ProductApi {
           ...material,
           CreatedDate: serverTimestamp(),
           LastUpdated: serverTimestamp(),
+          PublishedAt: null,
         }
       );
       return {
