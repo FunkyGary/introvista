@@ -3,6 +3,7 @@ import {
   getFirestore,
   collection,
   addDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import {
   FirebaseStorage,
@@ -15,15 +16,18 @@ import firebaseApp from "../firebase/firebase-config";
 import {
   MaterialProductCreateDto,
   ModelProductCreateDto,
-  ProductCreateDto,
 } from "./product-create.dto";
 import { FirebaseError } from "firebase/app";
 import { parseFirestoreErrorCode } from "../firebase/parse-firestore-error-code";
 import { injectable } from "inversify";
+import { FurnitureModel } from "./furniture-model.entity";
+import { Material } from "./material.entity";
 
 @injectable()
 class ProductApi {
-  collectionName = "products";
+  furnitureModelCollectionName = "furnitureModels";
+  materialCollectionName = "materials";
+
   db: Firestore;
   storage: FirebaseStorage;
 
@@ -32,7 +36,15 @@ class ProductApi {
     this.storage = getStorage(firebaseApp);
   }
 
-  async createModelProduct(
+  // async getProducts(): Promise<Product[]> {
+  //   const products = await getDocs(collection(this.db, this.collectionName));
+  //   return products.docs.map((doc) => ({
+  //     id: doc.id,
+  //     ...doc.data(),
+  //   }));
+  // }
+
+  async createFurnitureModelProduct(
     {
       modelFileGLB,
       modelFileUSD,
@@ -42,23 +54,42 @@ class ProductApi {
     userId: string
   ): Promise<{ productId?: string; error?: string }> {
     try {
-      const [modelFileGLBUrl, modelFileUSDUrl, thumbnailImageUrl] =
+      const [thumbnailImageUrl, modelFileGLBUrl, modelFileUSDUrl] =
         await Promise.all([
-          modelFileGLB ? this.uploadProductImage(modelFileGLB) : null,
-          modelFileUSD ? this.uploadProductImage(modelFileUSD) : null,
           thumbnailImages.length > 0
             ? this.uploadProductImage(thumbnailImages[0].file)
             : null,
+          modelFileGLB ? this.uploadProductFile(modelFileGLB) : null,
+          modelFileUSD ? this.uploadProductFile(modelFileUSD) : null,
         ]);
 
-      const docRef = await addDoc(collection(this.db, this.collectionName), {
-        ...data,
-        modelFileGLBUrl,
-        modelFileUSDUrl,
-        thumbnailImageUrl,
-        userId,
-        category: "furnitureModel",
-      });
+      const furnitureModel: Omit<
+        FurnitureModel,
+        "ModelID" | "CreatedDate" | "LastUpdated"
+      > = {
+        ModelName: data.modelName,
+        CategoryID: data.modelCategory,
+        Brand: data.brand,
+        ModelDescription: data.description,
+        ModelFileGLB: modelFileGLBUrl,
+        ModelFileUSD: modelFileUSDUrl,
+        ThumbnailImage: thumbnailImageUrl,
+        Dimensions: data.dimensions,
+        Weight: data.weight,
+        MaterialIDs: data.material,
+        Price: data.price,
+        StockQuantity: data.stockQuantity,
+        UserID: userId,
+      };
+
+      const docRef = await addDoc(
+        collection(this.db, this.furnitureModelCollectionName),
+        {
+          ...furnitureModel,
+          CreatedDate: serverTimestamp(),
+          LastUpdated: serverTimestamp(),
+        }
+      );
       return {
         productId: docRef.id,
       };
@@ -90,39 +121,55 @@ class ProductApi {
   ): Promise<{ productId?: string; error?: string }> {
     try {
       const [
+        thumbnailImageUrl,
         baseColorMapUrl,
         normalMapUrl,
         roughnessMapUrl,
         metallicMapUrl,
         ambientOcclusionMapUrl,
         heightMapUrl,
-        thumbnailImageUrl,
       ] = await Promise.all([
-        baseColorMap ? this.uploadProductImage(baseColorMap) : null,
-        normalMap ? this.uploadProductImage(normalMap) : null,
-        roughnessMap ? this.uploadProductImage(roughnessMap) : null,
-        metallicMap ? this.uploadProductImage(metallicMap) : null,
-        ambientOcclusionMap
-          ? this.uploadProductImage(ambientOcclusionMap)
-          : null,
-        heightMap ? this.uploadProductImage(heightMap) : null,
         thumbnailImages.length > 0
           ? this.uploadProductImage(thumbnailImages[0].file)
           : null,
+        baseColorMap ? this.uploadProductFile(baseColorMap) : null,
+        normalMap ? this.uploadProductFile(normalMap) : null,
+        roughnessMap ? this.uploadProductFile(roughnessMap) : null,
+        metallicMap ? this.uploadProductFile(metallicMap) : null,
+        ambientOcclusionMap
+          ? this.uploadProductFile(ambientOcclusionMap)
+          : null,
+        heightMap ? this.uploadProductFile(heightMap) : null,
       ]);
 
-      const docRef = await addDoc(collection(this.db, this.collectionName), {
-        ...data,
-        baseColorMapUrl,
-        normalMapUrl,
-        roughnessMapUrl,
-        metallicMapUrl,
-        ambientOcclusionMapUrl,
-        heightMapUrl,
-        thumbnailImageUrl,
-        userId,
-        category: "material",
-      });
+      const material: Omit<
+        Material,
+        "MaterialID" | "CreatedDate" | "LastUpdated"
+      > = {
+        MaterialName: data.materialName,
+        BaseColorMap: baseColorMapUrl,
+        NormalMap: normalMapUrl,
+        RoughnessMap: roughnessMapUrl,
+        MetallicMap: metallicMapUrl,
+        AmbientOcclusionMap: ambientOcclusionMapUrl,
+        ThumbnailImage: thumbnailImageUrl,
+        HeightMap: heightMapUrl,
+        MaterialPrice: data.materialPrice,
+        CategoryID: data.category,
+        Brand: null,
+        MaterialDescription: data.materialDescription,
+        PreviewImage: null,
+        UserID: userId,
+      };
+
+      const docRef = await addDoc(
+        collection(this.db, this.materialCollectionName),
+        {
+          ...material,
+          CreatedDate: serverTimestamp(),
+          LastUpdated: serverTimestamp(),
+        }
+      );
       return {
         productId: docRef.id,
       };
@@ -142,6 +189,13 @@ class ProductApi {
   private async uploadProductImage(file: File): Promise<string> {
     const filename = file.name;
     const fileRef = ref(this.storage, `products/images/${filename}`);
+    const snapshot = await uploadBytes(fileRef, file);
+    return getDownloadURL(snapshot.ref);
+  }
+
+  private async uploadProductFile(file: File): Promise<string> {
+    const filename = file.name;
+    const fileRef = ref(this.storage, `products/files/${filename}`);
     const snapshot = await uploadBytes(fileRef, file);
     return getDownloadURL(snapshot.ref);
   }

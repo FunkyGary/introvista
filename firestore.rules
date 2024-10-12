@@ -1,5 +1,13 @@
 service cloud.firestore {
   match /databases/{database}/documents {
+    match /furnitureModels/{furnitureId} {
+      allow update, delete: if request.auth.uid == resource.data.UserID;
+    }
+    
+    match /materials/{furnitureId} {
+      allow update, delete: if request.auth.uid == resource.data.UserID;
+    }
+
     match /{document=**} {
       // Only allow logged in users to read and write
       allow read, write: if request.auth.uid != null;

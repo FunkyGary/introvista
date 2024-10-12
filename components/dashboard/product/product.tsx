@@ -21,15 +21,10 @@ import { MaterialImage } from "./materialImage";
 import { MaterialFile } from "./materialFile";
 import { ModalFile } from "./modalFile";
 import {
-  MaterialProductCreateDto,
   materialProductSchema,
-  ModelProductCreateDto,
   modelProductSchema,
   ProductCreateDto,
 } from "@/lib/product/product-create.dto";
-import { useInjection } from "inversify-react";
-import ModelProductCreateUseCase from "@/lib/product/model-product-create-use-case";
-import MaterialProductCreateUseCase from "@/lib/product/material-product-create-use-case";
 import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useProductCreation } from "@/hooks/use-product-creation";

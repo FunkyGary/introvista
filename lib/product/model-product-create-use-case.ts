@@ -24,7 +24,7 @@ class ModelProductCreateUseCase {
       return { error: result.error.message };
     }
 
-    return this.productApi.createModelProduct(data, userId);
+    return this.productApi.createFurnitureModelProduct(data, userId);
   }
 }
 

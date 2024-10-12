@@ -10,7 +10,7 @@ export const modelProductSchema = z.object({
   brand: z.string().min(1, "Brand is required"),
   dimensions: z.string().min(1, "Dimensions are required"),
   weight: z.number().positive("Weight must be positive"),
-  material: z.string().optional(),
+  material: z.string(),
   stockQuantity: z
     .number()
     .int()
