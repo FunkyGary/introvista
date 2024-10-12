@@ -5,6 +5,7 @@ import {
   addDoc,
   serverTimestamp,
   getDocs,
+  Timestamp,
 } from "firebase/firestore";
 import {
   FirebaseStorage,
@@ -57,9 +58,9 @@ class ProductApi {
         MaterialIDs: data.MaterialIDs,
         Price: data.Price,
         StockQuantity: data.StockQuantity,
-        CreatedDate: data.CreatedDate,
-        LastUpdated: data.LastUpdated,
-        PublishedAt: data.PublishedAt,
+        CreatedDate: (data.CreatedDate as Timestamp).toDate(),
+        LastUpdated: (data.LastUpdated as Timestamp).toDate(),
+        PublishedAt: (data.PublishedAt as Timestamp | null)?.toDate() || null,
         UserID: data.UserID,
       };
 
@@ -88,9 +89,9 @@ class ProductApi {
         Brand: data.Brand,
         MaterialDescription: data.MaterialDescription,
         PreviewImage: data.PreviewImage,
-        CreatedDate: data.CreatedDate,
-        LastUpdated: data.LastUpdated,
-        PublishedAt: data.PublishedAt,
+        CreatedDate: (data.CreatedDate as Timestamp).toDate(),
+        LastUpdated: (data.LastUpdated as Timestamp).toDate(),
+        PublishedAt: (data.PublishedAt as Timestamp | null)?.toDate() || null,
         UserID: data.UserID,
       };
 
