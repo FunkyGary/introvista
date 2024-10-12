@@ -23,7 +23,7 @@ export default function RootLayout({
       <body>
         <DIProvider>
           <ThemeProvider>
-            <SnackbarProvider maxSnack={3}>
+            <SnackbarProvider maxSnack={3} autoHideDuration={2_000}>
               <UserProvider>
                 <UserRoleProvider>{children}</UserRoleProvider>
               </UserProvider>
