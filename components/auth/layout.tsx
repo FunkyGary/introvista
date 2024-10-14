@@ -1,12 +1,10 @@
 "use Client";
 
 import * as React from "react";
-import RouterLink from "next/link";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { paths } from "@/paths";
 import { Logo } from "@/components/core/logo";
 
 export interface LayoutProps {

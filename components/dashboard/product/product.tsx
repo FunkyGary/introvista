@@ -1,13 +1,14 @@
 "use client";
 
 import * as React from "react";
+import { useParams, useRouter } from "next/navigation";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import { ModelForm } from "./modelForm";
-import { MaterialForm } from "./materialForm";
+import { ModelForm } from "./ModelForm";
+import { MaterialForm } from "./MaterialForm";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Divider from "@mui/material/Divider";
@@ -16,132 +17,194 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Unstable_Grid2";
-import { ModelImage } from "./modelImage";
-import { MaterialImage } from "./materialImage";
-import { MaterialFile } from "./materialFile";
-import { ModalFile } from "./modalFile";
+import { ModelImage } from "./ModelImage";
+import { MaterialImage } from "./MaterialImage";
+import { MaterialFile } from "./MaterialFile";
+import { ModelFile } from "./ModelFile";
 import {
-  materialProductSchema,
-  modelProductSchema,
-  ProductCreateDto,
+    materialProductSchema,
+    modelProductSchema,
+    ProductCreateDto,
 } from "@/lib/product/product-create.dto";
 import { CircularProgress } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { useProductCreation } from "@/hooks/use-product-creation";
 import { paths } from "@/paths";
 import { enqueueSnackbar } from "notistack";
 
 const categories = [
-  { value: "furnitureModel", label: "家具" },
-  { value: "material", label: "材質" },
+    { value: "item", label: "物品" },
+    { value: "material", label: "材質" },
 ] as const;
 
-export function Product(): React.JSX.Element {
-  const [category, setCategory] = React.useState("furnitureModel");
-  const methods = useForm<ProductCreateDto>({
-    resolver: zodResolver(
-      category === "furnitureModel" ? modelProductSchema : materialProductSchema
-    ),
-    mode: "onBlur",
-  });
+interface ProductFormProps {
+    initialData?: ProductCreateDto;
+    productId?: string;
+}
 
-  const router = useRouter();
-  const { createProduct, isCreatingProduct } = useProductCreation();
-  const onSubmit = async (data: ProductCreateDto) => {
-    const { error } = await createProduct(category, data);
-    if (error) {
-      console.error("Error submitting form:", error);
-    } else {
-      enqueueSnackbar("產品上架成功！", {
-        variant: "success",
-      });
-      router.push(paths.dashboard.products);
-    }
-  };
+export function Product({
+    initialData,
+    productId,
+}: ProductFormProps): React.JSX.Element {
+    const [category, setCategory] = React.useState(
+        initialData?.category || "item"
+    );
+    const methods = useForm<ProductCreateDto>({
+        resolver: zodResolver(
+            category === "item" ? modelProductSchema : materialProductSchema
+        ),
+        mode: "onBlur",
+        defaultValues: initialData,
+    });
 
-  React.useEffect(() => {
-    methods.reset(); // Reset form when category changes
-  }, [category, methods]);
+    const router = useRouter();
+    const { createProduct, isCreatingProduct } = useProductCreation();
 
-  return (
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <Grid container spacing={4}>
-          <Grid md={4} xs={12}>
-            <FormControl fullWidth>
-              <InputLabel>新增品類</InputLabel>
-              <Select
-                label="新增品類"
-                name="category"
-                variant="outlined"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                {categories.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid sx={{ width: "100%" }}>
-            <Card>
-              <CardHeader title="屬性" />
-              <Divider />
-              <CardContent>
-                {category === "furnitureModel" ? (
-                  <ModelForm />
-                ) : (
-                  <MaterialForm />
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid sx={{ width: "100%" }}>
-            <Card>
-              <CardHeader title="圖片" />
-              <Divider />
-              <CardContent>
-                {category === "furnitureModel" ? (
-                  <ModelImage />
-                ) : (
-                  <MaterialImage />
-                )}
-              </CardContent>
-              <Divider />
-            </Card>
-          </Grid>
-          <Grid sx={{ width: "100%" }}>
-            <Card>
-              <CardHeader title="檔案" />
-              <Divider />
-              <CardContent>
-                {category === "furnitureModel" ? (
-                  <ModalFile />
-                ) : (
-                  <MaterialFile />
-                )}
-              </CardContent>
-              <Divider />
-            </Card>
-          </Grid>
-
-          <Grid sx={{ width: "100%" }}>
-            <CardActions sx={{ justifyContent: "flex-end" }}>
-              <Button
-                variant="contained"
-                type="submit"
-                endIcon={
-                  isCreatingProduct ? <CircularProgress size={20} /> : null
+    const onSubmit = (data: ProductCreateDto) => {
+        if (productId) {
+            // updateProduct(productId, category, data).then(({ error }) => {
+            //     if (error) {
+            //         console.error("Error updating product:", error);
+            //         enqueueSnackbar(error, { variant: "error" });
+            //     } else {
+            //         enqueueSnackbar("產品更新成功！", { variant: "success" });
+            //         router.push(paths.dashboard.products);
+            //     }
+            // });
+        } else {
+            createProduct(category, data).then(({ error }) => {
+                if (error) {
+                    console.error("Error creating product:", error);
+                    enqueueSnackbar(error, { variant: "error" });
+                } else {
+                    enqueueSnackbar("產品上架成功！", { variant: "success" });
+                    router.push(paths.dashboard.products);
                 }
-              >
-                新增
-              </Button>
-            </CardActions>
-          </Grid>
-        </Grid>
-      </form>
-    </FormProvider>
-  );
+            });
+        }
+    };
+
+    const handleDelete = () => {
+        // if (productId) {
+        //     deleteProduct(productId).then(({ error }) => {
+        //         if (error) {
+        //             console.error("Error deleting product:", error);
+        //             enqueueSnackbar(error, { variant: "error" });
+        //         } else {
+        //             enqueueSnackbar("產品刪除成功！", { variant: "success" });
+        //             router.push(paths.dashboard.products);
+        //         }
+        //     });
+        // }
+    };
+
+    React.useEffect(() => {
+        if (initialData) {
+            methods.reset(initialData);
+        }
+    }, [initialData, methods]);
+
+    return (
+        <FormProvider {...methods}>
+            <form onSubmit={methods.handleSubmit(onSubmit)}>
+                <Grid container spacing={4}>
+                    <Grid md={4} xs={12}>
+                        <FormControl fullWidth>
+                            <InputLabel>品類</InputLabel>
+                            <Select
+                                label="品類"
+                                name="category"
+                                variant="outlined"
+                                value={category}
+                                onChange={(e) => {
+                                    setCategory(e.target.value);
+                                    methods.setValue(
+                                        "category",
+                                        e.target.value
+                                    );
+                                }}
+                            >
+                                {categories.map((option) => (
+                                    <MenuItem
+                                        key={option.value}
+                                        value={option.value}
+                                    >
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid sx={{ width: "100%" }}>
+                        <Card>
+                            <CardHeader title="屬性" />
+                            <Divider />
+                            <CardContent>
+                                {category === "item" ? (
+                                    <ModelForm />
+                                ) : (
+                                    <MaterialForm />
+                                )}
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    <Grid sx={{ width: "100%" }}>
+                        <Card>
+                            <CardHeader title="圖片" />
+                            <Divider />
+                            <CardContent>
+                                {category === "item" ? (
+                                    <ModelImage />
+                                ) : (
+                                    <MaterialImage />
+                                )}
+                            </CardContent>
+                            <Divider />
+                        </Card>
+                    </Grid>
+                    <Grid sx={{ width: "100%" }}>
+                        <Card>
+                            <CardHeader title="檔案" />
+                            <Divider />
+                            <CardContent>
+                                {category === "item" ? (
+                                    <ModelFile />
+                                ) : (
+                                    <MaterialFile />
+                                )}
+                            </CardContent>
+                            <Divider />
+                        </Card>
+                    </Grid>
+
+                    <Grid sx={{ width: "100%" }}>
+                        <CardActions sx={{ justifyContent: "flex-end" }}>
+                            {productId && (
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    onClick={handleDelete}
+                                    // disabled={isDeletingProduct}
+                                    sx={{ mr: 2 }}
+                                >
+                                    刪除
+                                </Button>
+                            )}
+                            <Button
+                                variant="contained"
+                                type="submit"
+                                disabled={isCreatingProduct}
+                                endIcon={
+                                    isCreatingProduct ? (
+                                        <CircularProgress size={20} />
+                                    ) : null
+                                }
+                            >
+                                {productId ? "更新" : "新增"}
+                            </Button>
+                        </CardActions>
+                    </Grid>
+                </Grid>
+            </form>
+        </FormProvider>
+    );
 }
