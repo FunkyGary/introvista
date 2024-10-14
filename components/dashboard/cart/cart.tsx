@@ -186,7 +186,9 @@ export function Cart({ sx }: CartProps): React.JSX.Element {
                             {mockData?.models.map((model, index) => {
                                 return (
                                     <TableRow hover key={index}>
-                                        <TableCell>{model.modelName}</TableCell>
+                                        <TableCell>
+                                            {model.furnitureName}
+                                        </TableCell>
                                         <TableCell>
                                             {model.singlePrice}
                                         </TableCell>
