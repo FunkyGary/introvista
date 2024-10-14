@@ -110,7 +110,7 @@
     ],
     "models": [
         {
-            "modelName": "Cabinet H",
+            "furnitureName": "Cabinet H",
             "modelStructure": {
                 "name": "Cabinet H",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Cabinet/Actor/BP_Cabinet_H.BP_Cabinet_H_C'",
@@ -121,7 +121,7 @@
                 "38E65CA44713D402FA4566B637F701B3": {
                     "actor": "None",
                     "implantName": "38E65CA44713D402FA4566B637F701B3",
-                    "modelName": "Cabinet H",
+                    "furnitureName": "Cabinet H",
                     "transform": {
                         "rotation": {
                             "x": 6.7637779986990973e-6,
@@ -142,7 +142,7 @@
             "singlePrice": 1300
         },
         {
-            "modelName": "LedLight",
+            "furnitureName": "LedLight",
             "modelStructure": {
                 "name": "LedLight",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_LedLight.BP_LedLight_C'",
@@ -153,7 +153,7 @@
                 "0B9D3D0D40DA4DBAD11EACB646120B28": {
                     "actor": "None",
                     "implantName": "0B9D3D0D40DA4DBAD11EACB646120B28",
-                    "modelName": "LedLight",
+                    "furnitureName": "LedLight",
                     "transform": {
                         "rotation": {
                             "x": 8.6601590167929574e-5,
@@ -174,7 +174,7 @@
             "singlePrice": 1500
         },
         {
-            "modelName": "SquareLamp",
+            "furnitureName": "SquareLamp",
             "modelStructure": {
                 "name": "SquareLamp",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_SquareLamp.BP_SquareLamp_C'",
@@ -185,7 +185,7 @@
                 "EDD0BC3C423F10E27B3AD5B31BD5B433": {
                     "actor": "None",
                     "implantName": "EDD0BC3C423F10E27B3AD5B31BD5B433",
-                    "modelName": "SquareLamp",
+                    "furnitureName": "SquareLamp",
                     "transform": {
                         "rotation": {
                             "x": -1.126312962106812e-5,
@@ -206,7 +206,7 @@
             "singlePrice": 2500
         },
         {
-            "modelName": "KeepsTable",
+            "furnitureName": "KeepsTable",
             "modelStructure": {
                 "name": "KeepsTable",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Table/Actor/BP_KeepsTable.BP_KeepsTable_C'",
@@ -217,7 +217,7 @@
                 "3601D0B544757A10D2CD05B86B0951E2": {
                     "actor": "None",
                     "implantName": "3601D0B544757A10D2CD05B86B0951E2",
-                    "modelName": "KeepsTable",
+                    "furnitureName": "KeepsTable",
                     "transform": {
                         "rotation": {
                             "x": 9.7853072948880592e-5,
@@ -238,7 +238,7 @@
             "singlePrice": 3500
         },
         {
-            "modelName": "Washer B",
+            "furnitureName": "Washer B",
             "modelStructure": {
                 "name": "Washer B",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Electric/Actor/BP_washer_B.BP_washer_B_C'",
@@ -249,7 +249,7 @@
                 "04894E864760B7066A5560B4246FDA06": {
                     "actor": "None",
                     "implantName": "04894E864760B7066A5560B4246FDA06",
-                    "modelName": "Washer B",
+                    "furnitureName": "Washer B",
                     "transform": {
                         "rotation": {
                             "x": -6.0679304926096977e-6,
@@ -270,7 +270,7 @@
             "singlePrice": 28800
         },
         {
-            "modelName": "DiningChair",
+            "furnitureName": "DiningChair",
             "modelStructure": {
                 "name": "DiningChair",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Chair/Actor/BP_DiningChair.BP_DiningChair_C'",
@@ -281,7 +281,7 @@
                 "DAB96FE2424951FCB99E3294773750B7": {
                     "actor": "None",
                     "implantName": "DAB96FE2424951FCB99E3294773750B7",
-                    "modelName": "DiningChair",
+                    "furnitureName": "DiningChair",
                     "transform": {
                         "rotation": {
                             "x": -4.1487655548437532e-5,
@@ -302,7 +302,7 @@
             "singlePrice": 2700
         },
         {
-            "modelName": "Plant G",
+            "furnitureName": "Plant G",
             "modelStructure": {
                 "name": "Plant G",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Plant/Actor/BP_Plant_G.BP_Plant_G_C'",
@@ -313,7 +313,7 @@
                 "91D71BB140BCD46F23C417BB6942D3FD": {
                     "actor": "None",
                     "implantName": "91D71BB140BCD46F23C417BB6942D3FD",
-                    "modelName": "Plant G",
+                    "furnitureName": "Plant G",
                     "transform": {
                         "rotation": {
                             "x": -1.3497678707999795e-7,
@@ -334,7 +334,7 @@
             "singlePrice": 200
         },
         {
-            "modelName": "Plant M",
+            "furnitureName": "Plant M",
             "modelStructure": {
                 "name": "Plant M",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Plant/Actor/BP_Plant_M.BP_Plant_M_C'",
@@ -345,7 +345,7 @@
                 "C1DBDB7F4E512D212C3C5CB6DC685E8C": {
                     "actor": "None",
                     "implantName": "C1DBDB7F4E512D212C3C5CB6DC685E8C",
-                    "modelName": "Plant M",
+                    "furnitureName": "Plant M",
                     "transform": {
                         "rotation": {
                             "x": 6.0850856116594414e-5,
@@ -366,7 +366,7 @@
             "singlePrice": 1100
         },
         {
-            "modelName": "Bookcase A",
+            "furnitureName": "Bookcase A",
             "modelStructure": {
                 "name": "Bookcase A",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Cabinet/Actor/BP_Bookcase_A.BP_Bookcase_A_C'",
@@ -377,7 +377,7 @@
                 "A05774F147DBDF3E6C1E2C9772479CAC": {
                     "actor": "None",
                     "implantName": "A05774F147DBDF3E6C1E2C9772479CAC",
-                    "modelName": "Bookcase A",
+                    "furnitureName": "Bookcase A",
                     "transform": {
                         "rotation": {
                             "x": 0.00020907877286162574,
@@ -396,7 +396,7 @@
                 "2D4E61BF4E4DB66BA7072ABA3E59BB6F": {
                     "actor": "None",
                     "implantName": "2D4E61BF4E4DB66BA7072ABA3E59BB6F",
-                    "modelName": "Bookcase A",
+                    "furnitureName": "Bookcase A",
                     "transform": {
                         "rotation": {
                             "x": 2.0952350878256878e-5,
@@ -417,7 +417,7 @@
             "singlePrice": 3800
         },
         {
-            "modelName": "Lamp C",
+            "furnitureName": "Lamp C",
             "modelStructure": {
                 "name": "Lamp C",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_Lamp_C.BP_Lamp_C_C'",
@@ -428,7 +428,7 @@
                 "1897641942E70E1734DD82918158F4B0": {
                     "actor": "None",
                     "implantName": "1897641942E70E1734DD82918158F4B0",
-                    "modelName": "Lamp C",
+                    "furnitureName": "Lamp C",
                     "transform": {
                         "rotation": { "x": 0, "y": -0, "z": 0, "w": 1 },
                         "translation": { "x": 0, "y": 0, "z": 0 },
@@ -440,7 +440,7 @@
             "singlePrice": 2000
         },
         {
-            "modelName": "CorridorLight C",
+            "furnitureName": "CorridorLight C",
             "modelStructure": {
                 "name": "CorridorLight C",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_CorridorLight_C.BP_CorridorLight_C_C'",
@@ -451,7 +451,7 @@
                 "51DCD1294CE83B0052C20A8B6479D89B": {
                     "actor": "None",
                     "implantName": "51DCD1294CE83B0052C20A8B6479D89B",
-                    "modelName": "CorridorLight C",
+                    "furnitureName": "CorridorLight C",
                     "transform": {
                         "rotation": { "x": 0, "y": -0, "z": 0, "w": 1 },
                         "translation": { "x": 0, "y": 0, "z": 0 },
@@ -463,7 +463,7 @@
             "singlePrice": 1000
         },
         {
-            "modelName": "CorridorLight B",
+            "furnitureName": "CorridorLight B",
             "modelStructure": {
                 "name": "CorridorLight B",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_CorridorLight_B.BP_CorridorLight_B_C'",
@@ -474,7 +474,7 @@
                 "3D081C6F46C65FC93EAFFCACA30A78E5": {
                     "actor": "None",
                     "implantName": "3D081C6F46C65FC93EAFFCACA30A78E5",
-                    "modelName": "CorridorLight B",
+                    "furnitureName": "CorridorLight B",
                     "transform": {
                         "rotation": { "x": 0, "y": -0, "z": 0, "w": 1 },
                         "translation": {
@@ -490,7 +490,7 @@
             "singlePrice": 1700
         },
         {
-            "modelName": "Lamp B",
+            "furnitureName": "Lamp B",
             "modelStructure": {
                 "name": "Lamp B",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_Lamp_B.BP_Lamp_B_C'",
@@ -501,7 +501,7 @@
                 "703470124422B92EEDBA24AD576F4379": {
                     "actor": "None",
                     "implantName": "703470124422B92EEDBA24AD576F4379",
-                    "modelName": "Lamp B",
+                    "furnitureName": "Lamp B",
                     "transform": {
                         "rotation": { "x": 0, "y": -0, "z": 0, "w": 1 },
                         "translation": {
@@ -517,7 +517,7 @@
             "singlePrice": 2000
         },
         {
-            "modelName": "BookCase C",
+            "furnitureName": "BookCase C",
             "modelStructure": {
                 "name": "BookCase C",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Cabinet/Actor/BP_BookCase_C.BP_BookCase_C_C'",
@@ -528,7 +528,7 @@
                 "738AC2C24F1845A378E3C3BB3954379F": {
                     "actor": "None",
                     "implantName": "738AC2C24F1845A378E3C3BB3954379F",
-                    "modelName": "BookCase C",
+                    "furnitureName": "BookCase C",
                     "transform": {
                         "rotation": {
                             "x": -0.00020113051428908741,
@@ -549,7 +549,7 @@
             "singlePrice": 3800
         },
         {
-            "modelName": "Lamp A",
+            "furnitureName": "Lamp A",
             "modelStructure": {
                 "name": "Lamp A",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_Lamp_A.BP_Lamp_A_C'",
@@ -560,7 +560,7 @@
                 "EA8E26144187AC92B4C96C9F9FECA31A": {
                     "actor": "None",
                     "implantName": "EA8E26144187AC92B4C96C9F9FECA31A",
-                    "modelName": "Lamp A",
+                    "furnitureName": "Lamp A",
                     "transform": {
                         "rotation": {
                             "x": -3.8909791290628741e-5,
@@ -581,7 +581,7 @@
             "singlePrice": 1500
         },
         {
-            "modelName": "Bowl",
+            "furnitureName": "Bowl",
             "modelStructure": {
                 "name": "Bowl",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Decorate/Actor/BP_Bowl.BP_Bowl_C'",
@@ -592,7 +592,7 @@
                 "E692CA0E4270F707A178729D9742FB7B": {
                     "actor": "None",
                     "implantName": "E692CA0E4270F707A178729D9742FB7B",
-                    "modelName": "Bowl",
+                    "furnitureName": "Bowl",
                     "transform": {
                         "rotation": {
                             "x": -1.2906977989528321e-5,
@@ -613,7 +613,7 @@
             "singlePrice": 500
         },
         {
-            "modelName": "Clock A",
+            "furnitureName": "Clock A",
             "modelStructure": {
                 "name": "Clock A",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Decorate/Actor/BP_Clock_A.BP_Clock_A_C'",
@@ -624,7 +624,7 @@
                 "C5AEF6404F3B5AC181D5A1B930C0FDCB": {
                     "actor": "None",
                     "implantName": "C5AEF6404F3B5AC181D5A1B930C0FDCB",
-                    "modelName": "Clock A",
+                    "furnitureName": "Clock A",
                     "transform": {
                         "rotation": {
                             "x": -1.6076777112051223e-5,
@@ -645,7 +645,7 @@
             "singlePrice": 200
         },
         {
-            "modelName": "Puppet",
+            "furnitureName": "Puppet",
             "modelStructure": {
                 "name": "Puppet",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Decorate/Actor/BP_Puppet.BP_Puppet_C'",
@@ -656,7 +656,7 @@
                 "FD32DCEC4891D69294E0D28DD5D7796A": {
                     "actor": "None",
                     "implantName": "FD32DCEC4891D69294E0D28DD5D7796A",
-                    "modelName": "Puppet",
+                    "furnitureName": "Puppet",
                     "transform": {
                         "rotation": {
                             "x": 3.7973880886444229e-5,
@@ -677,7 +677,7 @@
             "singlePrice": 250
         },
         {
-            "modelName": "WallLamp",
+            "furnitureName": "WallLamp",
             "modelStructure": {
                 "name": "WallLamp",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Light/Actor/BP_WallLamp.BP_WallLamp_C'",
@@ -688,7 +688,7 @@
                 "39729F8C4F5DD95BBF2BD2913ECDA875": {
                     "actor": "None",
                     "implantName": "39729F8C4F5DD95BBF2BD2913ECDA875",
-                    "modelName": "WallLamp",
+                    "furnitureName": "WallLamp",
                     "transform": {
                         "rotation": {
                             "x": -0.00040011529088017242,

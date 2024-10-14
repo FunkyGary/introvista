@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Grid, Typography } from "@mui/material";
-import { FileUpload } from "./FileUpload";
+import { FileUpload } from "../../shared/FileUpload";
 import { useFormContext, Controller } from "react-hook-form";
 
 export function MaterialFile() {

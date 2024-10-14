@@ -110,7 +110,7 @@
     ],
     "models": [
         {
-            "modelName": "Cabinet H",
+            "furnitureName": "Cabinet H",
             "modelStructure": {
                 "name": "Cabinet H",
                 "model": "/Script/Engine.BlueprintGeneratedClass'/Game/Assets/Cabinet/Actor/BP_Cabinet_H.BP_Cabinet_H_C'",
@@ -121,7 +121,7 @@
                 "38E65CA44713D402FA4566B637F701B3": {
                     "actor": "None",
                     "implantName": "38E65CA44713D402FA4566B637F701B3",
-                    "modelName": "Cabinet H",
+                    "furnitureName": "Cabinet H",
                     "transform": {
                         "rotation": {
                             "x": 6.7637779986990973e-6,
