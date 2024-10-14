@@ -9,10 +9,10 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Unstable_Grid2";
 import TextField from "@mui/material/TextField";
-import { FileUpload } from "./FileUpload";
-import { MaterialFile } from "./materialFile";
-import { Card, CardContent, Typography } from "@mui/material";
-import { stringValidation, numberValidation } from "./validationRules";
+import {
+    stringValidation,
+    numberValidation,
+} from "../../../utils/validationRules";
 
 const materials = [
     { value: "wood", label: "木頭" },
@@ -20,8 +20,8 @@ const materials = [
 ] as const;
 
 const modelCategories = [
-    { value: "furnitureModel", label: "家具" },
-    { value: "material", label: "材質" },
+    { value: "chair", label: "椅子" },
+    { value: "table", label: "桌子" },
 ] as const;
 
 export function ModelForm(): React.JSX.Element {

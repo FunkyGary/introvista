@@ -77,7 +77,7 @@ export function Layout({ children }: LayoutProps): React.JSX.Element {
                         </Box>
                         <Typography align="center" variant="subtitle1">
                             An online shop specializing in high-quality,
-                            professional-grade furniture.
+                            professional-grade Furniture.
                         </Typography>
                     </Stack>
                 </Stack>
