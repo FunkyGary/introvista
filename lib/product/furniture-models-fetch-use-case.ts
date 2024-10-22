@@ -4,12 +4,12 @@ import ProductApi from "./product-api";
 
 @injectable()
 class FurnitureModelsFetchUseCase {
-  constructor(@inject(ProductApi) private productApi: ProductApi) {}
+    constructor(@inject(ProductApi) private productApi: ProductApi) {}
 
-  async execute(): Promise<FurnitureModel[]> {
-    const furnitureModels = await this.productApi.getFurnitureModels();
-    return furnitureModels;
-  }
+    async execute(): Promise<FurnitureModel[]> {
+        const furnitureModels = await this.productApi.getFurnitureModels();
+        return furnitureModels;
+    }
 }
 
 export default FurnitureModelsFetchUseCase;
