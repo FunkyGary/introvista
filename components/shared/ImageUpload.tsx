@@ -4,6 +4,7 @@ import ImageUploading from "react-images-uploading";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Image as ImageIcon } from "@phosphor-icons/react/dist/ssr/Image";
+import Image from "next/image";
 
 function ImageUpload({ name }: { name: string }): React.JSX.Element {
     const { control, setValue } = useFormContext(); // Access the form context provided by the parent
@@ -45,12 +46,19 @@ function ImageUpload({ name }: { name: string }): React.JSX.Element {
                                         borderRadius: "20px",
                                     }}
                                 >
-                                    <img
+                                    <Image
+                                        src={imageList[0].data_url}
+                                        alt={`Preview`}
+                                        width={200}
+                                        height={200}
+                                        className="object-cover rounded-md"
+                                    />
+                                    {/* <img
                                         src={imageList[0].data_url}
                                         alt=""
                                         width="200"
                                         height="200"
-                                    />
+                                    /> */}
                                 </Box>
                             ) : (
                                 <Box

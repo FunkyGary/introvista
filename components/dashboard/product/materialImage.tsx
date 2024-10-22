@@ -3,7 +3,7 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
-import ImageUpload from "../../shared/ImageUpload";
+import ImageUpload from "../../shared/imageUpload";
 
 export default function MaterialImage(): React.JSX.Element {
     return (
