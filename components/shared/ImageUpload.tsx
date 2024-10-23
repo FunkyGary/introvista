@@ -4,21 +4,26 @@ import ImageUploading from "react-images-uploading";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Image as ImageIcon } from "@phosphor-icons/react/dist/ssr/Image";
+import Image from "next/image";
 
-function ImageUpload({ name }: { name: string }): React.JSX.Element {
-    const { control, setValue } = useFormContext(); // Access the form context provided by the parent
+function ImageUpload({
+    name = "thumbnailImage",
+}: {
+    name?: string;
+}): React.JSX.Element {
+    const { control, setValue } = useFormContext();
 
     return (
         <Controller
             name={name}
             control={control}
-            defaultValue={[]}
+            defaultValue={null}
             render={({ field }) => (
                 <ImageUploading
-                    multiple
-                    value={field.value}
+                    multiple={false}
+                    value={field.value ? [{ data_url: field.value }] : []}
                     onChange={(imageList) => {
-                        return setValue(name, imageList);
+                        setValue(name, imageList[0]?.data_url || null);
                     }}
                     maxNumber={1}
                     dataURLKey="data_url"
@@ -26,14 +31,13 @@ function ImageUpload({ name }: { name: string }): React.JSX.Element {
                     {({
                         imageList,
                         onImageUpload,
-                        onImageRemoveAll,
                         onImageUpdate,
                         onImageRemove,
                         isDragging,
                         dragProps,
                     }) => (
                         <Box>
-                            {imageList.length > 0 ? (
+                            {imageList.length > 0 && imageList[0].data_url ? (
                                 <Box
                                     sx={{
                                         border: "1px solid #D9D9D9",
@@ -43,13 +47,15 @@ function ImageUpload({ name }: { name: string }): React.JSX.Element {
                                         justifyContent: "center",
                                         alignItems: "center",
                                         borderRadius: "20px",
+                                        overflow: "hidden",
                                     }}
                                 >
-                                    <img
+                                    <Image
                                         src={imageList[0].data_url}
-                                        alt=""
-                                        width="200"
-                                        height="200"
+                                        alt="Product thumbnail"
+                                        width={200}
+                                        height={200}
+                                        className="object-cover"
                                     />
                                 </Box>
                             ) : (
@@ -62,8 +68,10 @@ function ImageUpload({ name }: { name: string }): React.JSX.Element {
                                         justifyContent: "center",
                                         alignItems: "center",
                                         borderRadius: "20px",
+                                        cursor: "pointer",
                                     }}
-                                    // onClick={onImageUpload}
+                                    onClick={onImageUpload}
+                                    {...dragProps}
                                 >
                                     <ImageIcon size={150} color="white" />
                                 </Box>
@@ -78,19 +86,25 @@ function ImageUpload({ name }: { name: string }): React.JSX.Element {
                                 <Button
                                     size="small"
                                     variant="outlined"
-                                    onClick={() => onImageUpdate(0)}
+                                    onClick={() =>
+                                        imageList.length
+                                            ? onImageUpdate(0)
+                                            : onImageUpload()
+                                    }
                                     sx={{ marginRight: "10px" }}
                                 >
                                     上傳
                                 </Button>
-                                <Button
-                                    size="small"
-                                    variant="outlined"
-                                    color="error"
-                                    onClick={() => onImageRemove(0)}
-                                >
-                                    刪除
-                                </Button>
+                                {imageList.length > 0 && (
+                                    <Button
+                                        size="small"
+                                        variant="outlined"
+                                        color="error"
+                                        onClick={() => onImageRemove(0)}
+                                    >
+                                        刪除
+                                    </Button>
+                                )}
                             </Box>
                         </Box>
                     )}

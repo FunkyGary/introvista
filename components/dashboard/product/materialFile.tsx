@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Grid, Typography } from "@mui/material";
-import { FileUpload } from "../../shared/FileUpload";
+import { FileUpload } from "../../shared/fileUpload";
 import { useFormContext, Controller } from "react-hook-form";
 
 export default function MaterialFile() {
@@ -27,7 +27,7 @@ export default function MaterialFile() {
                     sx={{
                         display: "flex",
                         flexDirection: "column",
-                        alignItems: "center",
+                        padding: "15px",
                     }}
                 >
                     <Typography variant="h6" sx={{ paddingBottom: "10px" }}>

@@ -49,10 +49,10 @@ export function SignInForm(): React.JSX.Element {
 
     const authClient = useAuthClient();
     const onSubmit = React.useCallback(
-        async (values: Values): Promise<void> => {
+        async (data: Values): Promise<void> => {
             setIsPending(true);
 
-            const { error } = await authClient.signInWithPassword(values);
+            const { error } = await authClient.signInWithPassword(data);
 
             if (error) {
                 setError("root", { type: "server", message: error });
@@ -64,7 +64,7 @@ export function SignInForm(): React.JSX.Element {
             // After refresh, GuestGuard will handle the redirect
             router.refresh();
         },
-        [router, setError]
+        [authClient, router, setError] // Add router and setError to the dependency array
     );
 
     return (
