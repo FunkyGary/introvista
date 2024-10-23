@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import "reflect-metadata";
 import type { Metadata } from "next";
@@ -14,23 +14,23 @@ import { SnackbarProvider } from "notistack";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html>
-      <body>
-        <DIProvider>
-          <ThemeProvider>
-            <SnackbarProvider maxSnack={3} autoHideDuration={2_000}>
-              <UserProvider>
-                <UserRoleProvider>{children}</UserRoleProvider>
-              </UserProvider>
-            </SnackbarProvider>
-          </ThemeProvider>
-        </DIProvider>
-      </body>
-    </html>
-  );
+    return (
+        <html>
+            <body>
+                <DIProvider>
+                    <ThemeProvider>
+                        <SnackbarProvider maxSnack={3} autoHideDuration={2_000}>
+                            <UserProvider>
+                                <UserRoleProvider>{children}</UserRoleProvider>
+                            </UserProvider>
+                        </SnackbarProvider>
+                    </ThemeProvider>
+                </DIProvider>
+            </body>
+        </html>
+    );
 }
