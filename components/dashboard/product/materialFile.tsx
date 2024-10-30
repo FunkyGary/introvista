@@ -27,7 +27,7 @@ export default function MaterialFile() {
                     sx={{
                         display: "flex",
                         flexDirection: "column",
-                        alignItems: "center",
+                        padding: "15px",
                     }}
                 >
                     <Typography variant="h6" sx={{ paddingBottom: "10px" }}>

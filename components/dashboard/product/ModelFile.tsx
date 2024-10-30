@@ -9,8 +9,8 @@ export function ModelFile() {
     const { control } = useFormContext();
 
     const fileTypes = [
-        { name: "modelFileGLB", label: "ModelFileGLB" },
-        { name: "modelFileUSD", label: "ModelFileUSD" },
+        { name: "itemFiles.modelFileGLB", label: "Model File GLB" },
+        { name: "itemFiles.modelFileUSD", label: "Model File USD" },
     ];
 
     return (
@@ -32,6 +32,7 @@ export function ModelFile() {
                     <Controller
                         name={fileType.name}
                         control={control}
+                        defaultValue={null}
                         render={({ field }) => (
                             <FileUpload
                                 name={fileType.name}

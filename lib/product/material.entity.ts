@@ -1,20 +1,28 @@
 export interface Material {
-    MaterialID: string;
-    MaterialName: string;
-    BaseColorMap: string | null;
-    NormalMap: string | null;
-    RoughnessMap: string | null;
-    MetallicMap: string | null;
-    AmbientOcclusionMap: string | null;
-    ThumbnailImage: string | null;
-    HeightMap: string | null;
-    MaterialPrice: number;
-    CategoryID: string;
-    Brand: string | null;
-    MaterialDescription: string;
-    PreviewImage: string | null;
-    CreatedDate: Date;
-    LastUpdated: Date;
-    PublishedAt: Date | null;
-    UserID: string;
+    materialID: string;
+    tags: string[];
+    materialName: string;
+    categoryID: string;
+    supplierID: string;
+    brand: string;
+    materialDescription: string;
+    textureMaps: {
+        baseColorMap: string | null;
+        normalMap: string | null;
+        roughnessMap: string | null;
+        metallicMap: string | null;
+        ambientOcclusionMap?: string | null;
+        heightMap?: string | null;
+    };
+    previewImage: string | null;
+    dimensions?: {
+        length?: number;
+        width?: number;
+        height?: number;
+    };
+    weight?: number;
+    materialPrice: number;
+    isPublished: boolean;
+    createdDate: Date;
+    lastUpdated: Date;
 }

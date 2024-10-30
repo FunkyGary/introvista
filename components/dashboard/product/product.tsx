@@ -18,7 +18,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { ModelImage } from "./modelImage";
 import MaterialImage from "./materialImage";
 import MaterialFile from "./materialFile";
-import MaterialForm from "./materialForm";
+import { MaterialForm } from "./materialForm";
 import { ModelForm } from "./modelForm";
 import { ModelFile } from "./modelFile";
 import {
@@ -60,6 +60,7 @@ export function Product({
     const { createProduct, isCreatingProduct } = useProductCreation();
 
     const onSubmit = (data: ProductCreateDto) => {
+        console.log(data);
         if (productId) {
             // updateProduct(productId, category, data).then(({ error }) => {
             //     if (error) {

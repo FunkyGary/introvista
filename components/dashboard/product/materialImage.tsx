@@ -18,9 +18,9 @@ export default function MaterialImage(): React.JSX.Element {
                 }}
             >
                 <Typography variant="h6" sx={{ paddingBottom: "10px" }}>
-                    ThumbnailImage
+                    previewImage
                 </Typography>
-                <ImageUpload name="thumbnailImages" />
+                <ImageUpload name="previewImage" />
             </Grid>
         </Grid>
     );

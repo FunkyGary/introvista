@@ -13,19 +13,16 @@ import {
     stringValidation,
     numberValidation,
 } from "../../../utils/validationRules";
-
-const materials = [
-    { value: "wood", label: "木頭" },
-    { value: "metal", label: "金屬" },
-] as const;
-
-const modelCategories = [
-    { value: "chair", label: "椅子" },
-    { value: "table", label: "桌子" },
-] as const;
+import Checkbox from "@mui/material/Checkbox";
+import { FormControlLabel } from "@mui/material";
+import { Autocomplete, Chip, FormHelperText } from "@mui/material";
+import InputAdornment from "@mui/material/InputAdornment";
+import { useState } from "react";
+import { categories, MainCategory } from "@/utils/categories";
 
 export function ModelForm(): React.JSX.Element {
-    const { control } = useFormContext(); // Access the form context provided by the parent
+    const [mainCategory, setMainCategory] = useState<string>("");
+    const { control } = useFormContext();
 
     return (
         <Grid container spacing={3}>
@@ -33,7 +30,7 @@ export function ModelForm(): React.JSX.Element {
                 <FormControl fullWidth required>
                     <InputLabel>名稱</InputLabel>
                     <Controller
-                        name="modelName"
+                        name="itemName"
                         control={control}
                         rules={stringValidation}
                         render={({ field }) => (
@@ -42,23 +39,56 @@ export function ModelForm(): React.JSX.Element {
                     />
                 </FormControl>
             </Grid>
-            <Grid md={6} xs={12}>
+            <Grid md={3} xs={6}>
                 <FormControl fullWidth required>
-                    <InputLabel>類別</InputLabel>
+                    <InputLabel>主分類</InputLabel>
+                    <Select
+                        value={mainCategory}
+                        onChange={(e) => setMainCategory(e.target.value)}
+                        label="主分類"
+                    >
+                        {Object.keys(categories).map((category) => (
+                            <MenuItem key={category} value={category}>
+                                {category}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Grid>
+            <Grid md={3} xs={6}>
+                <FormControl fullWidth required>
                     <Controller
-                        name="modelCategory"
+                        name="categoryID"
                         control={control}
-                        render={({ field }) => (
-                            <Select {...field} label="類別" variant="outlined">
-                                {modelCategories.map((option) => (
-                                    <MenuItem
-                                        key={option.value}
-                                        value={option.value}
-                                    >
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </Select>
+                        defaultValue=""
+                        rules={{ required: "請選擇子分類" }}
+                        render={({ field, fieldState: { error } }) => (
+                            <>
+                                <InputLabel>子分類</InputLabel>
+                                <Select
+                                    {...field}
+                                    label="子分類"
+                                    error={!!error}
+                                    disabled={!mainCategory}
+                                >
+                                    {mainCategory &&
+                                        categories[
+                                            mainCategory as keyof typeof categories
+                                        ].map((subCategory) => (
+                                            <MenuItem
+                                                key={subCategory.value}
+                                                value={subCategory.value}
+                                            >
+                                                {subCategory.label}
+                                            </MenuItem>
+                                        ))}
+                                </Select>
+                                {error && (
+                                    <FormHelperText error>
+                                        {error.message}
+                                    </FormHelperText>
+                                )}
+                            </>
                         )}
                     />
                 </FormControl>
@@ -76,31 +106,115 @@ export function ModelForm(): React.JSX.Element {
                     />
                 </FormControl>
             </Grid>
-            <Grid md={6} xs={12}>
+            <Grid md={2} xs={12}>
                 <FormControl fullWidth required>
-                    <InputLabel>尺寸</InputLabel>
+                    <InputLabel>長</InputLabel>
                     <Controller
-                        name="dimensions"
+                        name="dimensions.length"
                         control={control}
-                        rules={stringValidation}
+                        defaultValue={0}
+                        rules={{
+                            required: "此欄位必填",
+                            min: {
+                                value: 0,
+                                message: "長度必須大於 0",
+                            },
+                        }}
                         render={({ field }) => (
-                            <OutlinedInput {...field} label="尺寸" />
+                            <OutlinedInput
+                                {...field}
+                                type="number"
+                                label="長"
+                                onChange={(e) =>
+                                    field.onChange(Number(e.target.value))
+                                }
+                            />
+                        )}
+                    />
+                </FormControl>
+            </Grid>
+            <Grid md={2} xs={12}>
+                <FormControl fullWidth required>
+                    <InputLabel>寬</InputLabel>
+                    <Controller
+                        name="dimensions.width"
+                        control={control}
+                        defaultValue={0}
+                        rules={{
+                            required: "此欄位必填",
+                            min: {
+                                value: 0,
+                                message: "寬度必須大於 0",
+                            },
+                        }}
+                        render={({ field }) => (
+                            <OutlinedInput
+                                {...field}
+                                type="number"
+                                label="寬"
+                                onChange={(e) =>
+                                    field.onChange(Number(e.target.value))
+                                }
+                            />
+                        )}
+                    />
+                </FormControl>
+            </Grid>
+            <Grid md={2} xs={12}>
+                <FormControl fullWidth required>
+                    <InputLabel>高</InputLabel>
+                    <Controller
+                        name="dimensions.height"
+                        control={control}
+                        defaultValue={0}
+                        rules={{
+                            required: "此欄位必填",
+                            min: {
+                                value: 0,
+                                message: "高度必須大於 0",
+                            },
+                        }}
+                        render={({ field }) => (
+                            <OutlinedInput
+                                {...field}
+                                type="number"
+                                label="高"
+                                onChange={(e) =>
+                                    field.onChange(Number(e.target.value))
+                                }
+                            />
                         )}
                     />
                 </FormControl>
             </Grid>
             <Grid md={6} xs={12}>
                 <FormControl fullWidth required>
-                    <InputLabel>重量</InputLabel>
+                    <InputLabel>重量 (kg)</InputLabel>
                     <Controller
                         name="weight"
                         control={control}
-                        rules={numberValidation}
+                        defaultValue={0}
+                        rules={{
+                            required: "此欄位必填",
+                            min: {
+                                value: 0,
+                                message: "重量必須大於 0",
+                            },
+                            validate: (value) => {
+                                if (isNaN(value)) return "請輸入有效數字";
+                                if (value <= 0) return "重量必須大於 0";
+                                return true;
+                            },
+                        }}
                         render={({ field }) => (
                             <OutlinedInput
                                 {...field}
-                                label="重量"
+                                label="重量 (kg)"
                                 type="number"
+                                inputProps={{
+                                    step: "0.1",
+                                    min: "0",
+                                }}
                                 onChange={(e) =>
                                     field.onChange(Number(e.target.value))
                                 }
@@ -111,40 +225,37 @@ export function ModelForm(): React.JSX.Element {
             </Grid>
             <Grid md={6} xs={12}>
                 <FormControl fullWidth>
-                    <InputLabel>材質</InputLabel>
                     <Controller
-                        name="material"
+                        name="tags"
                         control={control}
+                        defaultValue={[]}
                         render={({ field }) => (
-                            <Select {...field} label="材質" variant="outlined">
-                                {materials.map((option) => (
-                                    <MenuItem
-                                        key={option.value}
-                                        value={option.value}
-                                    >
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        )}
-                    />
-                </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
-                <FormControl fullWidth required>
-                    <InputLabel>庫存數量</InputLabel>
-                    <Controller
-                        name="stockQuantity"
-                        control={control}
-                        rules={numberValidation}
-                        render={({ field }) => (
-                            <OutlinedInput
-                                {...field}
-                                label="庫存數量"
-                                type="number"
-                                onChange={(e) =>
-                                    field.onChange(Number(e.target.value))
+                            <Autocomplete
+                                multiple
+                                freeSolo
+                                options={[]}
+                                value={field.value}
+                                onChange={(_, newValue) => {
+                                    field.onChange(newValue);
+                                }}
+                                renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                        <Chip
+                                            variant="outlined"
+                                            label={option}
+                                            {...getTagProps({ index })}
+                                            key={index}
+                                        />
+                                    ))
                                 }
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        variant="outlined"
+                                        label="標籤"
+                                        placeholder="新增標籤"
+                                    />
+                                )}
                             />
                         )}
                     />
@@ -152,18 +263,41 @@ export function ModelForm(): React.JSX.Element {
             </Grid>
             <Grid md={6} xs={12}>
                 <FormControl fullWidth required>
-                    <InputLabel>價格</InputLabel>
+                    <InputLabel>價格 (TWD)</InputLabel>
                     <Controller
                         name="price"
                         control={control}
-                        rules={numberValidation}
+                        defaultValue={0}
+                        rules={{
+                            required: "此欄位必填",
+                            min: {
+                                value: 0,
+                                message: "價格必須大於 0",
+                            },
+                            validate: (value) => {
+                                if (isNaN(value)) return "請輸入有效數字";
+                                if (value <= 0) return "價格必須大於 0";
+                                if (!Number.isInteger(value))
+                                    return "價格必須為整數";
+                                return true;
+                            },
+                        }}
                         render={({ field }) => (
                             <OutlinedInput
                                 {...field}
-                                label="價格"
+                                label="價格 (TWD)"
                                 type="number"
+                                inputProps={{
+                                    min: "0",
+                                    step: "1",
+                                }}
                                 onChange={(e) =>
                                     field.onChange(Number(e.target.value))
+                                }
+                                startAdornment={
+                                    <InputAdornment position="start">
+                                        NT$
+                                    </InputAdornment>
                                 }
                             />
                         )}
@@ -173,7 +307,7 @@ export function ModelForm(): React.JSX.Element {
             <Grid xs={12}>
                 <FormControl fullWidth>
                     <Controller
-                        name="description"
+                        name="itemDescription"
                         control={control}
                         rules={stringValidation}
                         render={({ field }) => (
@@ -188,6 +322,26 @@ export function ModelForm(): React.JSX.Element {
                         )}
                     />
                 </FormControl>
+            </Grid>
+            <Grid md={6} xs={12}>
+                <Controller
+                    name="isPublished"
+                    control={control}
+                    defaultValue={false}
+                    render={({ field }) => (
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={field.value}
+                                    onChange={(e) =>
+                                        field.onChange(e.target.checked)
+                                    }
+                                />
+                            }
+                            label="是否發布"
+                        />
+                    )}
+                />
             </Grid>
         </Grid>
     );
