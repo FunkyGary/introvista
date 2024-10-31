@@ -39,6 +39,7 @@ export const materialProductSchema = z.object({
     heightMap: fileSchema,
 });
 
+
 export type ModelProductCreateDto = z.infer<typeof modelProductSchema>;
 export type MaterialProductCreateDto = z.infer<typeof materialProductSchema>;
 
