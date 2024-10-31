@@ -2,11 +2,17 @@
 
 import * as React from "react";
 import Typography from "@mui/material/Typography";
-
 import Grid from "@mui/material/Unstable_Grid2";
 import ImageUpload from "../../shared/imageUpload";
+import { useFormContext } from "react-hook-form";
+import { imageValidation } from "@/utils/validationRules";
+import { FormHelperText } from "@mui/material";
 
 export function ModelImage(): React.JSX.Element {
+    const {
+        formState: { errors },
+    } = useFormContext();
+
     return (
         <Grid container spacing={3}>
             <Grid
@@ -19,9 +25,14 @@ export function ModelImage(): React.JSX.Element {
                 }}
             >
                 <Typography variant="h6" sx={{ paddingBottom: "10px" }}>
-                    ThumbnailImage
+                    縮圖*
                 </Typography>
-                <ImageUpload name="thumbnailImages" />
+                <ImageUpload name="thumbnailImage" rules={imageValidation} />
+                {errors.thumbnailImage && (
+                    <FormHelperText error>
+                        {errors.thumbnailImage.message as string}
+                    </FormHelperText>
+                )}
             </Grid>
         </Grid>
     );

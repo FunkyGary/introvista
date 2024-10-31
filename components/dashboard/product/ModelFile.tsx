@@ -32,11 +32,10 @@ export function ModelFile() {
                     <Controller
                         name={fileType.name}
                         control={control}
-                        defaultValue={null}
                         render={({ field }) => (
                             <FileUpload
                                 name={fileType.name}
-                                label={`Upload ${fileType.label}`}
+                                label="Upload"
                                 accept="*"
                                 onChange={(file) => field.onChange(file)}
                             />

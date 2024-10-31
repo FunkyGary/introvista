@@ -41,7 +41,7 @@ interface ProductFormProps {
     productId?: string;
 }
 
-export function Product({
+export default function Product({
     initialData,
     productId,
 }: ProductFormProps): React.JSX.Element {
@@ -105,107 +105,159 @@ export function Product({
     }, [initialData, methods]);
 
     return (
-        <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)}>
-                <Grid container spacing={4}>
-                    <Grid md={4} xs={12}>
-                        <FormControl fullWidth>
-                            <InputLabel>品類</InputLabel>
-                            <Select
-                                label="品類"
-                                name="category"
-                                variant="outlined"
-                                value={category}
-                                onChange={(e) => {
-                                    setCategory(e.target.value);
-                                    methods.setValue(
-                                        "category",
-                                        e.target.value
-                                    );
-                                }}
-                            >
-                                {categories.map((option) => (
-                                    <MenuItem
-                                        key={option.value}
-                                        value={option.value}
-                                    >
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid sx={{ width: "100%" }}>
-                        <Card>
-                            <CardHeader title="屬性" />
-                            <Divider />
-                            <CardContent>
-                                {category === "item" ? (
-                                    <ModelForm />
-                                ) : (
-                                    <MaterialForm />
-                                )}
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid sx={{ width: "100%" }}>
-                        <Card>
-                            <CardHeader title="圖片" />
-                            <Divider />
-                            <CardContent>
-                                {category === "item" ? (
-                                    <ModelImage />
-                                ) : (
-                                    <MaterialImage />
-                                )}
-                            </CardContent>
-                            <Divider />
-                        </Card>
-                    </Grid>
-                    <Grid sx={{ width: "100%" }}>
-                        <Card>
-                            <CardHeader title="檔案" />
-                            <Divider />
-                            <CardContent>
-                                {category === "item" ? (
-                                    <ModelFile />
-                                ) : (
-                                    <MaterialFile />
-                                )}
-                            </CardContent>
-                            <Divider />
-                        </Card>
-                    </Grid>
+        <Grid container spacing={4}>
+            <Grid md={4} xs={12}>
+                {/* Category Selection */}
+                <FormControl fullWidth>
+                    <InputLabel>品類</InputLabel>
+                    <Select
+                        label="品類"
+                        name="category"
+                        variant="outlined"
+                        value={category}
+                        onChange={(e) => {
+                            setCategory(e.target.value);
+                            methods.setValue("category", e.target.value);
+                        }}
+                    >
+                        {categories.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Grid>
 
-                    <Grid sx={{ width: "100%" }}>
-                        <CardActions sx={{ justifyContent: "flex-end" }}>
-                            {productId && (
+            {/* Model Form */}
+            {category === "item" && (
+                <FormProvider {...methods}>
+                    <form onSubmit={methods.handleSubmit(onSubmit)}>
+                        <Grid sx={{ width: "100%" }}>
+                            <Card>
+                                <CardHeader title="家具模型屬性" />
+                                <Divider />
+                                <CardContent>
+                                    <ModelForm />
+                                </CardContent>
+                            </Card>
+                        </Grid>
+
+                        <Grid sx={{ width: "100%" }}>
+                            <Card>
+                                <CardHeader title="圖片" />
+                                <Divider />
+                                <CardContent sx={{ paddingX: "30px" }}>
+                                    <ModelImage />
+                                </CardContent>
+                            </Card>
+                        </Grid>
+
+                        <Grid sx={{ width: "100%" }}>
+                            <Card>
+                                <CardHeader title="檔案" />
+                                <Divider />
+                                <CardContent>
+                                    <ModelFile />
+                                </CardContent>
+                            </Card>
+                        </Grid>
+
+                        <Grid sx={{ width: "100%" }}>
+                            <CardActions sx={{ justifyContent: "flex-end" }}>
+                                {productId && (
+                                    <Button
+                                        variant="outlined"
+                                        color="error"
+                                        onClick={handleDelete}
+                                        // disabled={isDeletingProduct}
+                                        sx={{ mr: 2 }}
+                                    >
+                                        刪除
+                                    </Button>
+                                )}
                                 <Button
-                                    variant="outlined"
-                                    color="error"
-                                    onClick={handleDelete}
-                                    // disabled={isDeletingProduct}
-                                    sx={{ mr: 2 }}
+                                    variant="contained"
+                                    type="submit"
+                                    disabled={isCreatingProduct}
+                                    endIcon={
+                                        isCreatingProduct ? (
+                                            <CircularProgress size={20} />
+                                        ) : null
+                                    }
                                 >
-                                    刪除
+                                    {productId ? "更新" : "新增"}
                                 </Button>
-                            )}
-                            <Button
-                                variant="contained"
-                                type="submit"
-                                disabled={isCreatingProduct}
-                                endIcon={
-                                    isCreatingProduct ? (
-                                        <CircularProgress size={20} />
-                                    ) : null
-                                }
-                            >
-                                {productId ? "更新" : "新增"}
-                            </Button>
-                        </CardActions>
-                    </Grid>
-                </Grid>
-            </form>
-        </FormProvider>
+                            </CardActions>
+                        </Grid>
+                    </form>
+                </FormProvider>
+            )}
+
+            {/* Material Form */}
+            {category === "material" && (
+                <FormProvider {...methods}>
+                    <form onSubmit={methods.handleSubmit(onSubmit)}>
+                        <Grid sx={{ width: "100%" }}>
+                            <Card>
+                                <CardHeader title="材質屬性" />
+                                <Divider />
+                                <CardContent>
+                                    <MaterialForm />
+                                </CardContent>
+                            </Card>
+                        </Grid>
+
+                        <Grid sx={{ width: "100%" }}>
+                            <Card>
+                                <CardHeader title="圖片" />
+                                <Divider />
+                                <CardContent sx={{ paddingX: "30px" }}>
+                                    <MaterialImage />
+                                </CardContent>
+                            </Card>
+                        </Grid>
+
+                        <Grid sx={{ width: "100%" }}>
+                            <Card>
+                                <CardHeader title="檔案" />
+                                <Divider />
+                                <CardContent>
+                                    <MaterialFile />
+                                </CardContent>
+                            </Card>
+                        </Grid>
+
+                        <Grid sx={{ width: "100%" }}>
+                            <CardActions sx={{ justifyContent: "flex-end" }}>
+                                {productId && (
+                                    <Button
+                                        variant="outlined"
+                                        color="error"
+                                        onClick={handleDelete}
+                                        // disabled={isDeletingProduct}
+                                        sx={{ mr: 2 }}
+                                    >
+                                        刪除
+                                    </Button>
+                                )}
+                                <Button
+                                    variant="contained"
+                                    type="submit"
+                                    disabled={isCreatingProduct}
+                                    endIcon={
+                                        isCreatingProduct ? (
+                                            <CircularProgress size={20} />
+                                        ) : null
+                                    }
+                                >
+                                    {productId ? "更新" : "新增"}
+                                </Button>
+                            </CardActions>
+                        </Grid>
+                    </form>
+                </FormProvider>
+            )}
+        </Grid>
     );
 }

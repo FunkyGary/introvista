@@ -1,12 +1,14 @@
 import React from "react";
 import { Button, Typography, Box } from "@mui/material";
 import { CloudArrowUp as CloudUploadIcon } from "@phosphor-icons/react/dist/ssr/CloudArrowUp";
+import { useFormContext } from "react-hook-form";
 
 interface FileUploadProps {
     name: string;
     label: string;
     accept?: string;
     onChange: (file: File | null) => void;
+    rules?: Record<string, any>;
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({
@@ -14,8 +16,15 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     label,
     accept,
     onChange,
+    rules,
 }) => {
+    const { register } = useFormContext();
     const [fileName, setFileName] = React.useState<string | null>(null);
+
+    // Register the field with validation rules
+    React.useEffect(() => {
+        register(name, rules);
+    }, [register, name, rules]);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null;
