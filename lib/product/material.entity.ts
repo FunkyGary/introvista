@@ -4,13 +4,13 @@ export interface Material {
     materialName: string;
     categoryID: string;
     supplierID: string;
-    brand: string;
+    brandID: string;
     materialDescription: string;
     textureMaps: {
         baseColorMap: string | null;
         normalMap: string | null;
         roughnessMap: string | null;
-        metallicMap: string | null;
+        metallicMap?: string | null;
         ambientOcclusionMap?: string | null;
         heightMap?: string | null;
     };

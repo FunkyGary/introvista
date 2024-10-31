@@ -22,7 +22,7 @@ import {
 import { FirebaseError } from "firebase/app";
 import { parseFirestoreErrorCode } from "../firebase/parse-firestore-error-code";
 import { injectable } from "inversify";
-import { FurnitureModel } from "./furniture-model.entity";
+import { Model } from "./model.entity";
 import { Material } from "./material.entity";
 
 @injectable()
@@ -38,13 +38,13 @@ class ProductApi {
         this.storage = getStorage(firebaseApp);
     }
 
-    async getFurnitureModels(): Promise<FurnitureModel[]> {
+    async getFurnitureModels(): Promise<Model[]> {
         const furnitureModels = await getDocs(
             collection(this.db, this.furnitureModelCollectionName)
         );
         return furnitureModels.docs.map((doc) => {
             const data = doc.data();
-            const furnitureModel: FurnitureModel = {
+            const furnitureModel: Model = {
                 ModelID: doc.id,
                 ModelName: data.ModelName,
                 CategoryID: data.CategoryID,
@@ -121,7 +121,7 @@ class ProductApi {
                 ]);
 
             const furnitureModel: Omit<
-                FurnitureModel,
+                Model,
                 "ModelID" | "CreatedDate" | "LastUpdated" | "PublishedAt"
             > = {
                 ModelName: data.modelName,
