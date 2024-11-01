@@ -14,16 +14,28 @@ export default function MaterialFile(): React.JSX.Element {
     } = useFormContext();
 
     const fileFields = [
-        { name: "baseColorMap", label: "BaseColorMap*", required: true },
-        { name: "normalMap", label: "Normal Map*", required: true },
-        { name: "roughnessMap", label: "Roughness Map*", required: true },
-        { name: "metallicMap", label: "MetallicMap", required: false },
         {
-            name: "ambientOcclusionMap",
+            name: "textureMaps.baseColorMap",
+            label: "BaseColorMap*",
+            required: true,
+        },
+        { name: "textureMaps.normalMap", label: "Normal Map*", required: true },
+        {
+            name: "textureMaps.roughnessMap",
+            label: "Roughness Map*",
+            required: true,
+        },
+        {
+            name: "textureMaps.metallicMap",
+            label: "MetallicMap",
+            required: false,
+        },
+        {
+            name: "textureMaps.ambientOcclusionMap",
             label: "AmbientOcclusionMap",
             required: false,
         },
-        { name: "heightMap", label: "HeightMap", required: false },
+        { name: "textureMaps.heightMap", label: "HeightMap", required: false },
     ];
 
     return (
