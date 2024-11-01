@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "@/components/dashboard/product/product";
+import Product from "@/components/dashboard/product/product";
 import withAuthRequired from "@/components/hoc/with-auth-required";
 import { notFound } from "next/navigation";
 import { ProductCreateDto } from "@/lib/product/product-create.dto";

@@ -113,13 +113,7 @@ export function ModelForm(): React.JSX.Element {
                         name="dimensions.length"
                         control={control}
                         defaultValue={0}
-                        rules={{
-                            required: "此欄位必填",
-                            min: {
-                                value: 0,
-                                message: "長度必須大於 0",
-                            },
-                        }}
+                        rules={numberValidation}
                         render={({ field }) => (
                             <OutlinedInput
                                 {...field}
@@ -140,13 +134,7 @@ export function ModelForm(): React.JSX.Element {
                         name="dimensions.width"
                         control={control}
                         defaultValue={0}
-                        rules={{
-                            required: "此欄位必填",
-                            min: {
-                                value: 0,
-                                message: "寬度必須大於 0",
-                            },
-                        }}
+                        rules={numberValidation}
                         render={({ field }) => (
                             <OutlinedInput
                                 {...field}
@@ -167,13 +155,7 @@ export function ModelForm(): React.JSX.Element {
                         name="dimensions.height"
                         control={control}
                         defaultValue={0}
-                        rules={{
-                            required: "此欄位必填",
-                            min: {
-                                value: 0,
-                                message: "高度必須大於 0",
-                            },
-                        }}
+                        rules={numberValidation}
                         render={({ field }) => (
                             <OutlinedInput
                                 {...field}
@@ -194,25 +176,13 @@ export function ModelForm(): React.JSX.Element {
                         name="weight"
                         control={control}
                         defaultValue={0}
-                        rules={{
-                            required: "此欄位必填",
-                            min: {
-                                value: 0,
-                                message: "重量必須大於 0",
-                            },
-                            validate: (value) => {
-                                if (isNaN(value)) return "請輸入有效數字";
-                                if (value <= 0) return "重量必須大於 0";
-                                return true;
-                            },
-                        }}
+                        rules={numberValidation}
                         render={({ field }) => (
                             <OutlinedInput
                                 {...field}
                                 label="重量 (kg)"
                                 type="number"
                                 inputProps={{
-                                    step: "0.1",
                                     min: "0",
                                 }}
                                 onChange={(e) =>
@@ -268,28 +238,14 @@ export function ModelForm(): React.JSX.Element {
                         name="price"
                         control={control}
                         defaultValue={0}
-                        rules={{
-                            required: "此欄位必填",
-                            min: {
-                                value: 0,
-                                message: "價格必須大於 0",
-                            },
-                            validate: (value) => {
-                                if (isNaN(value)) return "請輸入有效數字";
-                                if (value <= 0) return "價格必須大於 0";
-                                if (!Number.isInteger(value))
-                                    return "價格必須為整數";
-                                return true;
-                            },
-                        }}
+                        rules={numberValidation}
                         render={({ field }) => (
                             <OutlinedInput
                                 {...field}
                                 label="價格 (TWD)"
                                 type="number"
                                 inputProps={{
-                                    min: "0",
-                                    step: "1",
+                                    min: "1",
                                 }}
                                 onChange={(e) =>
                                     field.onChange(Number(e.target.value))

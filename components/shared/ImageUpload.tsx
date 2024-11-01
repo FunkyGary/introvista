@@ -6,12 +6,16 @@ import Box from "@mui/material/Box";
 import { Image as ImageIcon } from "@phosphor-icons/react/dist/ssr/Image";
 import Image from "next/image";
 
-function ImageUpload({
-    name = "thumbnailImage",
-}: {
-    name?: string;
-}): React.JSX.Element {
-    const { control, setValue } = useFormContext();
+interface ImageUploadProps {
+    name: string;
+    rules?: Record<string, any>;
+}
+
+export default function ImageUpload({ name, rules }: ImageUploadProps) {
+    const { control, setValue, register, watch } = useFormContext();
+
+    // Register the field with validation rules
+    register(name, rules);
 
     return (
         <Controller
@@ -113,5 +117,3 @@ function ImageUpload({
         />
     );
 }
-
-export default ImageUpload;

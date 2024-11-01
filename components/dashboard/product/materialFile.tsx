@@ -4,47 +4,66 @@ import React from "react";
 import { Grid, Typography } from "@mui/material";
 import { FileUpload } from "../../shared/fileUpload";
 import { useFormContext, Controller } from "react-hook-form";
+import { FormHelperText } from "@mui/material";
+import { FileValidation } from "@/utils/validationRules";
 
-export default function MaterialFile() {
-    const { control } = useFormContext();
+export default function MaterialFile(): React.JSX.Element {
+    const {
+        formState: { errors },
+        control,
+    } = useFormContext();
 
-    const fileTypes = [
-        { name: "baseColorMap", label: "BaseColorMap" },
-        { name: "normalMap", label: "Normal Map" },
-        { name: "roughnessMap", label: "Roughness Map" },
-        { name: "metallicMap", label: "MetallicMap" },
-        { name: "ambientOcclusionMap", label: "AmbientOcclusionMap" },
-        { name: "heightMap", label: "HeightMap" },
+    const fileFields = [
+        { name: "baseColorMap", label: "BaseColorMap*", required: true },
+        { name: "normalMap", label: "Normal Map*", required: true },
+        { name: "roughnessMap", label: "Roughness Map*", required: true },
+        { name: "metallicMap", label: "MetallicMap", required: false },
+        {
+            name: "ambientOcclusionMap",
+            label: "AmbientOcclusionMap",
+            required: false,
+        },
+        { name: "heightMap", label: "HeightMap", required: false },
     ];
 
     return (
-        <Grid container spacing={2}>
-            {fileTypes.map((fileType) => (
+        <Grid container spacing={3}>
+            {fileFields.map((field) => (
                 <Grid
-                    key={fileType.name}
+                    key={field.name}
                     md={3}
                     xs={12}
                     sx={{
                         display: "flex",
                         flexDirection: "column",
-                        padding: "15px",
+                        alignItems: "center",
                     }}
                 >
                     <Typography variant="h6" sx={{ paddingBottom: "10px" }}>
-                        {fileType.label}
+                        {field.label}
                     </Typography>
                     <Controller
-                        name={fileType.name}
+                        name={field.name}
                         control={control}
-                        render={({ field }) => (
+                        defaultValue={null}
+                        rules={field.required ? FileValidation : undefined}
+                        render={({ field: { onChange, value } }) => (
                             <FileUpload
-                                name={fileType.name}
-                                label={`Upload ${fileType.label}`}
+                                name={field.name}
+                                label="Upload"
                                 accept="*"
-                                onChange={(file) => field.onChange(file)}
+                                onChange={onChange}
+                                rules={
+                                    field.required ? FileValidation : undefined
+                                }
                             />
                         )}
                     />
+                    {errors[field.name] && (
+                        <FormHelperText error>
+                            {errors[field.name]?.message as string}
+                        </FormHelperText>
+                    )}
                 </Grid>
             ))}
         </Grid>
