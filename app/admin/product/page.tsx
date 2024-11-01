@@ -1,14 +1,14 @@
-"use client";
+'use client'
 
 import Product from "@/components/dashboard/product/product";
 import withAuthRequired from "@/components/hoc/with-auth-required";
 
 function CreateProductPage() {
-    return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-1">
-            <Product />
-        </main>
-    );
+  return (
+    <main className="flex flex-col justify-between items-center p-1 min-h-screen">
+      <Product />
+    </main>
+  )
 }
 
-export default withAuthRequired(CreateProductPage);
+export default withAuthRequired(CreateProductPage)
