@@ -30,6 +30,7 @@ import { Material } from './material.entity'
 
 @injectable()
 class ProductApi {
+  //TODO: rename furnitureModels to models
   furnitureModelCollectionName = 'furnitureModels'
   materialCollectionName = 'materials'
 
@@ -41,6 +42,7 @@ class ProductApi {
     this.storage = getStorage(firebaseApp)
   }
 
+  //TODO: rename furnitureModels to models
   async getFurnitureModels(): Promise<Model[]> {
     const furnitureModels = await getDocs(
       collection(this.db, this.furnitureModelCollectionName)
