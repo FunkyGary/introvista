@@ -59,8 +59,21 @@ export default function Product({
   const router = useRouter()
   const { createProduct, isCreatingProduct } = useProductCreation()
 
+  /* const onSubmit = async (data: ProductCreateDto) => { */
+  /*   console.log('Form submitted:', data) */
+  /*   const result = await createProduct(category, data) */
+  /*   if (result.error) { */
+  /*     console.error('Error creating product:', result.error) */
+  /*   } else { */
+  /*     console.log('Product created successfully') */
+  /*   } */
+  /* } */
+
   const onSubmit = (data: ProductCreateDto) => {
-    console.log(data)
+    console.log('Attempting to submit:', data)
+    console.log('Current form values:', methods.getValues())
+    console.log('Current form errors:', methods.formState.errors)
+
     if (productId) {
       // updateProduct(productId, category, data).then(({ error }) => {
       //     if (error) {
@@ -72,15 +85,20 @@ export default function Product({
       //     }
       // });
     } else {
-      createProduct(category, data).then(({ error }) => {
-        if (error) {
-          console.error('Error creating product:', error)
-          enqueueSnackbar(error, { variant: 'error' })
-        } else {
-          enqueueSnackbar('產品上架成功！', { variant: 'success' })
-          router.push(paths.dashboard.products)
-        }
-      })
+      createProduct(category, data)
+        .then(({ error }) => {
+          if (error) {
+            console.error('Error creating product:', error)
+            enqueueSnackbar(error, { variant: 'error' })
+          } else {
+            console.log('Product creation successful')
+            enqueueSnackbar('產品上架成功！', { variant: 'success' })
+            router.push(paths.dashboard.products)
+          }
+        })
+        .catch((err) => {
+          console.error('Error creating product:', err)
+        })
     }
   }
 
@@ -239,6 +257,7 @@ export default function Product({
                     刪除
                   </Button>
                 )}
+
                 <Button
                   variant="contained"
                   type="submit"
