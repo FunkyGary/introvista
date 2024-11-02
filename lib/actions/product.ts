@@ -8,6 +8,7 @@ import {
 } from 'firebase/storage'
 import {
   collection,
+  writeBatch,
   addDoc,
   updateDoc,
   deleteDoc,
@@ -69,94 +70,66 @@ export type Product = ModelProduct | MaterialProduct
 // Get products by user
 export const getUserProducts = async (userId: string) => {
   try {
-    // Create queries for both collections
-    const modelsQuery = query(
-      collection(db, COLLECTIONS.models),
+    const productsQuery = query(
+      collection(db, 'products'),
       where('userId', '==', userId)
     )
-    
-    const materialsQuery = query(
-      collection(db, COLLECTIONS.materials),
-      where('userId', '==', userId)
-    )
+    const productsSnapshot = await getDocs(productsQuery)
 
-    // Fetch both collections in parallel
-    const [modelsSnapshot, materialsSnapshot] = await Promise.all([
-      getDocs(modelsQuery),
-      getDocs(materialsQuery)
-    ])
-
-    // Transform models data
-    const models: ModelProduct[] = modelsSnapshot.docs.map(doc => {
+    const products = productsSnapshot.docs.map((doc) => {
       const data = doc.data()
       return {
-        modelID: doc.id,
-        type: 'model',
-        modelName: data.modelName || '',
-        price: data.price || 0,
-        modelDescription: data.modelDescription || '',
-        thumbnailImage: data.thumbnailImage || null,
-        modelFiles: {
-          modelFileGLB: data.modelFiles?.modelFileGLB || null,
-          modelFileUSD: data.modelFiles?.modelFileUSD || null,
-        },
+        productID: doc.id,
+        type: data.type,
+        name: data.name,
+        price: data.price,
+        description: data.description,
+        image: data.image || null,
         isPublished: data.isPublished || false,
         createdDate: (data.createdDate as Timestamp)?.toDate() || new Date(),
         lastUpdated: (data.lastUpdated as Timestamp)?.toDate() || new Date(),
-        supplierID: data.supplierID,
+        supplierID: data.supplierID || '',
       }
     })
 
-    // Transform materials data
-    const materials: MaterialProduct[] = materialsSnapshot.docs.map(doc => {
-      const data = doc.data()
-      return {
-        materialID: doc.id,
-        type: 'material',
-        materialName: data.materialName || '',
-        materialPrice: data.materialPrice || 0,
-        materialDescription: data.materialDescription || '',
-        previewImage: data.previewImage || null,
-        textureMaps: {
-          baseColorMap: data.textureMaps?.baseColorMap || null,
-          normalMap: data.textureMaps?.normalMap || null,
-          roughnessMap: data.textureMaps?.roughnessMap || null,
-        },
-        isPublished: data.isPublished || false,
-        createdDate: (data.createdDate as Timestamp)?.toDate() || new Date(),
-        lastUpdated: (data.lastUpdated as Timestamp)?.toDate() || new Date(),
-        supplierID: data.supplierID,
-      }
-    })
-
-    // Combine and sort by creation date
-    const allProducts: Product[] = [...models, ...materials].sort((a, b) => 
-      b.createdDate.getTime() - a.createdDate.getTime()
+    const sortedProducts = products.sort(
+      (a, b) => b.createdDate.getTime() - a.createdDate.getTime()
     )
 
-    return allProducts
+    return sortedProducts
   } catch (error) {
     console.error('Error fetching products:', error)
     throw error
   }
 }
 
-
 // Create product
-export const createProduct = async (type: 'models' | 'materials', data: any, files: {
-  [key: string]: File | null
-}) => {
+export const createProduct = async (
+  type: 'models' | 'materials',
+  data: any,
+  files: {
+    [key: string]: File | null
+  }
+) => {
   try {
     const uploadPromises = Object.entries(files).map(async ([key, file]) => {
       if (!file) return [key, null]
 
-      const isImage = ['thumbnailImage', 'previewImage', 'baseColorMap', 'normalMap', 
-        'roughnessMap', 'metallicMap', 'ambientOcclusionMap', 'heightMap'].includes(key)
-      
-      const url = await (isImage ? 
-        uploadProductImage(file) : 
-        uploadProductFile(file))
-      
+      const isImage = [
+        'thumbnailImage',
+        'previewImage',
+        'baseColorMap',
+        'normalMap',
+        'roughnessMap',
+        'metallicMap',
+        'ambientOcclusionMap',
+        'heightMap',
+      ].includes(key)
+
+      const url = await (isImage
+        ? uploadProductImage(file)
+        : uploadProductFile(file))
+
       return [key, url]
     })
 
@@ -165,31 +138,32 @@ export const createProduct = async (type: 'models' | 'materials', data: any, fil
 
     const productData = {
       ...data,
-      ...(type === 'models' ? {
-        modelFiles: {
-          modelFileGLB: uploadedUrls.modelFileGLB,
-          modelFileUSD: uploadedUrls.modelFileUSD,
-          additionalFiles: uploadedUrls.additionalFiles || null
-        },
-        thumbnailImage: uploadedUrls.thumbnailImage
-      } : {
-        textureMaps: {
-          baseColorMap: uploadedUrls.baseColorMap,
-          normalMap: uploadedUrls.normalMap,
-          roughnessMap: uploadedUrls.roughnessMap,
-          metallicMap: uploadedUrls.metallicMap,
-          ambientOcclusionMap: uploadedUrls.ambientOcclusionMap,
-          heightMap: uploadedUrls.heightMap
-        },
-        previewImage: uploadedUrls.previewImage
-      }),
+      ...(type === 'models'
+        ? {
+            modelFiles: {
+              modelFileGLB: uploadedUrls.modelFileGLB,
+              modelFileUSD: uploadedUrls.modelFileUSD,
+              additionalFiles: uploadedUrls.additionalFiles || null,
+            },
+            thumbnailImage: uploadedUrls.thumbnailImage,
+          }
+        : {
+            textureMaps: {
+              baseColorMap: uploadedUrls.baseColorMap,
+              normalMap: uploadedUrls.normalMap,
+              roughnessMap: uploadedUrls.roughnessMap,
+              metallicMap: uploadedUrls.metallicMap,
+              ambientOcclusionMap: uploadedUrls.ambientOcclusionMap,
+              heightMap: uploadedUrls.heightMap,
+            },
+            previewImage: uploadedUrls.previewImage,
+          }),
       createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     }
 
-    const docRef = await addDoc(collection(db, COLLECTIONS[type]), productData)
+    const docRef = await addDoc(collection(db, 'products'), productData)
     return { id: docRef.id }
-    
   } catch (error) {
     console.error('Error creating product:', error)
     throw error
@@ -197,12 +171,16 @@ export const createProduct = async (type: 'models' | 'materials', data: any, fil
 }
 
 // Update product
-export const updateProduct = async (type: 'models' | 'materials', id: string, data: any) => {
+export const updateProduct = async (
+  type: 'models' | 'materials',
+  id: string,
+  data: any
+) => {
   try {
     const docRef = doc(db, COLLECTIONS[type], id)
     await updateDoc(docRef, {
       ...data,
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     })
     return { success: true }
   } catch (error) {
@@ -212,9 +190,9 @@ export const updateProduct = async (type: 'models' | 'materials', id: string, da
 }
 
 // Delete product
-export const deleteProduct = async (type: 'models' | 'materials', id: string) => {
+export const deleteProduct = async (id: string) => {
   try {
-    await deleteDoc(doc(db, COLLECTIONS[type], id))
+    await deleteDoc(doc(db, 'products', id))
     return { success: true }
   } catch (error) {
     console.error('Error deleting product:', error)
@@ -222,6 +200,25 @@ export const deleteProduct = async (type: 'models' | 'materials', id: string) =>
   }
 }
 
+// Delete multiple products
+export const deleteProducts = async (ids: string[]) => {
+  try {
+    const batch = writeBatch(db)
+
+    ids.forEach((id) => {
+      const productDocRef = doc(db, 'products', id)
+      batch.delete(productDocRef)
+    })
+
+    // Commit the batch delete operation
+    await batch.commit()
+    console.log(`Successfully deleted products with IDs: ${ids.join(', ')}`)
+    return { success: true }
+  } catch (error) {
+    console.error('Error deleting products:', error)
+    return { success: false, message: 'Error deleting products' }
+  }
+}
 
 // Upload product image and file
 const uploadProductImage = async (file: File): Promise<string> => {
@@ -238,12 +235,12 @@ const uploadProductFile = async (file: File): Promise<string> => {
   return getDownloadURL(snapshot.ref)
 }
 
-export const createProductWithoutFiles = async (type: 'models' | 'materials', data: any) => {
+export const createProductWithoutFiles = async (data: any) => {
   try {
-    const docRef = await addDoc(collection(db, COLLECTIONS[type]), {
+    const docRef = await addDoc(collection(db, 'products'), {
       ...data,
       createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     })
     return { id: docRef.id }
   } catch (error) {
@@ -251,4 +248,3 @@ export const createProductWithoutFiles = async (type: 'models' | 'materials', da
     throw error
   }
 }
-

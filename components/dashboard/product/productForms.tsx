@@ -113,8 +113,7 @@ export default function Product({
     if (!productId) return
 
     try {
-      const collectionType = category === "item" ? "models" : "materials"
-      const result = await deleteProduct(collectionType, productId)
+      const result = await deleteProduct(productId)
 
       if (result.success) {
         enqueueSnackbar("產品刪除成功！", { variant: "success" })
@@ -170,7 +169,7 @@ export default function Product({
         )}
         <Button
           variant="contained"
-          type="submit"
+          onClick={methods.handleSubmit(handleSubmit)}
         >
           {productId ? "更新" : "新增"}
         </Button>
