@@ -24,9 +24,11 @@
         "react-hook-form": "^7.53.1",
         "react-images-uploading": "^3.1.7",
         "reflect-metadata": "^0.2.2",
+        "sonner": "^1.5.0",
         "zod": "^3.23.8"
     },
     "devDependencies": {
+        "@faker-js/faker": "^9.1.0",
         "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
         "@types/node": "^20",
         "@types/react": "^18",

@@ -1,154 +1,236 @@
+'use client'
+
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
-import Button from '@mui/material/Button'
-import Card from '@mui/material/Card'
-import CardActions from '@mui/material/CardActions'
-import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Divider from '@mui/material/Divider'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import Select from '@mui/material/Select'
-import Grid from '@mui/material/Unstable_Grid2'
-import { ModelImage } from './modelImage'
-import MaterialImage from './materialImage'
-import MaterialFile from './materialFile'
-import { MaterialForm } from './materialForm'
-import { ModelForm } from './modelForm'
-import { ModelFile } from './modelFile'
+import { toast } from 'sonner'
+
 import {
-  materialProductSchema,
-  modelProductSchema,
-  ProductCreateDto,
-} from '@/lib/product/product-create.dto'
-import { CircularProgress } from '@mui/material'
-import { useProductCreation } from '@/hooks/use-product-creation'
-import { paths } from '@/paths'
-import { enqueueSnackbar } from 'notistack'
-import { createProduct, updateProduct } from '@/lib/actions/product'
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Grid,
+  CircularProgress,
+} from '@mui/material'
 
-const categories = [
-  { value: 'item', label: '物品' },
-  { value: 'material', label: '材質' },
-] as const
+import { ProductFormValues, productFormSchema } from '@/lib/validations/product'
+import { createProductWithoutFiles } from '@/lib/actions/product'
+import { useUser } from '@/hooks/use-user'
 
-interface ProductFormProps {
-  initialData?: ProductCreateDto
-  productId?: string
-}
+type ProductType = 'models' | 'materials'
 
-export default function ProductForm({
-  initialData,
-  productId,
-}: ProductFormProps): React.JSX.Element {
-  const [category, setCategory] = React.useState(
-    initialData?.category || 'item'
-  )
-  const methods = useForm<ProductCreateDto>({
-    resolver: zodResolver(
-      category === 'item' ? modelProductSchema : materialProductSchema
-    ),
-    mode: 'onBlur',
-    defaultValues: initialData,
+export default function ProductForm() {
+  const router = useRouter()
+  const { user } = useUser()
+  const [loading, setLoading] = React.useState(false)
+  const [productType, setProductType] = React.useState<ProductType>('models')
+
+  const methods = useForm<ProductFormValues>({
+    resolver: zodResolver(productFormSchema),
+    defaultValues: {
+      modelName: '',
+      modelDescription: '',
+      price: 0,
+      userId: user?.id,
+    },
   })
 
-  const router = useRouter()
+  const handleTypeChange = (newType: 'models' | 'materials') => {
+    setProductType(newType)
+  }
 
-  const productType: 'models' | 'materials' =
-    category === 'item' ? 'models' : 'materials'
-
-  const onSubmit = async (data: ProductCreateDto) => {
+  const onSubmit = async (data: ProductFormValues) => {
     try {
-      if (productId) {
-        /* await updateProduct(category, productId, data) */
-        /* enqueueSnackbar('產品更新成功！', { variant: 'success' }) */
-      } else {
-        await createProduct(productType, data)
-        enqueueSnackbar('產品上架成功！', { variant: 'success' })
-      }
-      router.push(paths.dashboard.products)
+      setLoading(true)
+      console.log('Form data:', data)
+
+      await createProductWithoutFiles(productType, data)
+      toast.success('Product created successfully')
+      router.push('/admin/products')
+      router.refresh()
     } catch (error) {
-      console.error('Error:', error)
-      enqueueSnackbar('操作失敗', { variant: 'error' })
+      toast.error('Something went wrong')
+      console.error(error)
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <Grid container spacing={4}>
-      <Grid md={4} xs={12}>
-        {/* Category Selection */}
-        <FormControl fullWidth>
-          <InputLabel>品類</InputLabel>
-          <Select
-            label="品類"
-            name="category"
-            variant="outlined"
-            value={category}
-            onChange={(e) => {
-              setCategory(e.target.value)
-              methods.setValue('category', e.target.value)
-            }}
-          >
-            {categories.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
+    <FormProvider {...methods}>
+      <Grid container spacing={4}>
+        <Grid item md={4} xs={12}>
+          <FormControl fullWidth>
+            <InputLabel>Product Type</InputLabel>
+            <Select
+              label="Product Type"
+              value={productType}
+              onChange={(e) => handleTypeChange(e.target.value as ProductType)}
+            >
+              <MenuItem value="models">3D Model</MenuItem>
+              <MenuItem value="materials">Material</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
 
-      {/* Model Form */}
-      {category === 'item' && (
-        <FormProvider {...methods}>
+        <Grid item xs={12}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <Grid sx={{ width: '100%' }}>
-              <Card>
-                <CardHeader title="家具模型屬性" />
-                <Divider />
-                <CardContent>
-                  <ModelForm />
-                </CardContent>
-              </Card>
-            </Grid>
+            {productType === 'models' ? (
+              <>
+                <Card>
+                  <CardHeader title="Model Properties" />
+                  <Divider />
+                  <CardContent>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <FormControl fullWidth>
+                          <InputLabel>Model Name</InputLabel>
+                          <input
+                            {...methods.register('modelName')}
+                            className="p-2 w-full rounded border"
+                          />
+                          {methods.formState.errors.modelName && (
+                            <p className="text-red-500">
+                              {methods.formState.errors.modelName.message}
+                            </p>
+                          )}
+                        </FormControl>
+                      </Grid>
 
-            <Grid sx={{ width: '100%' }}>
-              <Card>
-                <CardHeader title="圖片" />
-                <Divider />
-                <CardContent sx={{ paddingX: '30px' }}>
-                  <ModelImage />
-                </CardContent>
-              </Card>
-            </Grid>
+                      <Grid item xs={12}>
+                        <FormControl fullWidth>
+                          <InputLabel>Description</InputLabel>
+                          <textarea
+                            {...methods.register('modelDescription')}
+                            className="p-2 w-full rounded border"
+                            rows={4}
+                          />
+                          {methods.formState.errors.modelDescription && (
+                            <p className="text-red-500">
+                              {
+                                methods.formState.errors.modelDescription
+                                  .message
+                              }
+                            </p>
+                          )}
+                        </FormControl>
+                      </Grid>
 
-            <Grid sx={{ width: '100%' }}>
-              <Card>
-                <CardHeader title="檔案" />
-                <Divider />
-                <CardContent>
-                  <ModelFile />
-                </CardContent>
-              </Card>
-            </Grid>
+                      <Grid item xs={12}>
+                        <FormControl fullWidth>
+                          <InputLabel>Price</InputLabel>
+                          <input
+                            type="number"
+                            {...methods.register('price', {
+                              valueAsNumber: true,
+                            })}
+                            className="p-2 w-full rounded border"
+                          />
+                          {methods.formState.errors.price && (
+                            <p className="text-red-500">
+                              {methods.formState.errors.price.message}
+                            </p>
+                          )}
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
+              </>
+            ) : (
+              <>
+                <Card>
+                  <CardHeader title="Material Properties" />
+                  <Divider />
+                  <CardContent>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <FormControl fullWidth>
+                          <InputLabel>Material Name</InputLabel>
+                          <input
+                            {...methods.register('materialName')}
+                            className="p-2 w-full rounded border"
+                          />
+                          {methods.formState.errors.materialName && (
+                            <p className="text-red-500">
+                              {methods.formState.errors.materialName.message}
+                            </p>
+                          )}
+                        </FormControl>
+                      </Grid>
 
-            <Grid sx={{ width: '100%' }}>
+                      <Grid item xs={12}>
+                        <FormControl fullWidth>
+                          <InputLabel>Description</InputLabel>
+                          <textarea
+                            {...methods.register('materialDescription')}
+                            className="p-2 w-full rounded border"
+                            rows={4}
+                          />
+                          {methods.formState.errors.materialDescription && (
+                            <p className="text-red-500">
+                              {
+                                methods.formState.errors.materialDescription
+                                  .message
+                              }
+                            </p>
+                          )}
+                        </FormControl>
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <FormControl fullWidth>
+                          <InputLabel>Price</InputLabel>
+                          <input
+                            type="number"
+                            {...methods.register('materialPrice', {
+                              valueAsNumber: true,
+                            })}
+                            className="p-2 w-full rounded border"
+                          />
+                          {methods.formState.errors.materialPrice && (
+                            <p className="text-red-500">
+                              {methods.formState.errors.materialPrice.message}
+                            </p>
+                          )}
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
+              </>
+            )}
+
+            <Card sx={{ mt: 3 }}>
               <CardActions sx={{ justifyContent: 'flex-end' }}>
                 <Button
                   variant="contained"
                   type="submit"
+                  disabled={loading}
+                  endIcon={loading ? <CircularProgress size={20} /> : null}
                 >
-                  {productId ? '更新' : '新增'}
+                  {loading ? 'Saving...'  : 'Create'}
                 </Button>
               </CardActions>
-            </Grid>
-          </form>
-        </FormProvider>
-      )}
-    </Grid>
-  )
+            </Card>
 
+            {/* Debug information */}
+            <pre className="p-4 mt-4 bg-gray-100 rounded">
+              Form Type: {productType}
+              {'\n'}
+              Errors: {JSON.stringify(methods.formState.errors, null, 2)}
+            </pre>
+          </form>
+        </Grid>
+      </Grid>
+    </FormProvider>
+  )
 }

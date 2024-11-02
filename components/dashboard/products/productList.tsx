@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
 import {
   Box,
   Card,
@@ -72,6 +73,7 @@ export function ProductList(): React.JSX.Element {
 
     fetchProducts()
   }, [user?.id])
+  console.log(products)
 
   // Filter products based on active tab
   const filteredProducts = React.useMemo(() => {
@@ -210,7 +212,13 @@ export function ProductList(): React.JSX.Element {
                     <TableCell>
                       <ButtonGroup variant="text" size="small">
                         <Button>預覽</Button>
-                        <Button>編輯</Button>
+                        <Button>
+                          <Link
+                            href={`/admin/product/${id}`}
+                          >
+                            編輯
+                          </Link>
+                        </Button>
                         <Button>推廣</Button>
                       </ButtonGroup>
                     </TableCell>
