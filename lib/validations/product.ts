@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const modelFormSchema = z.object({
   type: z.literal('models'),
   userId: z.string(),
-  category: z.string().min(1, 'Category is required'),
+  categoryID: z.string().min(1, 'Category ID is required'),
   isPublished: z.boolean().default(false),
   modelName: z.string().min(1, 'Model name is required'),
   modelDescription: z.string().min(1, 'Description is required'),
@@ -27,7 +27,7 @@ export const modelFormSchema = z.object({
 export const materialFormSchema = z.object({
   type: z.literal('materials'),
   userId: z.string(),
-  category: z.string().min(1, 'Category is required'),
+  categoryID: z.string().min(1, 'Category ID is required'),
   isPublished: z.boolean().default(false),
   materialName: z.string().min(1, 'Material name is required'),
   materialDescription: z.string().min(1, 'Description is required'),
