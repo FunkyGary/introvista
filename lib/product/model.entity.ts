@@ -1,12 +1,12 @@
 export interface Model {
-  itemID: string
+  modelID: string
   tags: string[]
-  itemName: string
+  modelName: string
   categoryID: string
   supplierID: string
   brandID: string
-  itemDescription: string
-  itemFiles: {
+  modelDescription: string
+  modelFiles: {
     modelFileGLB: string | null
     modelFileUSD: string | null
     additionalFiles: string[] | null
@@ -22,4 +22,28 @@ export interface Model {
   isPublished: boolean
   createdDate: Date
   lastUpdated: Date
+}
+
+export interface ModelDto {
+  modelID: string;
+  modelName: string;
+  categoryID: string;
+  brand: string;
+  modelDescription: string;
+  modelFileGLB: string | null;
+  modelFileUSD: string | null;
+  thumbnailImage: string | null;
+  dimensions: {
+    length: number;
+    width: number;
+    height: number;
+  };
+  weight: number;
+  materialIDs: string[];
+  price: number;
+  stockQuantity: number;
+  createdDate: Date;
+  lastUpdated: Date;
+  publishedAt: Date | null;
+  userID: string;
 }

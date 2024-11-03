@@ -3,7 +3,7 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
-import ImageUpload from "../../shared/imageUpload";
+import ImageUpload from "@/components/shared/ImageUpload";
 import { useFormContext } from "react-hook-form";
 import { imageValidation } from "@/utils/validationRules";
 import { FormHelperText } from "@mui/material";

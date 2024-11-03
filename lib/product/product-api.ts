@@ -25,7 +25,7 @@ import {
 import { FirebaseError } from 'firebase/app'
 import { parseFirestoreErrorCode } from '../firebase/parse-firestore-error-code'
 import { injectable } from 'inversify'
-import { Model } from './model.entity'
+import { Model, ModelDto } from './model.entity'
 import { Material } from './material.entity'
 
 @injectable()
@@ -47,7 +47,7 @@ class ProductApi {
     )
     return furnitureModels.docs.map((doc) => {
       const data = doc.data()
-      const furnitureModel: Model = {
+      const furnitureModel: ModelDto = {
         ModelID: doc.id,
         ModelName: data.ModelName,
         CategoryID: data.CategoryID,

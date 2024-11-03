@@ -97,11 +97,6 @@ export default function ProductForm() {
                             {...methods.register('modelName')}
                             className="p-2 w-full rounded border"
                           />
-                          {methods.formState.errors.modelName && (
-                            <p className="text-red-500">
-                              {methods.formState.errors.modelName.message}
-                            </p>
-                          )}
                         </FormControl>
                       </Grid>
 
@@ -113,14 +108,6 @@ export default function ProductForm() {
                             className="p-2 w-full rounded border"
                             rows={4}
                           />
-                          {methods.formState.errors.modelDescription && (
-                            <p className="text-red-500">
-                              {
-                                methods.formState.errors.modelDescription
-                                  .message
-                              }
-                            </p>
-                          )}
                         </FormControl>
                       </Grid>
 
@@ -134,11 +121,6 @@ export default function ProductForm() {
                             })}
                             className="p-2 w-full rounded border"
                           />
-                          {methods.formState.errors.price && (
-                            <p className="text-red-500">
-                              {methods.formState.errors.price.message}
-                            </p>
-                          )}
                         </FormControl>
                       </Grid>
                     </Grid>
@@ -159,11 +141,6 @@ export default function ProductForm() {
                             {...methods.register('materialName')}
                             className="p-2 w-full rounded border"
                           />
-                          {methods.formState.errors.materialName && (
-                            <p className="text-red-500">
-                              {methods.formState.errors.materialName.message}
-                            </p>
-                          )}
                         </FormControl>
                       </Grid>
 
@@ -175,14 +152,6 @@ export default function ProductForm() {
                             className="p-2 w-full rounded border"
                             rows={4}
                           />
-                          {methods.formState.errors.materialDescription && (
-                            <p className="text-red-500">
-                              {
-                                methods.formState.errors.materialDescription
-                                  .message
-                              }
-                            </p>
-                          )}
                         </FormControl>
                       </Grid>
 
@@ -196,11 +165,6 @@ export default function ProductForm() {
                             })}
                             className="p-2 w-full rounded border"
                           />
-                          {methods.formState.errors.materialPrice && (
-                            <p className="text-red-500">
-                              {methods.formState.errors.materialPrice.message}
-                            </p>
-                          )}
                         </FormControl>
                       </Grid>
                     </Grid>
