@@ -88,7 +88,7 @@ export default function Product({
 
       if (productId) {
         // Handle update
-        const result = await updateProduct(collectionType, productId, formData)
+        const result = await updateProduct( productId, formData)
         if (result.success) {
           enqueueSnackbar("產品更新成功！", { variant: "success" })
           router.push(paths.dashboard.products)
@@ -113,7 +113,7 @@ export default function Product({
     if (!productId) return
 
     try {
-      const result = await deleteProduct(productId)
+      const result = await deleteProduct( productId)
 
       if (result.success) {
         enqueueSnackbar("產品刪除成功！", { variant: "success" })
@@ -176,6 +176,9 @@ export default function Product({
       </CardActions>
     </Grid>
   )
+  
+  console.log(methods.getValues());
+  
 
   return (
     <Grid container spacing={4}>

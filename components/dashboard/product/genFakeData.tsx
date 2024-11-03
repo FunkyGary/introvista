@@ -16,7 +16,7 @@ export default function GenFakeData() {
       isPublished: faker.datatype.boolean(),
       userId: user?.id,
     }
-    createProductWithoutFiles(modelData)
+    createProductWithoutFiles('models', modelData)
   }
 
   const handleMaterial = () => {
@@ -35,7 +35,7 @@ export default function GenFakeData() {
       isPublished: faker.datatype.boolean(),
       userId: user?.id,
     }
-    createProductWithoutFiles(materialData)
+    createProductWithoutFiles('materials', materialData)
   }
   return (
     <div className="w-full">

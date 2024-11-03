@@ -37,23 +37,10 @@ const tabs = [
   { value: 'unpublished', label: '未上架商品' },
 ] as const
 
-interface ProductListType {
-  productID: string
-  type: 'model' | 'material'
-  name: string
-  price: number
-  description: string
-  image: string | null
-  isPublished: boolean
-  createdDate: Date
-  lastUpdated: Date
-  supplierID: string
-}
-
 export function ProductList(): React.JSX.Element {
   const { user } = useUser()
 
-  const [products, setProducts] = React.useState<ProductListType[]>([])
+  const [products, setProducts] = React.useState<Product[]>([])
   const [loading, setLoading] = React.useState(true)
   const [activeTab, setActiveTab] = React.useState('all')
   const [searchQuery, setSearchQuery] = React.useState('')
@@ -63,7 +50,7 @@ export function ProductList(): React.JSX.Element {
 
   // Selection handling
   const productIds = React.useMemo(
-    () => products.map((p) => p.productID),
+    () => products.map((p) => (p.type === 'model' ? p.modelID : p.materialID)),
     [products]
   )
   const { selectAll, deselectAll, selectOne, deselectOne, selected } =
@@ -185,7 +172,10 @@ export function ProductList(): React.JSX.Element {
             {filteredProducts
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((product) => {
-                const id = product.productID
+                const id =
+                  product.type === 'model'
+                    ? product.modelID
+                    : product.materialID
                 const isSelected = selected.has(id)
 
                 return (
@@ -202,8 +192,17 @@ export function ProductList(): React.JSX.Element {
                     <TableCell>
                       {product.type === 'model' ? '物品' : '材質'}
                     </TableCell>
-                    <TableCell>{product.name}</TableCell>
-                    <TableCell>$ {product.price}</TableCell>
+                    <TableCell>
+                      {product.type === 'model'
+                        ? product.modelName
+                        : product.materialName}
+                    </TableCell>
+                    <TableCell>
+                      $
+                      {product.type === 'model'
+                        ? product.price
+                        : product.materialPrice}
+                    </TableCell>
                     <TableCell>
                       {product.isPublished ? '已上架' : '未上架'}
                     </TableCell>
@@ -214,7 +213,11 @@ export function ProductList(): React.JSX.Element {
                       <ButtonGroup variant="text" size="small">
                         <Button>預覽</Button>
                         <Button>
-                          <Link href={`/admin/product/${id}`}>編輯</Link>
+                          <Link
+                            href={`/admin/product/${id}`}
+                          >
+                            編輯
+                          </Link>
                         </Button>
                         <Button>推廣</Button>
                       </ButtonGroup>

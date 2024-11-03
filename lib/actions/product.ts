@@ -7,6 +7,7 @@ import {
   getDownloadURL,
 } from 'firebase/storage'
 import {
+  getDoc,
   collection,
   writeBatch,
   addDoc,
@@ -67,8 +68,7 @@ interface MaterialProduct extends BaseProduct {
 
 export type Product = ModelProduct | MaterialProduct
 
-// Get products by user
-export const getUserProducts = async (userId: string) => {
+export const getUserProductsFromSingleCollection = async (userId: string) => {
   try {
     const productsQuery = query(
       collection(db, 'products'),
@@ -99,6 +99,109 @@ export const getUserProducts = async (userId: string) => {
     return sortedProducts
   } catch (error) {
     console.error('Error fetching products:', error)
+    throw error
+  }
+}
+
+// Get products by user
+export const getUserProducts = async (userId: string) => {
+  try {
+    const modelsQuery = query(
+      collection(db, COLLECTIONS.models),
+      where('userId', '==', userId)
+    )
+
+    const materialsQuery = query(
+      collection(db, COLLECTIONS.materials),
+      where('userId', '==', userId)
+    )
+
+    const [modelsSnapshot, materialsSnapshot] = await Promise.all([
+      getDocs(modelsQuery),
+      getDocs(materialsQuery),
+    ])
+
+    // Transform models data
+    const models: ModelProduct[] = modelsSnapshot.docs.map((doc) => {
+      const data = doc.data()
+      return {
+        modelID: doc.id,
+        type: 'model',
+        modelName: data.modelName || '',
+        price: data.price || 0,
+        modelDescription: data.modelDescription || '',
+        thumbnailImage: data.thumbnailImage || null,
+        modelFiles: {
+          modelFileGLB: data.modelFiles?.modelFileGLB || null,
+          modelFileUSD: data.modelFiles?.modelFileUSD || null,
+        },
+        isPublished: data.isPublished || false,
+        createdDate: (data.createdDate as Timestamp)?.toDate() || new Date(),
+        lastUpdated: (data.lastUpdated as Timestamp)?.toDate() || new Date(),
+        supplierID: data.supplierID,
+      }
+    })
+
+    // Transform materials data
+    const materials: MaterialProduct[] = materialsSnapshot.docs.map((doc) => {
+      const data = doc.data()
+      return {
+        materialID: doc.id,
+        type: 'material',
+        materialName: data.materialName || '',
+        materialPrice: data.materialPrice || 0,
+        materialDescription: data.materialDescription || '',
+        previewImage: data.previewImage || null,
+        textureMaps: {
+          baseColorMap: data.textureMaps?.baseColorMap || null,
+          normalMap: data.textureMaps?.normalMap || null,
+          roughnessMap: data.textureMaps?.roughnessMap || null,
+        },
+        isPublished: data.isPublished || false,
+        createdDate: (data.createdDate as Timestamp)?.toDate() || new Date(),
+        lastUpdated: (data.lastUpdated as Timestamp)?.toDate() || new Date(),
+        supplierID: data.supplierID,
+      }
+    })
+
+    // Combine and sort by creation date
+    const allProducts: Product[] = [...models, ...materials].sort(
+      (a, b) => b.createdDate.getTime() - a.createdDate.getTime()
+    )
+
+    return allProducts
+  } catch (error) {
+    console.error('Error fetching products:', error)
+    throw error
+  }
+}
+
+// Get Product By ProductId 
+/* export const getProductByProductId = async (id: string) => { */
+/*   try { */
+/*     const productDocRef = doc(db, 'products', id) */
+/*     const productDoc = await getDoc(productDocRef) */
+/*     return productDoc.data() */
+/*   } catch (error) { */
+/*     console.error('Error fetching product:', error) */
+/*     throw error */
+/*   } */
+/* } */
+
+// Get Product By ProductId from multiple collections
+export const getProductByProductId = async (id: string) => {
+  const collections = ['models', 'materials']
+  try {
+    const productDoc = await Promise.all(
+      collections.map(async (collection) => {
+        const productDocRef = doc(db, collection, id)
+        const productDoc = await getDoc(productDocRef)
+        return productDoc.data()
+    })
+  )
+    return productDoc
+  } catch (error) {
+    console.error('Error fetching product:', error)
     throw error
   }
 }
@@ -170,14 +273,10 @@ export const createProduct = async (
   }
 }
 
-// Update product
-export const updateProduct = async (
-  type: 'models' | 'materials',
-  id: string,
-  data: any
-) => {
+// Update product by Id
+export const updateProduct = async (id: string, data: any) => {
   try {
-    const docRef = doc(db, COLLECTIONS[type], id)
+    const docRef = doc(db, 'products', id)
     await updateDoc(docRef, {
       ...data,
       updatedAt: serverTimestamp(),
@@ -192,11 +291,53 @@ export const updateProduct = async (
 // Delete product
 export const deleteProduct = async (id: string) => {
   try {
-    await deleteDoc(doc(db, 'products', id))
-    return { success: true }
+    const collections = ['models', 'materials']
+    let deletedCount = 0
+
+    const checkPromises = collections.map(async (collection) => {
+      const docRef = doc(db, collection, id)
+      const docSnapshot = await getDoc(docRef)
+      return {
+        collection,
+        exists: docSnapshot.exists(),
+        ref: docRef,
+      }
+    })
+
+    const results = await Promise.all(checkPromises)
+
+    const deletePromises = results
+      .filter((result) => result.exists)
+      .map(async (result) => {
+        await deleteDoc(result.ref)
+        deletedCount++
+        console.log(
+          `Document with ID ${id} deleted from collection: ${result.collection}`
+        )
+      })
+
+    await Promise.all(deletePromises)
+
+    if (deletedCount === 0) {
+      return {
+        success: false,
+        message: 'Document not found in any collection',
+      }
+    }
+
+    return {
+      success: true,
+      message: `Document deleted from ${deletedCount} collection(s)`,
+      deletedCount,
+    }
   } catch (error) {
     console.error('Error deleting product:', error)
-    throw error
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : 'An unknown error occurred',
+      error,
+    }
   }
 }
 
@@ -210,7 +351,6 @@ export const deleteProducts = async (ids: string[]) => {
       batch.delete(productDocRef)
     })
 
-    // Commit the batch delete operation
     await batch.commit()
     console.log(`Successfully deleted products with IDs: ${ids.join(', ')}`)
     return { success: true }
@@ -235,9 +375,12 @@ const uploadProductFile = async (file: File): Promise<string> => {
   return getDownloadURL(snapshot.ref)
 }
 
-export const createProductWithoutFiles = async (data: any) => {
+export const createProductWithoutFiles = async (
+  type: 'models' | 'materials',
+  data: any
+) => {
   try {
-    const docRef = await addDoc(collection(db, 'products'), {
+    const docRef = await addDoc(collection(db, COLLECTIONS[type]), {
       ...data,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
