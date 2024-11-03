@@ -15,12 +15,12 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import Grid from '@mui/material/Unstable_Grid2'
-import { ModelImage } from './modelImage'
+import { ModelImage } from './ModelImage'
 import MaterialImage from './materialImage'
 import MaterialFile from './materialFile'
 import { MaterialForm } from './materialForm'
-import { ModelForm } from './modelForm'
-import { ModelFile } from './modelFile'
+import { ModelForm } from './ModelForm'
+import { ModelFile } from './ModelFile'
 import {
   materialProductSchema,
   modelProductSchema,

@@ -23,8 +23,6 @@ import { categories, MainCategory } from '@/utils/categories'
 export function ModelForm(): React.JSX.Element {
   const [mainCategory, setMainCategory] = useState<string>('')
   const { control } = useFormContext()
-  console.log(control);
-  
 
   return (
     <Grid container spacing={3}>
@@ -32,7 +30,7 @@ export function ModelForm(): React.JSX.Element {
         <FormControl fullWidth required>
           <InputLabel>名稱</InputLabel>
           <Controller
-            name="modelName"
+            name="modelname"
             control={control}
             rules={stringValidation}
             render={({ field }) => <OutlinedInput {...field} label="名稱" />}

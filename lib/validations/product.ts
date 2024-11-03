@@ -3,6 +3,7 @@ import { z } from 'zod'
 export const modelFormSchema = z.object({
   type: z.literal('models'),
   userId: z.string(),
+  category: z.string().min(1, 'Category is required'),
   isPublished: z.boolean().default(false),
   modelName: z.string().min(1, 'Model name is required'),
   modelDescription: z.string().min(1, 'Description is required'),
@@ -13,6 +14,7 @@ export const modelFormSchema = z.object({
     height: z.number().min(0),
   }),
   weight: z.number().min(0),
+  thumbnailImage: z.string().nullable().optional(),
   modelFiles: z
     .object({
       modelFileGLB: z.string().nullable(),
@@ -20,12 +22,12 @@ export const modelFormSchema = z.object({
       additionalFiles: z.array(z.string()).nullable(),
     })
     .optional(),
-  thumbnailImage: z.string().nullable(),
 })
 
 export const materialFormSchema = z.object({
   type: z.literal('materials'),
   userId: z.string(),
+  category: z.string().min(1, 'Category is required'),
   isPublished: z.boolean().default(false),
   materialName: z.string().min(1, 'Material name is required'),
   materialDescription: z.string().min(1, 'Description is required'),
@@ -48,7 +50,7 @@ export const materialFormSchema = z.object({
       heightMap: z.string().nullable(),
     })
     .optional(),
-  previewImage: z.string().nullable(),
+  previewImage: z.string().nullable().optional(),
 })
 
 export const productFormSchema = modelFormSchema.or(materialFormSchema)
