@@ -1,10 +1,5 @@
 import firebaseApp from '../firebase/firebase-config'
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL,
-} from 'firebase/storage'
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import {
   getDoc,
   collection,
@@ -104,7 +99,7 @@ interface MaterialData {
     height: number
   }
   weight?: number
-  previewImage?: { file: File | null }[]
+  previewImage?: File | null
   textureMaps?: {
     baseColorMap?: File | null
     normalMap?: File | null
@@ -367,7 +362,7 @@ const uploadProductImage = async (file: File): Promise<string> => {
   const fileRef = ref(storage, `products/images/${filename}`)
   const snapshot = await uploadBytes(fileRef, file)
 
-  console.log('finished upload image');
+  console.log('finished upload image')
   return getDownloadURL(snapshot.ref)
 }
 
@@ -376,7 +371,7 @@ const uploadProductFile = async (file: File): Promise<string> => {
   const fileRef = ref(storage, `products/files/${filename}`)
   const snapshot = await uploadBytes(fileRef, file)
 
-  console.log('finished upload file');
+  console.log('finished upload file')
   return getDownloadURL(snapshot.ref)
 }
 
@@ -405,8 +400,8 @@ const extractModelFiles = (data: ModelData) => {
 const extractMaterialFiles = (data: MaterialData) => {
   const files: Record<string, File | null> = {}
 
-  if (data.previewImage?.[0]?.file) {
-    files.previewImage = data.previewImage[0].file
+  if (data.previewImage) {
+    files.previewImage = data.previewImage || null
   }
 
   if (data.textureMaps) {
@@ -470,24 +465,24 @@ const prepareProductData = (
     return {
       ...baseData,
       itemFiles: {
-        modelFileGLB: uploadedUrls.modelFileGLB,
-        modelFileUSD: uploadedUrls.modelFileUSD,
+        modelFileGLB: uploadedUrls.modelFileGLB || null,
+        modelFileUSD: uploadedUrls.modelFileUSD || null,
         additionalFiles: uploadedUrls.additionalFiles || null,
       },
-      thumbnailImage: uploadedUrls.thumbnailImage,
+      thumbnailImage: uploadedUrls.thumbnailImage || null,
     }
   } else {
     return {
       ...baseData,
       textureMaps: {
-        baseColorMap: uploadedUrls.baseColorMap,
-        normalMap: uploadedUrls.normalMap,
-        roughnessMap: uploadedUrls.roughnessMap,
-        metallicMap: uploadedUrls.metallicMap,
-        ambientOcclusionMap: uploadedUrls.ambientOcclusionMap,
-        heightMap: uploadedUrls.heightMap,
+        baseColorMap: uploadedUrls.baseColorMap || null,
+        normalMap: uploadedUrls.normalMap || null,
+        roughnessMap: uploadedUrls.roughnessMap || null,
+        metallicMap: uploadedUrls.metallicMap || null,
+        ambientOcclusionMap: uploadedUrls.ambientOcclusionMap || null,
+        heightMap: uploadedUrls.heightMap || null,
       },
-      previewImage: uploadedUrls.previewImage,
+      previewImage: uploadedUrls.previewImage || null,
     }
   }
 }
