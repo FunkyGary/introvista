@@ -1,5 +1,11 @@
 import { z } from 'zod'
 
+export const fileSchema = z.instanceof(File).nullable().optional()
+export const uploadImageFileSchema = z.array(
+  z.object({ file: z.instanceof(File) })
+)
+
+// Define Zod schemas for ModelForm and MaterialForm
 export const modelFormSchema = z.object({
   type: z.literal('models'),
   userId: z.string(),
@@ -14,14 +20,9 @@ export const modelFormSchema = z.object({
     height: z.number().min(0),
   }),
   weight: z.number().min(0),
-  thumbnailImage: z.string().nullable().optional(),
-  modelFiles: z
-    .object({
-      modelFileGLB: z.string().nullable(),
-      modelFileUSD: z.string().nullable(),
-      additionalFiles: z.array(z.string()).nullable(),
-    })
-    .optional(),
+  modelFileGLB: fileSchema.optional(),
+  modelFileUSD: fileSchema.optional(),
+  thumbnailImage: uploadImageFileSchema.optional(),
 })
 
 export const materialFormSchema = z.object({
@@ -40,18 +41,16 @@ export const materialFormSchema = z.object({
     })
     .optional(),
   weight: z.number().min(0).optional(),
-  textureMaps: z
-    .object({
-      baseColorMap: z.string().nullable(),
-      normalMap: z.string().nullable(),
-      roughnessMap: z.string().nullable(),
-      metallicMap: z.string().nullable(),
-      ambientOcclusionMap: z.string().nullable(),
-      heightMap: z.string().nullable(),
-    })
-    .optional(),
-  previewImage: z.string().nullable().optional(),
+  baseColorMap: fileSchema.optional(),
+  normalMap: fileSchema.optional(),
+  roughnessMap: fileSchema.optional(),
+  metallicMap: fileSchema.optional(),
+  ambientOcclusionMap: fileSchema.optional(),
+  heightMap: fileSchema.optional(),
+  previewImage: uploadImageFileSchema.optional()
 })
 
-export const productFormSchema = modelFormSchema.or(materialFormSchema)
-export type ProductFormValues = z.infer<typeof productFormSchema>
+type ModelFormValues = z.infer<typeof modelFormSchema>
+type MaterialFormValues = z.infer<typeof materialFormSchema>
+
+export type ProductFormValues = ModelFormValues | MaterialFormValues

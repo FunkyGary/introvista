@@ -22,7 +22,7 @@ import {
   serverTimestamp,
   Timestamp,
 } from 'firebase/firestore'
-import { Model, Material } from 'types/product'
+import { ModelSchema, Material } from 'types/product'
 
 const db = getFirestore(firebaseApp)
 const storage = getStorage(firebaseApp)

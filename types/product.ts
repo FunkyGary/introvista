@@ -1,14 +1,12 @@
-import { z } from 'zod'
-
-export interface Model {
-  modelID: string
+export interface ModelSchema {
+  itemID: string
   tags: string[]
-  modelName: string
+  itemName: string
   categoryID: string
   supplierID: string
   brandID: string
-  modelDescription: string
-  modelFiles: {
+  itemDescription: string
+  itemFiles: {
     modelFileGLB: string | null
     modelFileUSD: string | null
     additionalFiles: string[] | null
@@ -25,6 +23,7 @@ export interface Model {
   createdDate: Date
   lastUpdated: Date
   userId: string
+  type: 'models'
 }
 
 export interface Material {
@@ -55,43 +54,5 @@ export interface Material {
   createdDate: Date
   lastUpdated: Date
   userId: string
+  type: 'materials'
 }
-
-
-export interface Product {
-  productID: string
-  type: 'model' | 'material'
-  tags: string[]
-  name: string
-  categoryID: string
-  supplierID: string
-  brandID: string
-  description: string
-  files?: {
-    modelFileGLB?: string | null
-    modelFileUSD?: string | null
-    additionalFiles?: string[] | null
-  }
-  textureMaps?: {
-    baseColorMap?: string | null
-    normalMap?: string | null
-    roughnessMap?: string | null
-    metallicMap?: string | null
-    ambientOcclusionMap?: string | null
-    heightMap?: string | null
-  }
-  thumbnailImage?: string | null
-  previewImage?: string | null
-  dimensions?: {
-    length?: number
-    width?: number
-    height?: number
-  }
-  weight?: number
-  price: number
-  isPublished: boolean
-  createdDate: Date
-  lastUpdated: Date
-  userId: string
-}
-
