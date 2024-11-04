@@ -31,7 +31,7 @@ import { MaterialForm } from "./materialForm"
 import { ModelImage } from "./ModelImage"
 import { ModelForm } from "./ModelForm"
 import { ModelFile } from "./ModelFile"
-import { ProductFormValues, productFormSchema } from "@/lib/validations/product"
+import { ProductFormValues, materialFormSchema, modelFormSchema } from "@/lib/validations/product"
 import { paths } from "@/paths"
 import { useUser } from "@/hooks/use-user"
 
@@ -50,15 +50,14 @@ export default function Product({
   productId,
 }: ProductFormProps): React.JSX.Element {
   const [category, setCategory] = React.useState(
-    initialData?.category || "item"
+    initialData?.type || "item"
   )
   const router = useRouter()
   const { user } = useUser()
 
   const methods = useForm<ProductFormValues>({
     resolver: zodResolver(
-      productFormSchema
-      /* category === 'item' ? modelProductSchema : materialProductSchema */
+      category === 'item' ? modelFormSchema : materialFormSchema
     ),
     defaultValues: {
       userId: user?.id,
@@ -70,21 +69,21 @@ export default function Product({
     try {
       const files = {
         // For models
-        /* ...(category === 'item' && { */
-        /*   thumbnailImage: formData.thumbnailImage?.[0] || null, */
-        /*   modelFileGLB: formData.modelFileGLB?.[0] || null, */
-        /*   modelFileUSD: formData.modelFileUSD?.[0] || null, */
-        /* }), */
+        ...(category === 'item' && {
+          thumbnailImage: formData.thumbnailImage?.[0] || null,
+          modelFileGLB: formData.modelFileGLB?.[0] || null,
+          modelFileUSD: formData.modelFileUSD?.[0] || null,
+        }),
         // For materials
-        /* ...(category === 'material' && { */
-        /*   previewImage: formData.previewImage?.[0] || null, */
-        /*   baseColorMap: formData.baseColorMap?.[0] || null, */
-        /*   normalMap: formData.normalMap?.[0] || null, */
-        /*   roughnessMap: formData.roughnessMap?.[0] || null, */
-        /*   metallicMap: formData.metallicMap?.[0] || null, */
-        /*   ambientOcclusionMap: formData.ambientOcclusionMap?.[0] || null, */
-        /*   heightMap: formData.heightMap?.[0] || null, */
-        /* }), */
+        ...(category === 'material' && {
+          previewImage: formData.previewImage?.[0] || null,
+          baseColorMap: formData.baseColorMap?.[0] || null,
+          normalMap: formData.normalMap?.[0] || null,
+          roughnessMap: formData.roughnessMap?.[0] || null,
+          metallicMap: formData.metallicMap?.[0] || null,
+          ambientOcclusionMap: formData.ambientOcclusionMap?.[0] || null,
+          heightMap: formData.heightMap?.[0] || null,
+        }),
       }
 
       const collectionType = category === "item" ? "models" : "materials"
@@ -98,7 +97,9 @@ export default function Product({
         }
       } else {
         // Handle create
-        const result = await createProductWithoutFiles(collectionType, formData)
+        console.log(formData);
+        
+        const result = await createProduct(collectionType, formData, files)
         if (result.id) {
           enqueueSnackbar("產品上架成功！", { variant: "success" })
           router.push(paths.dashboard.products)
@@ -226,7 +227,7 @@ export default function Product({
           {category === "item" ? (
             <>
               {renderFormSection("家具模型屬性", <ModelForm />)}
-              {/* {renderFormSection('圖片', <ModelImage />)} */}
+              {renderFormSection('圖片', <ModelImage />)}
               {/* {renderFormSection('檔案', <ModelFile />)} */}
             </>
           ) : (

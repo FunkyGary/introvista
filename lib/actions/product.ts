@@ -265,7 +265,7 @@ export const createProduct = async (
       updatedAt: serverTimestamp(),
     }
 
-    const docRef = await addDoc(collection(db, 'products'), productData)
+    const docRef = await addDoc(collection(db, COLLECTIONS[type]), productData)
     return { id: docRef.id }
   } catch (error) {
     console.error('Error creating product:', error)

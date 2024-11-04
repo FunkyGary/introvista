@@ -73,7 +73,6 @@ export function ProductList(): React.JSX.Element {
 
     fetchProducts()
   }, [user?.id])
-  console.log(products)
 
   // Filter products based on active tab
   const filteredProducts = React.useMemo(() => {

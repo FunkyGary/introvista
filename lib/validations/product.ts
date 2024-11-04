@@ -20,8 +20,12 @@ export const modelFormSchema = z.object({
     height: z.number().min(0),
   }),
   weight: z.number().min(0),
-  modelFileGLB: fileSchema.optional(),
-  modelFileUSD: fileSchema.optional(),
+  itmeFiles: z
+    .object({
+      modelFileGLB: fileSchema.optional(),
+      modelFileUSD: fileSchema.optional(),
+    })
+    .optional(),
   thumbnailImage: uploadImageFileSchema.optional(),
 })
 
@@ -41,13 +45,17 @@ export const materialFormSchema = z.object({
     })
     .optional(),
   weight: z.number().min(0).optional(),
-  baseColorMap: fileSchema.optional(),
-  normalMap: fileSchema.optional(),
-  roughnessMap: fileSchema.optional(),
-  metallicMap: fileSchema.optional(),
-  ambientOcclusionMap: fileSchema.optional(),
-  heightMap: fileSchema.optional(),
-  previewImage: uploadImageFileSchema.optional()
+  textureMaps: z
+    .object({
+      baseColorMap: fileSchema.optional(),
+      normalMap: fileSchema.optional(),
+      roughnessMap: fileSchema.optional(),
+      metallicMap: fileSchema.optional(),
+      ambientOcclusionMap: fileSchema.optional(),
+      heightMap: fileSchema.optional(),
+    })
+    .optional(),
+  previewImage: uploadImageFileSchema.optional(),
 })
 
 type ModelFormValues = z.infer<typeof modelFormSchema>
