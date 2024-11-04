@@ -1,5 +1,4 @@
 export interface ModelSchema {
-  itemID: string
   tags: string[]
   itemName: string
   categoryID: string
@@ -27,7 +26,6 @@ export interface ModelSchema {
 }
 
 export interface Material {
-  materialID: string
   tags: string[]
   materialName: string
   categoryID: string

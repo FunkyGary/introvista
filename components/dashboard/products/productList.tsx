@@ -50,7 +50,7 @@ export function ProductList(): React.JSX.Element {
 
   // Selection handling
   const productIds = React.useMemo(
-    () => products.map((p) => (p.type === 'model' ? p.modelID : p.materialID)),
+    () => products.map((p) => (p.type === 'model' ? p.itemID : p.materialID)),
     [products]
   )
   const { selectAll, deselectAll, selectOne, deselectOne, selected } =
@@ -173,7 +173,7 @@ export function ProductList(): React.JSX.Element {
               .map((product) => {
                 const id =
                   product.type === 'model'
-                    ? product.modelID
+                    ? product.itemID
                     : product.materialID
                 const isSelected = selected.has(id)
 
@@ -193,7 +193,7 @@ export function ProductList(): React.JSX.Element {
                     </TableCell>
                     <TableCell>
                       {product.type === 'model'
-                        ? product.modelName
+                        ? product.itemName
                         : product.materialName}
                     </TableCell>
                     <TableCell>
@@ -212,11 +212,7 @@ export function ProductList(): React.JSX.Element {
                       <ButtonGroup variant="text" size="small">
                         <Button>預覽</Button>
                         <Button>
-                          <Link
-                            href={`/admin/product/${id}`}
-                          >
-                            編輯
-                          </Link>
+                          <Link href={`/admin/product/${id}`}>編輯</Link>
                         </Button>
                         <Button>推廣</Button>
                       </ButtonGroup>

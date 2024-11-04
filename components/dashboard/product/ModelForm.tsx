@@ -30,7 +30,7 @@ export function ModelForm(): React.JSX.Element {
         <FormControl fullWidth required>
           <InputLabel>名稱</InputLabel>
           <Controller
-            name="modelname"
+            name="itemName"
             control={control}
             rules={stringValidation}
             render={({ field }) => <OutlinedInput {...field} label="名稱" />}

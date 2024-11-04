@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
-export const fileSchema = z.instanceof(File).nullable().optional()
+export const fileSchema = z.instanceof(File).nullable()
 export const uploadImageFileSchema = z.array(
-  z.object({ file: z.instanceof(File) })
+  z.object({ file: z.instanceof(File).nullable() })
 )
 
 // Define Zod schemas for ModelForm and MaterialForm
@@ -11,8 +11,8 @@ export const modelFormSchema = z.object({
   userId: z.string(),
   categoryID: z.string().min(1, 'Category ID is required'),
   isPublished: z.boolean().default(false),
-  modelName: z.string().min(1, 'Model name is required'),
-  modelDescription: z.string().min(1, 'Description is required'),
+  itemName: z.string().min(1, 'Model name is required'),
+  itemDescription: z.string().min(1, 'Description is required'),
   price: z.number().min(0, 'Price must be positive'),
   dimensions: z.object({
     length: z.number().min(0),
@@ -20,13 +20,13 @@ export const modelFormSchema = z.object({
     height: z.number().min(0),
   }),
   weight: z.number().min(0),
-  itmeFiles: z
+  itemFiles: z
     .object({
-      modelFileGLB: fileSchema.optional(),
-      modelFileUSD: fileSchema.optional(),
+      modelFileGLB: fileSchema,
+      modelFileUSD: fileSchema,
     })
     .optional(),
-  thumbnailImage: uploadImageFileSchema.optional(),
+  thumbnailImage: fileSchema,
 })
 
 export const materialFormSchema = z.object({
@@ -47,15 +47,15 @@ export const materialFormSchema = z.object({
   weight: z.number().min(0).optional(),
   textureMaps: z
     .object({
-      baseColorMap: fileSchema.optional(),
-      normalMap: fileSchema.optional(),
-      roughnessMap: fileSchema.optional(),
-      metallicMap: fileSchema.optional(),
-      ambientOcclusionMap: fileSchema.optional(),
-      heightMap: fileSchema.optional(),
+      baseColorMap: fileSchema,
+      normalMap: fileSchema,
+      roughnessMap: fileSchema,
+      metallicMap: fileSchema,
+      ambientOcclusionMap: fileSchema,
+      heightMap: fileSchema,
     })
     .optional(),
-  previewImage: uploadImageFileSchema.optional(),
+  previewImage: uploadImageFileSchema,
 })
 
 type ModelFormValues = z.infer<typeof modelFormSchema>

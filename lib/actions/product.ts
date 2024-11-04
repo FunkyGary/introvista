@@ -1,6 +1,5 @@
 import firebaseApp from '../firebase/firebase-config'
 import {
-  FirebaseStorage,
   getStorage,
   ref,
   uploadBytes,
@@ -17,7 +16,6 @@ import {
   getDocs,
   where,
   query,
-  orderBy,
   getFirestore,
   serverTimestamp,
   Timestamp,
@@ -41,8 +39,8 @@ interface BaseProduct {
 
 interface ModelProduct extends BaseProduct {
   type: 'model'
-  modelID: string
-  modelName: string
+  itemID: string
+  itemName: string
   price: number
   modelDescription: string
   thumbnailImage: string | null
@@ -67,6 +65,57 @@ interface MaterialProduct extends BaseProduct {
 }
 
 export type Product = ModelProduct | MaterialProduct
+
+type ProductType = 'models' | 'materials'
+
+interface ModelData {
+  type: 'models'
+  itemName: string
+  itemDescription: string
+  price: number
+  categoryID: string
+  userId: string
+  isPublished: boolean
+  dimensions: {
+    length: number
+    width: number
+    height: number
+  }
+  weight: number
+  thumbnailImage?: File | null
+  itemFiles?: {
+    modelFileGLB?: File | null
+    modelFileUSD?: File | null
+    additionalFiles?: File | null
+  }
+}
+
+interface MaterialData {
+  type: 'materials'
+  materialName: string
+  materialDescription: string
+  materialPrice: number
+  categoryID: string
+  userId: string
+  isPublished: boolean
+  dimensions?: {
+    length: number
+    width: number
+    height: number
+  }
+  weight?: number
+  previewImage?: { file: File | null }[]
+  textureMaps?: {
+    baseColorMap?: File | null
+    normalMap?: File | null
+    roughnessMap?: File | null
+    metallicMap?: File | null
+    ambientOcclusionMap?: File | null
+    heightMap?: File | null
+  }
+}
+
+export type ProductData = ModelData | MaterialData
 
 export const getUserProductsFromSingleCollection = async (userId: string) => {
   try {
@@ -125,9 +174,9 @@ export const getUserProducts = async (userId: string) => {
     const models: ModelProduct[] = modelsSnapshot.docs.map((doc) => {
       const data = doc.data()
       return {
-        modelID: doc.id,
+        itemID: doc.id,
         type: 'model',
-        modelName: data.modelName || '',
+        itemName: data.itemName || '',
         price: data.price || 0,
         modelDescription: data.modelDescription || '',
         thumbnailImage: data.thumbnailImage || null,
@@ -176,7 +225,7 @@ export const getUserProducts = async (userId: string) => {
   }
 }
 
-// Get Product By ProductId 
+// Get Product By ProductId
 /* export const getProductByProductId = async (id: string) => { */
 /*   try { */
 /*     const productDocRef = doc(db, 'products', id) */
@@ -197,8 +246,8 @@ export const getProductByProductId = async (id: string) => {
         const productDocRef = doc(db, collection, id)
         const productDoc = await getDoc(productDocRef)
         return productDoc.data()
-    })
-  )
+      })
+    )
     return productDoc
   } catch (error) {
     console.error('Error fetching product:', error)
@@ -207,63 +256,15 @@ export const getProductByProductId = async (id: string) => {
 }
 
 // Create product
-export const createProduct = async (
-  type: 'models' | 'materials',
-  data: any,
-  files: {
-    [key: string]: File | null
-  }
-) => {
+export const createProduct = async (type: ProductType, data: ProductData) => {
   try {
-    const uploadPromises = Object.entries(files).map(async ([key, file]) => {
-      if (!file) return [key, null]
+    const files =
+      type === 'models'
+        ? extractModelFiles(data as ModelData)
+        : extractMaterialFiles(data as MaterialData)
 
-      const isImage = [
-        'thumbnailImage',
-        'previewImage',
-        'baseColorMap',
-        'normalMap',
-        'roughnessMap',
-        'metallicMap',
-        'ambientOcclusionMap',
-        'heightMap',
-      ].includes(key)
-
-      const url = await (isImage
-        ? uploadProductImage(file)
-        : uploadProductFile(file))
-
-      return [key, url]
-    })
-
-    const uploadResults = await Promise.all(uploadPromises)
-    const uploadedUrls = Object.fromEntries(uploadResults)
-
-    const productData = {
-      ...data,
-      ...(type === 'models'
-        ? {
-            modelFiles: {
-              modelFileGLB: uploadedUrls.modelFileGLB,
-              modelFileUSD: uploadedUrls.modelFileUSD,
-              additionalFiles: uploadedUrls.additionalFiles || null,
-            },
-            thumbnailImage: uploadedUrls.thumbnailImage,
-          }
-        : {
-            textureMaps: {
-              baseColorMap: uploadedUrls.baseColorMap,
-              normalMap: uploadedUrls.normalMap,
-              roughnessMap: uploadedUrls.roughnessMap,
-              metallicMap: uploadedUrls.metallicMap,
-              ambientOcclusionMap: uploadedUrls.ambientOcclusionMap,
-              heightMap: uploadedUrls.heightMap,
-            },
-            previewImage: uploadedUrls.previewImage,
-          }),
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    }
+    const uploadedUrls = await uploadFiles(files)
+    const productData = prepareProductData(type, data, uploadedUrls)
 
     const docRef = await addDoc(collection(db, COLLECTIONS[type]), productData)
     return { id: docRef.id }
@@ -365,6 +366,8 @@ const uploadProductImage = async (file: File): Promise<string> => {
   const filename = file.name
   const fileRef = ref(storage, `products/images/${filename}`)
   const snapshot = await uploadBytes(fileRef, file)
+
+  console.log('finished upload image');
   return getDownloadURL(snapshot.ref)
 }
 
@@ -372,7 +375,121 @@ const uploadProductFile = async (file: File): Promise<string> => {
   const filename = file.name
   const fileRef = ref(storage, `products/files/${filename}`)
   const snapshot = await uploadBytes(fileRef, file)
+
+  console.log('finished upload file');
   return getDownloadURL(snapshot.ref)
+}
+
+const extractModelFiles = (data: ModelData) => {
+  const files: Record<string, File | null> = {}
+
+  if (data.thumbnailImage) {
+    files.thumbnailImage = data.thumbnailImage
+  }
+
+  if (data.itemFiles) {
+    if (data.itemFiles.modelFileGLB) {
+      files.modelFileGLB = data.itemFiles.modelFileGLB
+    }
+    if (data.itemFiles.modelFileUSD) {
+      files.modelFileUSD = data.itemFiles.modelFileUSD
+    }
+    if (data.itemFiles.additionalFiles) {
+      files.additionalFiles = data.itemFiles.additionalFiles
+    }
+  }
+
+  return files
+}
+
+const extractMaterialFiles = (data: MaterialData) => {
+  const files: Record<string, File | null> = {}
+
+  if (data.previewImage?.[0]?.file) {
+    files.previewImage = data.previewImage[0].file
+  }
+
+  if (data.textureMaps) {
+    const mapTypes = [
+      'baseColorMap',
+      'normalMap',
+      'roughnessMap',
+      'metallicMap',
+      'ambientOcclusionMap',
+      'heightMap',
+    ] as const
+
+    mapTypes.forEach((mapType) => {
+      if (data.textureMaps?.[mapType]) {
+        files[mapType] = data.textureMaps[mapType]
+      }
+    })
+  }
+
+  return files
+}
+
+const uploadFiles = async (files: Record<string, File | null>) => {
+  const uploadPromises = Object.entries(files).map(async ([key, file]) => {
+    if (!file) return [key, null]
+
+    const isImage = [
+      'thumbnailImage',
+      'previewImage',
+      'baseColorMap',
+      'normalMap',
+      'roughnessMap',
+      'metallicMap',
+      'ambientOcclusionMap',
+      'heightMap',
+    ].includes(key)
+
+    const url = await (isImage
+      ? uploadProductImage(file)
+      : uploadProductFile(file))
+
+    return [key, url]
+  })
+
+  const uploadResults = await Promise.all(uploadPromises)
+  return Object.fromEntries(uploadResults)
+}
+
+const prepareProductData = (
+  type: ProductType,
+  data: ProductData,
+  uploadedUrls: Record<string, string | null>
+) => {
+  const baseData = {
+    ...data,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  }
+
+  if (type === 'models') {
+    return {
+      ...baseData,
+      itemFiles: {
+        modelFileGLB: uploadedUrls.modelFileGLB,
+        modelFileUSD: uploadedUrls.modelFileUSD,
+        additionalFiles: uploadedUrls.additionalFiles || null,
+      },
+      thumbnailImage: uploadedUrls.thumbnailImage,
+    }
+  } else {
+    return {
+      ...baseData,
+      textureMaps: {
+        baseColorMap: uploadedUrls.baseColorMap,
+        normalMap: uploadedUrls.normalMap,
+        roughnessMap: uploadedUrls.roughnessMap,
+        metallicMap: uploadedUrls.metallicMap,
+        ambientOcclusionMap: uploadedUrls.ambientOcclusionMap,
+        heightMap: uploadedUrls.heightMap,
+      },
+      previewImage: uploadedUrls.previewImage,
+    }
+  }
 }
 
 export const createProductWithoutFiles = async (
