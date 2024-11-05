@@ -58,7 +58,7 @@ export const materialFormSchema = z.object({
   previewImage: uploadImageFileSchema,
 })
 
-type ModelFormValues = z.infer<typeof modelFormSchema>
-type MaterialFormValues = z.infer<typeof materialFormSchema>
+export type ModelFormValues = z.infer<typeof modelFormSchema>
+export type MaterialFormValues = z.infer<typeof materialFormSchema>
 
 export type ProductFormValues = ModelFormValues | MaterialFormValues

@@ -15,7 +15,22 @@ import {
   serverTimestamp,
   Timestamp,
 } from 'firebase/firestore'
-import { ModelSchema, Material } from 'types/product'
+import {
+  ModelData,
+  MaterialData,
+  ModelProduct,
+  MaterialProduct,
+  ProductType,
+  Product,
+} from 'types/product'
+
+import {
+  ProductFormValues,
+  MaterialFormValues,
+  ModelFormValues,
+  materialFormSchema,
+  modelFormSchema,
+} from '@/lib/validations/product'
 
 const db = getFirestore(firebaseApp)
 const storage = getStorage(firebaseApp)
@@ -24,93 +39,6 @@ const COLLECTIONS = {
   models: 'models',
   materials: 'materials',
 } as const
-
-interface BaseProduct {
-  isPublished: boolean
-  createdDate: Date
-  lastUpdated: Date
-  supplierID: string
-}
-
-interface ModelProduct extends BaseProduct {
-  type: 'model'
-  itemID: string
-  itemName: string
-  price: number
-  modelDescription: string
-  thumbnailImage: string | null
-  modelFiles: {
-    modelFileGLB: string | null
-    modelFileUSD: string | null
-  }
-}
-
-interface MaterialProduct extends BaseProduct {
-  type: 'material'
-  materialID: string
-  materialName: string
-  materialPrice: number
-  materialDescription: string
-  previewImage: string | null
-  textureMaps: {
-    baseColorMap: string | null
-    normalMap: string | null
-    roughnessMap: string | null
-  }
-}
-
-export type Product = ModelProduct | MaterialProduct
-
-type ProductType = 'models' | 'materials'
-
-interface ModelData {
-  type: 'models'
-  itemName: string
-  itemDescription: string
-  price: number
-  categoryID: string
-  userId: string
-  isPublished: boolean
-  dimensions: {
-    length: number
-    width: number
-    height: number
-  }
-  weight: number
-  thumbnailImage?: File | null
-  itemFiles?: {
-    modelFileGLB?: File | null
-    modelFileUSD?: File | null
-    additionalFiles?: File | null
-  }
-}
-
-interface MaterialData {
-  type: 'materials'
-  materialName: string
-  materialDescription: string
-  materialPrice: number
-  categoryID: string
-  userId: string
-  isPublished: boolean
-  dimensions?: {
-    length: number
-    width: number
-    height: number
-  }
-  weight?: number
-  previewImage?: File | null
-  textureMaps?: {
-    baseColorMap?: File | null
-    normalMap?: File | null
-    roughnessMap?: File | null
-    metallicMap?: File | null
-    ambientOcclusionMap?: File | null
-    heightMap?: File | null
-  }
-}
-
-export type ProductData = ModelData | MaterialData
 
 export const getUserProductsFromSingleCollection = async (userId: string) => {
   try {
@@ -251,12 +179,15 @@ export const getProductByProductId = async (id: string) => {
 }
 
 // Create product
-export const createProduct = async (type: ProductType, data: ProductData) => {
+export const createProduct = async (
+  type: ProductType,
+  data: ProductFormValues
+) => {
   try {
     const files =
       type === 'models'
-        ? extractModelFiles(data as ModelData)
-        : extractMaterialFiles(data as MaterialData)
+        ? extractModelFiles(data as ModelFormValues)
+        : extractMaterialFiles(data as MaterialFormValues)
 
     const uploadedUrls = await uploadFiles(files)
     const productData = prepareProductData(type, data, uploadedUrls)
@@ -270,12 +201,17 @@ export const createProduct = async (type: ProductType, data: ProductData) => {
 }
 
 // Update product by Id
-export const updateProduct = async (id: string, data: any) => {
+export const updateProduct = async (
+  id: string,
+  type: ProductType,
+  data: ProductFormValues
+) => {
   try {
-    const docRef = doc(db, 'products', id)
+    const docRef = doc(db, COLLECTIONS[type], id)
+    const updatedData = prepareProductData(type, data, {})
     await updateDoc(docRef, {
-      ...data,
-      updatedAt: serverTimestamp(),
+      ...updatedData,
+      lastUpdated: serverTimestamp(),
     })
     return { success: true }
   } catch (error) {
@@ -363,7 +299,7 @@ const uploadProductImage = async (file: File): Promise<string> => {
   const snapshot = await uploadBytes(fileRef, file)
 
   console.log('finished upload image')
-  return getDownloadURL(snapshot.ref)
+  return snapshot.ref.toString()
 }
 
 const uploadProductFile = async (file: File): Promise<string> => {
@@ -372,10 +308,10 @@ const uploadProductFile = async (file: File): Promise<string> => {
   const snapshot = await uploadBytes(fileRef, file)
 
   console.log('finished upload file')
-  return getDownloadURL(snapshot.ref)
+  return snapshot.ref.toString()
 }
 
-const extractModelFiles = (data: ModelData) => {
+const extractModelFiles = (data: ModelFormValues) => {
   const files: Record<string, File | null> = {}
 
   if (data.thumbnailImage) {
@@ -389,19 +325,17 @@ const extractModelFiles = (data: ModelData) => {
     if (data.itemFiles.modelFileUSD) {
       files.modelFileUSD = data.itemFiles.modelFileUSD
     }
-    if (data.itemFiles.additionalFiles) {
-      files.additionalFiles = data.itemFiles.additionalFiles
-    }
   }
 
   return files
 }
 
-const extractMaterialFiles = (data: MaterialData) => {
+const extractMaterialFiles = (data: MaterialFormValues) => {
   const files: Record<string, File | null> = {}
 
   if (data.previewImage) {
-    files.previewImage = data.previewImage || null
+    files.previewImage =
+      data.previewImage instanceof File ? data.previewImage : null
   }
 
   if (data.textureMaps) {
@@ -452,13 +386,13 @@ const uploadFiles = async (files: Record<string, File | null>) => {
 
 const prepareProductData = (
   type: ProductType,
-  data: ProductData,
+  data: ProductFormValues,
   uploadedUrls: Record<string, string | null>
 ) => {
   const baseData = {
     ...data,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
+    createdDate: serverTimestamp(),
+    lastUpdated: serverTimestamp(),
   }
 
   if (type === 'models') {
@@ -489,13 +423,13 @@ const prepareProductData = (
 
 export const createProductWithoutFiles = async (
   type: 'models' | 'materials',
-  data: any
+  data: ProductFormValues
 ) => {
   try {
     const docRef = await addDoc(collection(db, COLLECTIONS[type]), {
       ...data,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
+      createdDate: serverTimestamp(),
+      lastUpdated: serverTimestamp(),
     })
     return { id: docRef.id }
   } catch (error) {

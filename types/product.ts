@@ -1,56 +1,86 @@
-export interface ModelSchema {
-  tags: string[]
-  itemName: string
-  categoryID: string
+interface BaseProduct {
+  isPublished: boolean
+  createdDate: Date
+  lastUpdated: Date
   supplierID: string
-  brandID: string
-  itemDescription: string
-  itemFiles: {
+}
+
+export interface ModelProduct extends BaseProduct {
+  type: 'model'
+  itemID: string
+  itemName: string
+  price: number
+  modelDescription: string
+  thumbnailImage: string | null
+  modelFiles: {
     modelFileGLB: string | null
     modelFileUSD: string | null
-    additionalFiles: string[] | null
   }
-  thumbnailImage: string | null
+}
+
+export interface MaterialProduct extends BaseProduct {
+  type: 'material'
+  materialID: string
+  materialName: string
+  materialPrice: number
+  materialDescription: string
+  previewImage: string | null
+  textureMaps: {
+    baseColorMap: string | null
+    normalMap: string | null
+    roughnessMap: string | null
+  }
+}
+
+export type Product = ModelProduct | MaterialProduct
+
+export type ProductType = 'models' | 'materials'
+
+export interface ModelData {
+  type: 'models'
+  itemName: string
+  itemDescription: string
+  price: number
+  categoryID: string
+  userId: string
+  isPublished: boolean
   dimensions: {
     length: number
     width: number
     height: number
   }
   weight: number
-  price: number
-  isPublished: boolean
-  createdDate: Date
-  lastUpdated: Date
-  userId: string
-  type: 'models'
+  thumbnailImage?: File | null
+  itemFiles?: {
+    modelFileGLB?: File | null
+    modelFileUSD?: File | null
+    additionalFiles?: File | null
+  }
 }
 
-export interface Material {
-  tags: string[]
+export interface MaterialData {
+  type: 'materials'
   materialName: string
-  categoryID: string
-  supplierID: string
-  brandID: string
   materialDescription: string
-  textureMaps: {
-    baseColorMap: string | null
-    normalMap: string | null
-    roughnessMap: string | null
-    metallicMap?: string | null
-    ambientOcclusionMap?: string | null
-    heightMap?: string | null
-  }
-  previewImage: string | null
+  materialPrice: number
+  categoryID: string
+  userId: string
+  isPublished: boolean
   dimensions?: {
-    length?: number
-    width?: number
-    height?: number
+    length: number
+    width: number
+    height: number
   }
   weight?: number
-  materialPrice: number
-  isPublished: boolean
-  createdDate: Date
-  lastUpdated: Date
-  userId: string
-  type: 'materials'
+  previewImage?: File | null
+  textureMaps?: {
+    baseColorMap?: File | null
+    normalMap?: File | null
+    roughnessMap?: File | null
+    metallicMap?: File | null
+    ambientOcclusionMap?: File | null
+    heightMap?: File | null
+  }
 }
+
+export type ProductData = ModelData | MaterialData
