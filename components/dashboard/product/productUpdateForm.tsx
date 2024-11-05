@@ -48,13 +48,20 @@ interface ProductFormProps {
   productId?: string
 }
 
-export default function Product({
+export default function ProductUpdateForm({
   initialData,
   productId,
 }: ProductFormProps): React.JSX.Element {
   const [category, setCategory] = React.useState(
-    initialData?.type === 'models' ? 'item' : 'material' || 'item'
+    initialData?.type === 'models' ? 'item' : 'material'
+
   )
+
+  const [productType, setProductType] = React.useState(
+    initialData?.type
+  )
+  console.log(productType, initialData?.type === 'models', category);
+  
   const router = useRouter()
   const { user } = useUser()
 
@@ -86,20 +93,13 @@ export default function Product({
     }
   }
 
-  const handleCategoryChange = (newCategory: string) => {
-    setCategory(newCategory)
-    methods.reset({
-      userId: user?.id,
-      ...initialData,
-    })
-  }
 
-  React.useEffect(() => {
-
-    if (initialData) {
-      methods.reset(initialData)
-    }
-  }, [initialData, methods, category])
+  /* React.useEffect(() => { */
+  /**/
+  /*   if (initialData) { */
+  /*     methods.reset(initialData) */
+  /*   } */
+  /* }, [initialData, methods, category]) */
 
   const renderFormSection = (title: string, content: React.ReactNode) => (
     <Grid sx={{ width: '100%' }}>
@@ -178,8 +178,7 @@ export default function Product({
             label="品類"
             name="category"
             variant="outlined"
-            value={category}
-            onChange={(e) => handleCategoryChange(e.target.value)}
+            value={productType}
           >
             {CATEGORIES.map((option) => (
               <MenuItem key={option.value} value={option.value}>

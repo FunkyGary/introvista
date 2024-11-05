@@ -3,7 +3,7 @@
 import withAuthRequired from '@/components/hoc/with-auth-required'
 import { notFound } from 'next/navigation'
 import { ProductCreateDto } from '@/lib/product/product-create.dto'
-import ProductForms from '@/components/dashboard/product/productForms'
+import ProductUpdateForm from '@/components/dashboard/product/productUpdateForm'
 import { getProductByProductId } from '@/lib/actions/product'
 import { useEffect, useState } from 'react'
 import { useUser } from '@/hooks/use-user'
@@ -43,10 +43,11 @@ function ProductPage({ params }: { params: { id: string } }) {
     notFound()
   }
 
+  console.log(data);
+  
   return (
     <main className="flex flex-col justify-between items-center p-1 min-h-screen">
-      <ProductForms initialData={data} productId={productId} />
-      {JSON.stringify(data)}
+      <ProductUpdateForm initialData={data} productId={productId} />
     </main>
   )
 }

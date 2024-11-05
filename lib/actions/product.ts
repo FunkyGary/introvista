@@ -22,6 +22,7 @@ import {
   MaterialProduct,
   ProductType,
   Product,
+  ProductData,
 } from 'types/product'
 
 import {
@@ -148,18 +149,6 @@ export const getUserProducts = async (userId: string) => {
   }
 }
 
-// Get Product By ProductId
-/* export const getProductByProductId = async (id: string) => { */
-/*   try { */
-/*     const productDocRef = doc(db, 'products', id) */
-/*     const productDoc = await getDoc(productDocRef) */
-/*     return productDoc.data() */
-/*   } catch (error) { */
-/*     console.error('Error fetching product:', error) */
-/*     throw error */
-/*   } */
-/* } */
-
 // Get Product By ProductId from multiple collections
 export const getProductByProductId = async (id: string) => {
   const collections = ['models', 'materials']
@@ -168,10 +157,44 @@ export const getProductByProductId = async (id: string) => {
       collections.map(async (collection) => {
         const productDocRef = doc(db, collection, id)
         const productDoc = await getDoc(productDocRef)
-        return productDoc.data()
+        if (!productDoc.exists()) return undefined
+
+        const modelData = {
+          type: 'models',
+          itemID: productDoc.id,
+          itemName: productDoc.data()?.itemName,
+          itemDescription: productDoc.data()?.itemDescription,
+          price: productDoc.data()?.price,
+          categoryID: productDoc.data()?.categoryID,
+          userId: productDoc.data()?.userId,
+          isPublished: productDoc.data()?.isPublished,
+          dimensions: productDoc.data()?.dimensions,
+          weight: productDoc.data()?.weight,
+          tags: productDoc.data()?.tags,
+        } as ModelData
+
+        const materialData = {
+          type: 'materials',
+          materialID: productDoc.id,
+          materialName: productDoc.data()?.materialName,
+          materialDescription: productDoc.data()?.materialDescription,
+          materialPrice: productDoc.data()?.materialPrice,
+          isPublished: productDoc.data()?.isPublished,
+          categoryID: productDoc.data()?.categoryID,
+          userId: productDoc.data()?.userId,
+          dimensions: productDoc.data()?.dimensions,
+          weight: productDoc.data()?.weight,
+          tags: productDoc.data()?.tags,
+        } as MaterialData
+
+        const productData = collection === 'models' ? modelData : materialData
+
+        return productData as ProductData
       })
     )
-    return productDoc
+
+    // Return the product that exists
+    return productDoc.find((doc) => doc !== undefined)
   } catch (error) {
     console.error('Error fetching product:', error)
     throw error

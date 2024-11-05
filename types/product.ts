@@ -12,9 +12,10 @@ export interface ModelProduct extends BaseProduct {
   price: number
   modelDescription: string
   thumbnailImage: string | null
-  modelFiles: {
+  itemFiles: {
     modelFileGLB: string | null
     modelFileUSD: string | null
+    additionalFiles: string | null
   }
 }
 
@@ -29,6 +30,9 @@ export interface MaterialProduct extends BaseProduct {
     baseColorMap: string | null
     normalMap: string | null
     roughnessMap: string | null
+    heightMap: string | null
+    metallicMap: string | null
+    ambientOcclusionMap: string | null
   }
 }
 

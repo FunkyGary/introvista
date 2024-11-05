@@ -31,6 +31,7 @@ export function ModelForm(): React.JSX.Element {
           <InputLabel>名稱</InputLabel>
           <Controller
             name="itemName"
+            defaultValue={control._defaultValues.itemName}
             control={control}
             rules={stringValidation}
             render={({ field }) => <OutlinedInput {...field} label="名稱" />}

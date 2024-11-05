@@ -28,7 +28,8 @@ import {
 } from '@mui/material'
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass'
 import { useSelection } from '@/hooks/use-selection'
-import { getUserProducts, type Product } from '@/lib/actions/product'
+import { getUserProducts } from '@/lib/actions/product'
+import { ProductData, Product } from '@/types/product'
 import { useUser } from '@/hooks/use-user' // Adjust based on your auth setup
 
 const tabs = [
@@ -172,9 +173,7 @@ export function ProductList(): React.JSX.Element {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((product) => {
                 const id =
-                  product.type === 'model'
-                    ? product.itemID
-                    : product.materialID
+                  product.type === 'model' ? product.itemID : product.materialID
                 const isSelected = selected.has(id)
 
                 return (
