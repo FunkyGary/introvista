@@ -48,12 +48,12 @@ interface ProductFormProps {
   productId?: string
 }
 
-export default function Product({
+export default function ProductForms({
   initialData,
   productId,
 }: ProductFormProps): React.JSX.Element {
   const [category, setCategory] = React.useState(
-    initialData?.type === 'models' ? 'item' : 'material' || 'item'
+    initialData?.type === 'models' ? 'item' : 'material'
   )
   const router = useRouter()
   const { user } = useUser()
@@ -95,7 +95,6 @@ export default function Product({
   }
 
   React.useEffect(() => {
-
     if (initialData) {
       methods.reset(initialData)
     }
@@ -180,6 +179,7 @@ export default function Product({
             variant="outlined"
             value={category}
             onChange={(e) => handleCategoryChange(e.target.value)}
+            disabled={!!productId}
           >
             {CATEGORIES.map((option) => (
               <MenuItem key={option.value} value={option.value}>

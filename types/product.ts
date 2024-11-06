@@ -44,6 +44,7 @@ export interface ModelData {
   type: 'models'
   itemName: string
   itemDescription: string
+  brand: string
   price: number
   categoryID: string
   userId: string
@@ -67,6 +68,7 @@ export interface MaterialData {
   materialName: string
   materialDescription: string
   materialPrice: number
+  brand: string
   categoryID: string
   userId: string
   isPublished: boolean

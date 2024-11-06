@@ -104,7 +104,7 @@ export const getUserProducts = async (userId: string) => {
         price: data.price || 0,
         modelDescription: data.modelDescription || '',
         thumbnailImage: data.thumbnailImage || null,
-        modelFiles: {
+        itemFiles: {
           modelFileGLB: data.modelFiles?.modelFileGLB || null,
           modelFileUSD: data.modelFiles?.modelFileUSD || null,
         },
@@ -164,6 +164,7 @@ export const getProductByProductId = async (id: string) => {
           itemID: productDoc.id,
           itemName: productDoc.data()?.itemName,
           itemDescription: productDoc.data()?.itemDescription,
+          brand: productDoc.data()?.brand,
           price: productDoc.data()?.price,
           categoryID: productDoc.data()?.categoryID,
           userId: productDoc.data()?.userId,
@@ -179,6 +180,7 @@ export const getProductByProductId = async (id: string) => {
           materialName: productDoc.data()?.materialName,
           materialDescription: productDoc.data()?.materialDescription,
           materialPrice: productDoc.data()?.materialPrice,
+          brand: productDoc.data()?.brand,
           isPublished: productDoc.data()?.isPublished,
           categoryID: productDoc.data()?.categoryID,
           userId: productDoc.data()?.userId,
