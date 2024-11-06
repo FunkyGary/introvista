@@ -28,7 +28,8 @@ import {
 } from '@mui/material'
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass'
 import { useSelection } from '@/hooks/use-selection'
-import { getUserProducts, type Product } from '@/lib/actions/product'
+import { getUserProducts } from '@/lib/actions/product'
+import { ProductData, Product } from '@/types/product'
 import { useUser } from '@/hooks/use-user' // Adjust based on your auth setup
 
 const tabs = [
@@ -50,7 +51,7 @@ export function ProductList(): React.JSX.Element {
 
   // Selection handling
   const productIds = React.useMemo(
-    () => products.map((p) => (p.type === 'model' ? p.modelID : p.materialID)),
+    () => products.map((p) => (p.type === 'model' ? p.itemID : p.materialID)),
     [products]
   )
   const { selectAll, deselectAll, selectOne, deselectOne, selected } =
@@ -172,9 +173,7 @@ export function ProductList(): React.JSX.Element {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((product) => {
                 const id =
-                  product.type === 'model'
-                    ? product.modelID
-                    : product.materialID
+                  product.type === 'model' ? product.itemID : product.materialID
                 const isSelected = selected.has(id)
 
                 return (
@@ -193,7 +192,7 @@ export function ProductList(): React.JSX.Element {
                     </TableCell>
                     <TableCell>
                       {product.type === 'model'
-                        ? product.modelName
+                        ? product.itemName
                         : product.materialName}
                     </TableCell>
                     <TableCell>
@@ -212,11 +211,7 @@ export function ProductList(): React.JSX.Element {
                       <ButtonGroup variant="text" size="small">
                         <Button>預覽</Button>
                         <Button>
-                          <Link
-                            href={`/admin/product/${id}`}
-                          >
-                            編輯
-                          </Link>
+                          <Link href={`/admin/product/${id}`}>編輯</Link>
                         </Button>
                         <Button>推廣</Button>
                       </ButtonGroup>
