@@ -172,6 +172,8 @@ export const getProductByProductId = async (id: string) => {
           dimensions: productDoc.data()?.dimensions,
           weight: productDoc.data()?.weight,
           tags: productDoc.data()?.tags,
+          thumbnailImage: productDoc.data()?.thumbnailImage,
+          itemFiles: productDoc.data()?.itemFiles,
         } as ModelData
 
         const materialData = {
@@ -187,6 +189,8 @@ export const getProductByProductId = async (id: string) => {
           dimensions: productDoc.data()?.dimensions,
           weight: productDoc.data()?.weight,
           tags: productDoc.data()?.tags,
+          previewImage: productDoc.data()?.previewImage,
+          textureMaps: productDoc.data()?.textureMaps,
         } as MaterialData
 
         const productData = collection === 'models' ? modelData : materialData
@@ -232,8 +236,16 @@ export const updateProduct = async (
   data: ProductFormValues
 ) => {
   try {
+    const files =
+      type === 'models'
+        ? extractModelFiles(data as ModelFormValues)
+        : extractMaterialFiles(data as MaterialFormValues)
+
+    const uploadedUrls = await uploadFiles(files)
     const docRef = doc(db, COLLECTIONS[type], id)
-    const updatedData = prepareProductData(type, data, {})
+
+    const updatedData = prepareProductData(type, data, uploadedUrls)
+
     await updateDoc(docRef, {
       ...updatedData,
       lastUpdated: serverTimestamp(),
@@ -268,9 +280,6 @@ export const deleteProduct = async (id: string) => {
       .map(async (result) => {
         await deleteDoc(result.ref)
         deletedCount++
-        console.log(
-          `Document with ID ${id} deleted from collection: ${result.collection}`
-        )
       })
 
     await Promise.all(deletePromises)
@@ -324,7 +333,9 @@ const uploadProductImage = async (file: File): Promise<string> => {
   const snapshot = await uploadBytes(fileRef, file)
 
   console.log('finished upload image')
+  
   return snapshot.ref.toString()
+  /* return getDownloadURL(snapshot.ref) */
 }
 
 const uploadProductFile = async (file: File): Promise<string> => {
@@ -334,6 +345,7 @@ const uploadProductFile = async (file: File): Promise<string> => {
 
   console.log('finished upload file')
   return snapshot.ref.toString()
+  /* return getDownloadURL(snapshot.ref) */
 }
 
 const extractModelFiles = (data: ModelFormValues) => {
@@ -359,8 +371,7 @@ const extractMaterialFiles = (data: MaterialFormValues) => {
   const files: Record<string, File | null> = {}
 
   if (data.previewImage) {
-    files.previewImage =
-      data.previewImage instanceof File ? data.previewImage : null
+    files.previewImage = data.previewImage
   }
 
   if (data.textureMaps) {

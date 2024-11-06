@@ -43,8 +43,6 @@ function ProductPage({ params }: { params: { id: string } }) {
     notFound()
   }
 
-  console.log(data)
-
   return (
     <main className="flex flex-col justify-between items-center p-1 min-h-screen">
       {data !== null && data && (

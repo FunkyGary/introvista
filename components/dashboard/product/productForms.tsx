@@ -95,6 +95,8 @@ export default function ProductForms({
   }
 
   React.useEffect(() => {
+    console.log(methods.getValues())
+    
     if (initialData) {
       methods.reset(initialData)
     }
@@ -137,14 +139,16 @@ export default function ProductForms({
       const formData = methods.getValues()
       const collectionType = category === 'item' ? 'models' : 'materials'
 
-      if (collectionType === 'models') {
-        modelFormSchema.parse(formData)
-      } else {
-        materialFormSchema.parse(formData)
-      }
+      /* if (collectionType === 'models') { */
+      /*   modelFormSchema.parse(formData) */
+      /* } else { */
+      /*   materialFormSchema.parse(formData) */
+      /* } */
 
       if (productId) {
         // Update existing product
+        console.log(formData)
+        
         const result = await updateProduct(productId, collectionType, formData)
         if (result.success) {
           enqueueSnackbar('產品更新成功！', { variant: 'success' })

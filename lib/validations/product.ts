@@ -55,7 +55,7 @@ export const materialFormSchema = z.object({
       heightMap: fileSchema,
     })
     .optional(),
-  previewImage: uploadImageFileSchema,
+  previewImage: fileSchema,
 })
 
 export type ModelFormValues = z.infer<typeof modelFormSchema>
