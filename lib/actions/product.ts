@@ -29,8 +29,6 @@ import {
   ProductFormValues,
   MaterialFormValues,
   ModelFormValues,
-  materialFormSchema,
-  modelFormSchema,
 } from '@/lib/validations/product'
 
 const db = getFirestore(firebaseApp)
@@ -172,8 +170,6 @@ export const getProductByProductId = async (id: string) => {
           dimensions: productDoc.data()?.dimensions,
           weight: productDoc.data()?.weight,
           tags: productDoc.data()?.tags,
-          thumbnailImage: productDoc.data()?.thumbnailImage,
-          itemFiles: productDoc.data()?.itemFiles,
         } as ModelData
 
         const materialData = {
@@ -189,8 +185,6 @@ export const getProductByProductId = async (id: string) => {
           dimensions: productDoc.data()?.dimensions,
           weight: productDoc.data()?.weight,
           tags: productDoc.data()?.tags,
-          previewImage: productDoc.data()?.previewImage,
-          textureMaps: productDoc.data()?.textureMaps,
         } as MaterialData
 
         const productData = collection === 'models' ? modelData : materialData
@@ -218,9 +212,10 @@ export const createProduct = async (
         ? extractModelFiles(data as ModelFormValues)
         : extractMaterialFiles(data as MaterialFormValues)
 
+    console.log('Files to upload:', files)
     const uploadedUrls = await uploadFiles(files)
+    
     const productData = prepareProductData(type, data, uploadedUrls)
-
     const docRef = await addDoc(collection(db, COLLECTIONS[type]), productData)
     return { id: docRef.id }
   } catch (error) {
@@ -328,14 +323,26 @@ export const deleteProducts = async (ids: string[]) => {
 
 // Upload product image and file
 const uploadProductImage = async (file: File): Promise<string> => {
+  if (!file) {
+    console.error('No file provided for upload')
+    return ''
+  }
+
   const filename = file.name
+  if (!filename) {
+    console.error('File name is undefined')
+    return ''
+  }
+
+  console.log(`Uploading image with filename: ${filename}`)
+
   const fileRef = ref(storage, `products/images/${filename}`)
   const snapshot = await uploadBytes(fileRef, file)
 
-  console.log('finished upload image')
-  
-  return snapshot.ref.toString()
-  /* return getDownloadURL(snapshot.ref) */
+  console.log('Finished uploading image')
+
+  // return snapshot.ref.toString()
+  return getDownloadURL(snapshot.ref)
 }
 
 const uploadProductFile = async (file: File): Promise<string> => {
@@ -417,6 +424,8 @@ const uploadFiles = async (files: Record<string, File | null>) => {
   })
 
   const uploadResults = await Promise.all(uploadPromises)
+  console.log(Object.fromEntries(uploadResults));
+  
   return Object.fromEntries(uploadResults)
 }
 
