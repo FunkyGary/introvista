@@ -170,6 +170,8 @@ export const getProductByProductId = async (id: string) => {
           dimensions: productDoc.data()?.dimensions,
           weight: productDoc.data()?.weight,
           tags: productDoc.data()?.tags,
+          thumbnailImage: productDoc.data()?.thumbnailImage,
+          itemFiles: productDoc.data()?.itemFiles,
         } as ModelData
 
         const materialData = {
@@ -185,6 +187,8 @@ export const getProductByProductId = async (id: string) => {
           dimensions: productDoc.data()?.dimensions,
           weight: productDoc.data()?.weight,
           tags: productDoc.data()?.tags,
+          previewImage: productDoc.data()?.previewImage,
+          textureMaps: productDoc.data()?.textureMaps,
         } as MaterialData
 
         const productData = collection === 'models' ? modelData : materialData
@@ -214,7 +218,7 @@ export const createProduct = async (
 
     console.log('Files to upload:', files)
     const uploadedUrls = await uploadFiles(files)
-    
+
     const productData = prepareProductData(type, data, uploadedUrls)
     const docRef = await addDoc(collection(db, COLLECTIONS[type]), productData)
     return { id: docRef.id }
@@ -424,8 +428,8 @@ const uploadFiles = async (files: Record<string, File | null>) => {
   })
 
   const uploadResults = await Promise.all(uploadPromises)
-  console.log(Object.fromEntries(uploadResults));
-  
+  console.log(Object.fromEntries(uploadResults))
+
   return Object.fromEntries(uploadResults)
 }
 

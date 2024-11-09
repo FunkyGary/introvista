@@ -95,6 +95,8 @@ export default function ProductForms({
   }
 
   React.useEffect(() => {
+    console.log(methods.getValues())
+    
     if (initialData) {
       methods.reset(initialData)
     }
@@ -125,9 +127,8 @@ export default function ProductForms({
             刪除
           </Button>
         )}
-        <Button
-          type="submit"
-          variant="contained"
+        <Button type="submit" 
+          variant="contained" 
           /* onClick={onFormSubmit} */
         >
           {productId ? '更新' : '新增'}
@@ -149,6 +150,7 @@ export default function ProductForms({
 
       if (productId) {
         // Update existing product
+
         console.log(formData)
         const result = await updateProduct(productId, collectionType, formData)
         if (result.success) {
@@ -196,7 +198,8 @@ export default function ProductForms({
       </Grid>
 
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onFormSubmit)}>
+        {/* <form> */}
+          <form onSubmit={methods.handleSubmit(onFormSubmit)}>
           {category === 'item' ? (
             <>
               {renderFormSection('家具模型屬性', <ModelForm />)}

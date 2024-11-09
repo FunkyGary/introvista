@@ -14,6 +14,7 @@
         "@hookform/resolvers": "^3.9.0",
         "@mui/material": "^5.16.7",
         "@phosphor-icons/react": "^2.1.7",
+        "antd": "^5.21.6",
         "firebase": "^10.13.2",
         "inversify": "^6.0.2",
         "inversify-react": "^1.1.1",
