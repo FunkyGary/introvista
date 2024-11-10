@@ -4,8 +4,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  sendEmailVerification,
   updateProfile,
   updatePassword,
+  updateEmail,
   onAuthStateChanged,
   signOut,
   getAuth,
@@ -16,6 +18,7 @@ import type {
   SignInWithPasswordParams,
   SignUpParams,
   UpdatePasswordParams,
+  UpdateEmailParams,
 } from "./client";
 import type { User } from "@/types/user";
 import { FirebaseError } from "firebase/app";
@@ -181,6 +184,28 @@ class AuthApi {
     return {};
   }
 
+  async updateEmail({
+    newEmail,
+  }: UpdateEmailParams): Promise<{ error?: string }> {
+    try {
+      const user = this.auth.currentUser;
+      if (!user) {
+        return { error: "User not found" };
+      }
+
+      // update Email and send verification email
+      await updateEmail(user, newEmail);
+      await sendEmailVerification(user);
+
+    } catch (error) {
+      console.error(error);
+      return { error: this.getErrorMessage(error) };
+    }
+
+    return {};
+  }
+
+
   async signOut(): Promise<{ error?: string }> {
     try {
       await signOut(this.auth);
@@ -191,6 +216,10 @@ class AuthApi {
 
     return {};
   }
+
+
+
+
 
   private mapFirebaseUserToUser(firebaseUser: FirebaseUser): User {
     const email = firebaseUser.email ?? "";
