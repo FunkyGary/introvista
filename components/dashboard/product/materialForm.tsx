@@ -19,13 +19,15 @@ import { categories, MainCategory } from '@/utils/categories'
 import { Material } from '@/lib/product/material.entity'
 
 export function MaterialForm(): React.JSX.Element {
-  const [mainCategory, setMainCategory] = useState<string>('')
+  const [mainCategory, setMainCategory] = useState<string | undefined>(
+    undefined
+  )
   const { control, getValues } = useFormContext()
 
   const mainCategoryFromId = React.useCallback((id: string): void => {
     const mainCat = Object.entries(categories).find(([_, subCategories]) =>
       subCategories.some((sub) => sub.value === id)
-    )?.[0] as string
+    )?.[0] as string | undefined
 
     setMainCategory(mainCat)
   }, [])
@@ -54,7 +56,7 @@ export function MaterialForm(): React.JSX.Element {
         <FormControl fullWidth required>
           <InputLabel>主分類</InputLabel>
           <Select
-            value={mainCategory || ''}
+            value={mainCategory || ""}
             onChange={(e) => setMainCategory(e.target.value)}
             label="主分類"
           >
