@@ -49,7 +49,7 @@ interface DesignerInfo {
   lastUpdated: Date
 }
 
-interface UserData {
+export interface UserData {
   userID: string
   role: string
   tags: string[]
@@ -57,14 +57,14 @@ interface UserData {
   email: string
   passwordHash: string
   profileImageUrl?: string
-  contactInfo: {
+  contactInfo?: {
     phone: string
     address?: string
     website?: string
   }
   supplierInfo?: SupplierInfo
   designerInfo?: DesignerInfo
-  preferences: {
+  preferences?: {
     language: string
     currency: string
     notificationSettings: {
@@ -73,6 +73,6 @@ interface UserData {
     }
   }
   createdDate: Date
-  lastLoginDate: Date
+  lastLoginDate?: Date
   lastUpdated: Date
 }
