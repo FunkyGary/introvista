@@ -15,7 +15,7 @@ export interface ModelProduct extends BaseProduct {
   itemFiles: {
     modelFileGLB: string | null
     modelFileUSD: string | null
-    additionalFiles: string | null
+    additionalFiles?: string | null
   }
 }
 
@@ -34,6 +34,7 @@ export interface MaterialProduct extends BaseProduct {
     metallicMap: string | null
     ambientOcclusionMap: string | null
   }
+
 }
 
 export type Product = ModelProduct | MaterialProduct

@@ -1,4 +1,4 @@
-import { Model } from "@/lib/product/model.entity";
+import { FurnitureModel as Model } from "@/lib/product/model.entity";
 import FurnitureModelsFetchUseCase from "@/lib/product/furniture-models-fetch-use-case";
 import { useInjection } from "inversify-react";
 import React from "react";

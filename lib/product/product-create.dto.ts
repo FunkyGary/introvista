@@ -1,9 +1,16 @@
 import { z } from 'zod'
 
-export const fileSchema = z.instanceof(File).nullable().optional()
-export const uploadImageFileSchema = z.array(
-  z.object({ file: z.instanceof(File) })
-)
+/* export const fileSchema = z.instanceof(File).nullable().optional() */
+/* export const uploadImageFileSchema = z.array( */
+/*   z.object({ file: z.instanceof(File) }) */
+/* ) */
+
+const fileSchema =
+  typeof window !== 'undefined'
+    ? z.instanceof(File).nullable()
+    : z.any().nullable()
+
+export const uploadImageFileSchema = z.array(z.object({ file: fileSchema }))
 
 // Define Zod schemas for ModelForm and MaterialForm
 export const modelProductSchema = z.object({

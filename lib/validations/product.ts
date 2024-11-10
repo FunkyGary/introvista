@@ -1,8 +1,10 @@
 import { z } from 'zod'
 
-export const fileSchema = z.instanceof(File).nullable()
+// Define a custom file schema that only uses `File` in the browser
+const fileSchema = typeof window !== 'undefined' ? z.instanceof(File).nullable() : z.any().nullable();
+
 export const uploadImageFileSchema = z.array(
-  z.object({ file: z.instanceof(File).nullable() })
+  z.object({ file: fileSchema })
 )
 
 // Define Zod schemas for ModelForm and MaterialForm

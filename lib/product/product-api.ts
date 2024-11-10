@@ -25,7 +25,7 @@ import {
 import { FirebaseError } from 'firebase/app'
 import { parseFirestoreErrorCode } from '../firebase/parse-firestore-error-code'
 import { injectable } from 'inversify'
-import { Model, ModelDto } from './model.entity'
+import { FurnitureModel } from './model.entity'
 import { Material } from './material.entity'
 
 @injectable()
@@ -41,13 +41,13 @@ class ProductApi {
     this.storage = getStorage(firebaseApp)
   }
 
-  async getFurnitureModels(): Promise<Model[]> {
+  async getFurnitureModels(): Promise<FurnitureModel[]> {
     const furnitureModels = await getDocs(
       collection(this.db, this.furnitureModelCollectionName)
     )
     return furnitureModels.docs.map((doc) => {
       const data = doc.data()
-      const furnitureModel: ModelDto = {
+      const furnitureModel: FurnitureModel = {
         ModelID: doc.id,
         ModelName: data.ModelName,
         CategoryID: data.CategoryID,
@@ -122,7 +122,7 @@ class ProductApi {
         ])
 
       const furnitureModel: Omit<
-        Model,
+        FurnitureModel,
         'ModelID' | 'CreatedDate' | 'LastUpdated' | 'PublishedAt'
       > = {
         ModelName: data.modelName,
@@ -281,7 +281,7 @@ class ProductApi {
   // update model and material by Product ID
   async updateDocumentByProductId(
     ProductId: string,
-    updatedData: Partial<Model | Material>,
+    updatedData: Partial<FurnitureModel | Material>,
     colelctionName: string
   ): Promise<{ success: boolean; error?: string }> {
     const docRef = doc(this.db, colelctionName, ProductId)
