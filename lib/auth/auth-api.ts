@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import {
   type User as FirebaseUser,
   type Auth,
