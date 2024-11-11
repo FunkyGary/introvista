@@ -232,7 +232,6 @@ export const createProduct = async (
     const cleanedFiles = Object.fromEntries(
       Object.entries(files).filter(([_, file]) => file !== null)
     )
-    console.log('Files to upload:', cleanedFiles)
     const uploadedUrls = await uploadFiles(cleanedFiles)
 
     const productData = prepareProductData(type, data, uploadedUrls)

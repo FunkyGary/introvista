@@ -134,7 +134,6 @@ export default function ProductForms({
         <Button
           type="submit"
           variant="contained"
-          /* onClick={onFormSubmit} */
         >
           {productId ? "更新" : "新增"}
         </Button>
@@ -162,6 +161,8 @@ export default function ProductForms({
         }
       } else {
         // Create new product
+        console.log(formData)
+        
         const result = await createProduct(collectionType, formData)
         if (result.id) {
           enqueueSnackbar("產品上架成功！", { variant: "success" })
@@ -200,7 +201,6 @@ export default function ProductForms({
       </Grid>
 
       <FormProvider {...methods}>
-        {/* <form> */}
         <form onSubmit={methods.handleSubmit(onFormSubmit)}>
           {category === "item" ? (
             <>
