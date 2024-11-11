@@ -56,7 +56,7 @@ export function MaterialForm(): React.JSX.Element {
         <FormControl fullWidth required>
           <InputLabel>主分類</InputLabel>
           <Select
-            value={mainCategory || ""}
+            value={mainCategory || ''}
             onChange={(e) => setMainCategory(e.target.value)}
             label="主分類"
           >

@@ -24,6 +24,8 @@ import {
   getDocs,
   deleteDoc,
   Timestamp,
+  query,
+  where
 } from 'firebase/firestore'
 import type {
   ResetPasswordParams,
@@ -93,6 +95,18 @@ class AuthApi {
   }: SignInWithPasswordParams): Promise<{ error?: string }> {
     try {
       await signInWithEmailAndPassword(this.auth, email, password)
+
+      // get user data by email from firestore
+      const userQuery = query(
+        collection(this.db, this.userCollectionName),
+        where('email', '==', email)
+      )
+      const userQuerySnapshot = await getDocs(userQuery)
+
+      // update last login timestamp
+      userQuerySnapshot.docs.map((doc) => {
+        return { lastLoginDate: serverTimestamp() }
+      })
     } catch (error) {
       console.error(error)
       return { error: this.getErrorMessage(error) }
@@ -218,6 +232,7 @@ class AuthApi {
   }: UpdateEmailParams): Promise<{ error?: string }> {
     try {
       const user = this.auth.currentUser
+
       if (!user) {
         return { error: 'User not found' }
       }
