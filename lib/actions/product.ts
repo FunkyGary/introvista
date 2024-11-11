@@ -173,8 +173,11 @@ export const getProductByProductId = async (id: string) => {
           dimensions: productDoc.data()?.dimensions,
           weight: productDoc.data()?.weight,
           tags: productDoc.data()?.tags,
-          thumbnailImage: productDoc.data()?.thumbnailImage,
-          itemFiles: productDoc.data()?.itemFiles,
+          thumbnailImage: [],
+          itemFiles: {
+            modelFileGLB: null,
+            modelFileUSD: null,
+          },
         } as ModelData
 
         const materialData = {
@@ -190,8 +193,15 @@ export const getProductByProductId = async (id: string) => {
           dimensions: productDoc.data()?.dimensions,
           weight: productDoc.data()?.weight,
           tags: productDoc.data()?.tags,
-          previewImage: productDoc.data()?.previewImage,
-          textureMaps: productDoc.data()?.textureMaps,
+          previewImage: [],
+          textureMaps: {
+            baseColorMap: null,
+            normalMap: null,
+            roughnessMap: null,
+            metallicMap: null,
+            ambientOcclusionMap: null,
+            heightMap: null,
+          },
         } as MaterialData
 
         const productData = collection === 'models' ? modelData : materialData
@@ -219,7 +229,6 @@ export const createProduct = async (
         ? extractModelFiles(data as ModelFormValues)
         : extractMaterialFiles(data as MaterialFormValues)
 
-    console.log('Files to upload:', files)
     const uploadedUrls = await uploadFiles(files)
 
     const productData = prepareProductData(type, data, uploadedUrls)
@@ -243,7 +252,12 @@ export const updateProduct = async (
         ? extractModelFiles(data as ModelFormValues)
         : extractMaterialFiles(data as MaterialFormValues)
 
-    const uploadedUrls = await uploadFiles(files)
+    // if file is null, remove from the object
+    const cleanedFiles = Object.fromEntries(
+      Object.entries(files).filter(([_, file]) => file !== null)
+    )
+
+    const uploadedUrls = await uploadFiles(cleanedFiles)
     const docRef = doc(db, COLLECTIONS[type], id)
 
     const updatedData = prepareProductData(type, data, uploadedUrls)
@@ -330,26 +344,11 @@ export const deleteProducts = async (ids: string[]) => {
 
 // Upload product image and file
 const uploadProductImage = async (file: File): Promise<string> => {
-  if (!file) {
-    console.error('No file provided for upload')
-    return ''
-  }
-
   const filename = file.name
-  if (!filename) {
-    console.error('File name is undefined')
-    return ''
-  }
-
-  console.log(`Uploading image with filename: ${filename}`)
-
   const fileRef = ref(storage, `products/images/${filename}`)
   const snapshot = await uploadBytes(fileRef, file)
 
-  console.log('Finished uploading image')
-
-  // return snapshot.ref.toString()
-  return getDownloadURL(snapshot.ref)
+  return snapshot.ref.toString()
 }
 
 const uploadProductFile = async (file: File): Promise<string> => {
@@ -357,16 +356,13 @@ const uploadProductFile = async (file: File): Promise<string> => {
   const fileRef = ref(storage, `products/files/${filename}`)
   const snapshot = await uploadBytes(fileRef, file)
 
-  console.log('finished upload file')
   return snapshot.ref.toString()
-  /* return getDownloadURL(snapshot.ref) */
 }
 
 const extractModelFiles = (data: ModelFormValues) => {
   const files: Record<string, File | null> = {}
-
   if (data.thumbnailImage) {
-    files.thumbnailImage = data.thumbnailImage
+    files.thumbnailImage = data.thumbnailImage[0].file
   }
 
   if (data.itemFiles) {
@@ -385,7 +381,7 @@ const extractMaterialFiles = (data: MaterialFormValues) => {
   const files: Record<string, File | null> = {}
 
   if (data.previewImage) {
-    files.previewImage = data.previewImage
+    files.previewImage = data.previewImage[0].file
   }
 
   if (data.textureMaps) {
@@ -431,7 +427,6 @@ const uploadFiles = async (files: Record<string, File | null>) => {
   })
 
   const uploadResults = await Promise.all(uploadPromises)
-  console.log(Object.fromEntries(uploadResults))
 
   return Object.fromEntries(uploadResults)
 }

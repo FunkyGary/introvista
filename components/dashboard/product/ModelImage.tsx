@@ -7,6 +7,8 @@ import ImageUpload from '@/components/shared/ImageUpload'
 import { useFormContext } from 'react-hook-form'
 import { imageValidation } from '@/utils/validationRules'
 import { FormHelperText } from '@mui/material'
+import UploadImage from '@/components/shared/UploadImage'
+
 
 export function ModelImage(): React.JSX.Element {
   const {
@@ -27,7 +29,8 @@ export function ModelImage(): React.JSX.Element {
         <Typography variant="h6" sx={{ paddingBottom: '10px' }}>
           縮圖*
         </Typography>
-        <ImageUpload name="thumbnailImage" rules={imageValidation} />
+        {/* <ImageUpload name="thumbnailImage" rules={imageValidation} /> */}
+        <UploadImage name="thumbnailImage" rules={imageValidation} />
         {errors.thumbnailImage && (
           <FormHelperText error>
             {errors.thumbnailImage.message as string}

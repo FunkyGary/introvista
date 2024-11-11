@@ -34,13 +34,15 @@ import {
   ProductFormValues,
   materialFormSchema,
   modelFormSchema,
+  modelInitialData,
+  materialInitialData,
 } from '@/lib/validations/product'
 import { paths } from '@/paths'
 import { useUser } from '@/hooks/use-user'
 
 const CATEGORIES = [
-  { value: 'item', label: '物品' },
-  { value: 'material', label: '材質' },
+  { value: 'item', label: '物品', initialData: '' },
+  { value: 'material', label: '材質', initialData: '' },
 ] as const
 
 interface ProductFormProps {
@@ -53,7 +55,7 @@ export default function ProductForms({
   productId,
 }: ProductFormProps): React.JSX.Element {
   const [category, setCategory] = React.useState(
-    initialData?.type === 'models' ? 'item' : 'material'
+    productId && initialData?.type === 'materials' ? 'material' : 'item'
   )
   const router = useRouter()
   const { user } = useUser()
@@ -88,19 +90,23 @@ export default function ProductForms({
 
   const handleCategoryChange = (newCategory: string) => {
     setCategory(newCategory)
-    methods.reset({
-      userId: user?.id,
-      ...initialData,
-    })
+    // Reset form data when category changes
+    category === 'item'
+      ? methods.reset({
+          userId: user?.id,
+          ...modelInitialData,
+        })
+      : methods.reset({
+          userId: user?.id,
+          ...materialInitialData,
+        })
   }
 
   React.useEffect(() => {
-    console.log(methods.getValues())
-    
-    if (initialData) {
+    if (initialData && productId) {
       methods.reset(initialData)
     }
-  }, [initialData, methods, category])
+  }, [initialData, methods, productId])
 
   const renderFormSection = (title: string, content: React.ReactNode) => (
     <Grid sx={{ width: '100%' }}>
@@ -127,8 +133,9 @@ export default function ProductForms({
             刪除
           </Button>
         )}
-        <Button type="submit" 
-          variant="contained" 
+        <Button
+          type="submit"
+          variant="contained"
           /* onClick={onFormSubmit} */
         >
           {productId ? '更新' : '新增'}
@@ -150,8 +157,6 @@ export default function ProductForms({
 
       if (productId) {
         // Update existing product
-
-        console.log(formData)
         const result = await updateProduct(productId, collectionType, formData)
         if (result.success) {
           enqueueSnackbar('產品更新成功！', { variant: 'success' })
@@ -159,9 +164,7 @@ export default function ProductForms({
         }
       } else {
         // Create new product
-        console.log('formData:', formData)
         const result = await createProduct(collectionType, formData)
-
         if (result.id) {
           enqueueSnackbar('產品上架成功！', { variant: 'success' })
           router.push(paths.dashboard.products)
@@ -199,7 +202,7 @@ export default function ProductForms({
 
       <FormProvider {...methods}>
         {/* <form> */}
-          <form onSubmit={methods.handleSubmit(onFormSubmit)}>
+        <form onSubmit={methods.handleSubmit(onFormSubmit)}>
           {category === 'item' ? (
             <>
               {renderFormSection('家具模型屬性', <ModelForm />)}
