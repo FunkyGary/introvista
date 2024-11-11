@@ -1,12 +1,12 @@
 import { inject, injectable } from "inversify";
-import { Model } from "./model.entity";
+import { FurnitureModel } from "./model.entity";
 import ProductApi from "./product-api";
 
 @injectable()
 class FurnitureModelsFetchUseCase {
     constructor(@inject(ProductApi) private productApi: ProductApi) {}
 
-    async execute(): Promise<Model[]> {
+    async execute(): Promise<FurnitureModel[]> {
         const furnitureModels = await this.productApi.getFurnitureModels();
         return furnitureModels;
     }

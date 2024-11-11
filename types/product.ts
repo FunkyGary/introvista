@@ -15,7 +15,7 @@ export interface ModelProduct extends BaseProduct {
   itemFiles: {
     modelFileGLB: string | null
     modelFileUSD: string | null
-    additionalFiles: string | null
+    additionalFiles?: string | null
   }
 }
 
@@ -34,6 +34,7 @@ export interface MaterialProduct extends BaseProduct {
     metallicMap: string | null
     ambientOcclusionMap: string | null
   }
+
 }
 
 export type Product = ModelProduct | MaterialProduct
@@ -55,7 +56,7 @@ export interface ModelData {
     height: number
   }
   weight: number
-  thumbnailImage?: File | null
+  thumbnailImage?: [] | null
   itemFiles?: {
     modelFileGLB?: File | null
     modelFileUSD?: File | null
@@ -78,7 +79,7 @@ export interface MaterialData {
     height: number
   }
   weight?: number
-  previewImage?: File | null
+  previewImage?: [] | null
   textureMaps?: {
     baseColorMap?: File | null
     normalMap?: File | null

@@ -39,7 +39,7 @@ export default function GenFakeData() {
       userId: user?.id,
     }
 
-    createProductWithoutFiles("models", modelData)
+    /* createProductWithoutFiles("models", modelData) */
   }
 
   const handleMaterial = () => {
@@ -74,7 +74,7 @@ export default function GenFakeData() {
       userId: user?.id,
     }
 
-    createProductWithoutFiles("materials", materialData)
+    /* createProductWithoutFiles("materials", materialData) */
   }
   return (
     <div className="w-full">

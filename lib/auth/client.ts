@@ -44,6 +44,10 @@ export interface UpdatePasswordParams {
   newPassword: string;
 }
 
+export interface UpdateEmailParams {
+  newEmail: string;
+}
+
 @injectable()
 class AuthClient {
   constructor(@inject(AuthApi) private authApi: AuthApi) {}

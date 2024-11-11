@@ -21,7 +21,7 @@ import { useState } from "react"
 import { categories, MainCategory } from "@/utils/categories"
 
 export function ModelForm(): React.JSX.Element {
-  const [mainCategory, setMainCategory] = useState<MainCategory | undefined>(
+  const [mainCategory, setMainCategory] = useState<string | undefined>(
     undefined
   )
   const { control, getValues } = useFormContext()
@@ -29,7 +29,7 @@ export function ModelForm(): React.JSX.Element {
   const mainCategoryFromId = React.useCallback((id: string): void => {
     const mainCat = Object.entries(categories).find(([_, subCategories]) =>
       subCategories.some((sub) => sub.value === id)
-    )?.[0] as MainCategory | undefined
+    )?.[0] as string | undefined
 
     setMainCategory(mainCat)
   }, [])

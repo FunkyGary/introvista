@@ -29,8 +29,6 @@ import {
   ProductFormValues,
   MaterialFormValues,
   ModelFormValues,
-  materialFormSchema,
-  modelFormSchema,
 } from '@/lib/validations/product'
 
 const db = getFirestore(firebaseApp)
@@ -129,6 +127,9 @@ export const getUserProducts = async (userId: string) => {
           baseColorMap: data.textureMaps?.baseColorMap || null,
           normalMap: data.textureMaps?.normalMap || null,
           roughnessMap: data.textureMaps?.roughnessMap || null,
+          heightMap: data.textureMaps?.heightMap || null,
+          metallicMap: data.textureMaps?.metallicMap || null,
+          ambientOcclusionMap: data.textureMaps?.ambientOcclusionMap || null,
         },
         isPublished: data.isPublished || false,
         createdDate: (data.createdDate as Timestamp)?.toDate() || new Date(),
@@ -172,8 +173,11 @@ export const getProductByProductId = async (id: string) => {
           dimensions: productDoc.data()?.dimensions,
           weight: productDoc.data()?.weight,
           tags: productDoc.data()?.tags,
-          thumbnailImage: productDoc.data()?.thumbnailImage,
-          itemFiles: productDoc.data()?.itemFiles,
+          thumbnailImage: [],
+          itemFiles: {
+            modelFileGLB: null,
+            modelFileUSD: null,
+          },
         } as ModelData
 
         const materialData = {
@@ -189,8 +193,15 @@ export const getProductByProductId = async (id: string) => {
           dimensions: productDoc.data()?.dimensions,
           weight: productDoc.data()?.weight,
           tags: productDoc.data()?.tags,
-          previewImage: productDoc.data()?.previewImage,
-          textureMaps: productDoc.data()?.textureMaps,
+          previewImage: [],
+          textureMaps: {
+            baseColorMap: null,
+            normalMap: null,
+            roughnessMap: null,
+            metallicMap: null,
+            ambientOcclusionMap: null,
+            heightMap: null,
+          },
         } as MaterialData
 
         const productData = collection === 'models' ? modelData : materialData
@@ -218,9 +229,12 @@ export const createProduct = async (
         ? extractModelFiles(data as ModelFormValues)
         : extractMaterialFiles(data as MaterialFormValues)
 
-    const uploadedUrls = await uploadFiles(files)
-    const productData = prepareProductData(type, data, uploadedUrls)
+    const cleanedFiles = Object.fromEntries(
+      Object.entries(files).filter(([_, file]) => file !== null)
+    )
+    const uploadedUrls = await uploadFiles(cleanedFiles)
 
+    const productData = prepareProductData(type, data, uploadedUrls)
     const docRef = await addDoc(collection(db, COLLECTIONS[type]), productData)
     return { id: docRef.id }
   } catch (error) {
@@ -241,9 +255,12 @@ export const updateProduct = async (
         ? extractModelFiles(data as ModelFormValues)
         : extractMaterialFiles(data as MaterialFormValues)
 
-    const uploadedUrls = await uploadFiles(files)
+    // Remove null files
+    const cleanedFiles = Object.fromEntries(
+      Object.entries(files).filter(([_, file]) => file !== null)
+    )
+    const uploadedUrls = await uploadFiles(cleanedFiles)
     const docRef = doc(db, COLLECTIONS[type], id)
-
     const updatedData = prepareProductData(type, data, uploadedUrls)
 
     await updateDoc(docRef, {
@@ -332,10 +349,7 @@ const uploadProductImage = async (file: File): Promise<string> => {
   const fileRef = ref(storage, `products/images/${filename}`)
   const snapshot = await uploadBytes(fileRef, file)
 
-  console.log('finished upload image')
-  
   return snapshot.ref.toString()
-  /* return getDownloadURL(snapshot.ref) */
 }
 
 const uploadProductFile = async (file: File): Promise<string> => {
@@ -343,23 +357,21 @@ const uploadProductFile = async (file: File): Promise<string> => {
   const fileRef = ref(storage, `products/files/${filename}`)
   const snapshot = await uploadBytes(fileRef, file)
 
-  console.log('finished upload file')
   return snapshot.ref.toString()
-  /* return getDownloadURL(snapshot.ref) */
 }
 
 const extractModelFiles = (data: ModelFormValues) => {
   const files: Record<string, File | null> = {}
 
-  if (data.thumbnailImage) {
-    files.thumbnailImage = data.thumbnailImage
+  if (data.thumbnailImage?.[0]?.file) {
+    files.thumbnailImage = data.thumbnailImage[0].file
   }
 
   if (data.itemFiles) {
-    if (data.itemFiles.modelFileGLB) {
+    if (data.itemFiles.modelFileGLB instanceof File) {
       files.modelFileGLB = data.itemFiles.modelFileGLB
     }
-    if (data.itemFiles.modelFileUSD) {
+    if (data.itemFiles.modelFileUSD instanceof File) {
       files.modelFileUSD = data.itemFiles.modelFileUSD
     }
   }
@@ -370,8 +382,8 @@ const extractModelFiles = (data: ModelFormValues) => {
 const extractMaterialFiles = (data: MaterialFormValues) => {
   const files: Record<string, File | null> = {}
 
-  if (data.previewImage) {
-    files.previewImage = data.previewImage
+  if (data.previewImage?.[0]?.file) {
+    files.previewImage = data.previewImage[0].file
   }
 
   if (data.textureMaps) {
@@ -385,7 +397,7 @@ const extractMaterialFiles = (data: MaterialFormValues) => {
     ] as const
 
     mapTypes.forEach((mapType) => {
-      if (data.textureMaps?.[mapType]) {
+      if (data.textureMaps?.[mapType] instanceof File) {
         files[mapType] = data.textureMaps[mapType]
       }
     })
@@ -417,6 +429,7 @@ const uploadFiles = async (files: Record<string, File | null>) => {
   })
 
   const uploadResults = await Promise.all(uploadPromises)
+
   return Object.fromEntries(uploadResults)
 }
 

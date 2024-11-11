@@ -1,13 +1,16 @@
 import { z } from 'zod'
 
-export const fileSchema = z.instanceof(File).nullable()
-export const uploadImageFileSchema = z.array(
-  z.object({ file: z.instanceof(File).nullable() })
-)
+// Define a custom file schema that only uses `File` in the browser
+const fileSchema =
+  typeof window !== 'undefined'
+    ? z.instanceof(File).nullable()
+    : z.any().nullable()
+
+export const uploadImageFileSchema = z.array(z.object({ file: fileSchema }))
 
 // Define Zod schemas for ModelForm and MaterialForm
 export const modelFormSchema = z.object({
-  type: z.literal('models'),
+  type: z.literal('models').optional(),
   userId: z.string(),
   categoryID: z.string().min(1, 'Category ID is required'),
   isPublished: z.boolean().default(false),
@@ -26,11 +29,11 @@ export const modelFormSchema = z.object({
       modelFileUSD: fileSchema,
     })
     .optional(),
-  thumbnailImage: fileSchema,
+  thumbnailImage: uploadImageFileSchema,
 })
 
 export const materialFormSchema = z.object({
-  type: z.literal('materials'),
+  type: z.literal('materials').optional(),
   userId: z.string(),
   categoryID: z.string().min(1, 'Category ID is required'),
   isPublished: z.boolean().default(false),
@@ -55,10 +58,52 @@ export const materialFormSchema = z.object({
       heightMap: fileSchema,
     })
     .optional(),
-  previewImage: fileSchema,
+  previewImage: uploadImageFileSchema,
 })
 
 export type ModelFormValues = z.infer<typeof modelFormSchema>
 export type MaterialFormValues = z.infer<typeof materialFormSchema>
 
 export type ProductFormValues = ModelFormValues | MaterialFormValues
+
+export const modelInitialData = {
+  categoryID: '',
+  isPublished: false,
+  itemName: '',
+  itemDescription: '',
+  price: 0,
+  dimensions: {
+    length: 0,
+    width: 0,
+    height: 0,
+  },
+  weight: 0,
+  itemFiles: {
+    modelFileGLB: null,
+    modelFileUSD: null,
+  },
+  thumbnailImage: undefined,
+}
+
+export const materialInitialData = {
+  categoryID: '',
+  isPublished: false,
+  materialName: '',
+  materialDescription: '',
+  materialPrice: 0,
+  dimensions: {
+    length: 0,
+    width: 0,
+    height: 0,
+  },
+  weight: 0,
+  textureMaps: {
+    baseColorMap: null,
+    normalMap: null,
+    roughnessMap: null,
+    metallicMap: null,
+    ambientOcclusionMap: null,
+    heightMap: null,
+  },
+  previewImage: undefined,
+}

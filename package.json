@@ -1,51 +1,66 @@
 {
-    "name": "introvista",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "dev": "next dev",
-        "build": "next build",
-        "start": "next start",
-        "lint": "next lint"
-    },
-    "dependencies": {
-        "@emotion/react": "^11.13.0",
-        "@emotion/styled": "^11.13.0",
-        "@hookform/resolvers": "^3.9.0",
-        "@mui/material": "^5.16.7",
-        "@phosphor-icons/react": "^2.1.7",
-        "firebase": "^10.13.2",
-        "inversify": "^6.0.2",
-        "inversify-react": "^1.1.1",
-        "next": "14.2.5",
-        "notistack": "^3.0.1",
-        "react": "^18",
-        "react-dom": "^18",
-        "react-hook-form": "^7.53.1",
-        "react-images-uploading": "^3.1.7",
-        "reflect-metadata": "^0.2.2",
-        "sonner": "^1.5.0",
-        "zod": "^3.23.8"
-    },
-    "devDependencies": {
-        "@faker-js/faker": "^9.1.0",
-        "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
-        "@types/node": "^20",
-        "@types/react": "^18",
-        "@types/react-dom": "^18",
-        "@vercel/style-guide": "^6.0.0",
-        "cz-conventional-changelog": "^3.3.0",
-        "eslint": "^8",
-        "eslint-config-next": "14.2.5",
-        "eslint-config-prettier": "^9.1.0",
-        "postcss": "^8",
-        "prettier": "^3.3.3",
-        "tailwindcss": "^3.4.1",
-        "typescript": "^5"
-    },
-    "config": {
-        "commitizen": {
-            "path": "./node_modules/cz-conventional-changelog"
-        }
+  "name": "introvista",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prepare": "husky"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@hookform/resolvers": "^3.9.0",
+    "@mui/material": "^5.16.7",
+    "@phosphor-icons/react": "^2.1.7",
+    "antd": "^5.21.6",
+    "firebase": "^10.13.2",
+    "inversify": "^6.0.2",
+    "inversify-react": "^1.1.1",
+    "next": "14.2.5",
+    "notistack": "^3.0.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.53.1",
+    "react-images-uploading": "^3.1.7",
+    "reflect-metadata": "^0.2.2",
+    "sonner": "^1.5.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^9.1.0",
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@vercel/style-guide": "^6.0.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "postcss": "^8",
+    "prettier": "^3.3.3",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
