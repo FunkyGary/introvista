@@ -229,7 +229,11 @@ export const createProduct = async (
         ? extractModelFiles(data as ModelFormValues)
         : extractMaterialFiles(data as MaterialFormValues)
 
-    const uploadedUrls = await uploadFiles(files)
+    const cleanedFiles = Object.fromEntries(
+      Object.entries(files).filter(([_, file]) => file !== null)
+    )
+    console.log('Files to upload:', cleanedFiles)
+    const uploadedUrls = await uploadFiles(cleanedFiles)
 
     const productData = prepareProductData(type, data, uploadedUrls)
     const docRef = await addDoc(collection(db, COLLECTIONS[type]), productData)
@@ -252,14 +256,12 @@ export const updateProduct = async (
         ? extractModelFiles(data as ModelFormValues)
         : extractMaterialFiles(data as MaterialFormValues)
 
-    // if file is null, remove from the object
+    // Remove null files
     const cleanedFiles = Object.fromEntries(
       Object.entries(files).filter(([_, file]) => file !== null)
     )
-
     const uploadedUrls = await uploadFiles(cleanedFiles)
     const docRef = doc(db, COLLECTIONS[type], id)
-
     const updatedData = prepareProductData(type, data, uploadedUrls)
 
     await updateDoc(docRef, {
@@ -361,15 +363,16 @@ const uploadProductFile = async (file: File): Promise<string> => {
 
 const extractModelFiles = (data: ModelFormValues) => {
   const files: Record<string, File | null> = {}
-  if (data.thumbnailImage) {
+
+  if (data.thumbnailImage?.[0]?.file) {
     files.thumbnailImage = data.thumbnailImage[0].file
   }
 
   if (data.itemFiles) {
-    if (data.itemFiles.modelFileGLB) {
+    if (data.itemFiles.modelFileGLB instanceof File) {
       files.modelFileGLB = data.itemFiles.modelFileGLB
     }
-    if (data.itemFiles.modelFileUSD) {
+    if (data.itemFiles.modelFileUSD instanceof File) {
       files.modelFileUSD = data.itemFiles.modelFileUSD
     }
   }
@@ -380,7 +383,7 @@ const extractModelFiles = (data: ModelFormValues) => {
 const extractMaterialFiles = (data: MaterialFormValues) => {
   const files: Record<string, File | null> = {}
 
-  if (data.previewImage) {
+  if (data.previewImage?.[0]?.file) {
     files.previewImage = data.previewImage[0].file
   }
 
@@ -395,7 +398,7 @@ const extractMaterialFiles = (data: MaterialFormValues) => {
     ] as const
 
     mapTypes.forEach((mapType) => {
-      if (data.textureMaps?.[mapType]) {
+      if (data.textureMaps?.[mapType] instanceof File) {
         files[mapType] = data.textureMaps[mapType]
       }
     })

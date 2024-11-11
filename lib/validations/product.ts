@@ -10,7 +10,7 @@ export const uploadImageFileSchema = z.array(z.object({ file: fileSchema }))
 
 // Define Zod schemas for ModelForm and MaterialForm
 export const modelFormSchema = z.object({
-  type: z.literal('models'),
+  type: z.literal('models').optional(),
   userId: z.string(),
   categoryID: z.string().min(1, 'Category ID is required'),
   isPublished: z.boolean().default(false),
@@ -33,7 +33,7 @@ export const modelFormSchema = z.object({
 })
 
 export const materialFormSchema = z.object({
-  type: z.literal('materials'),
+  type: z.literal('materials').optional(),
   userId: z.string(),
   categoryID: z.string().min(1, 'Category ID is required'),
   isPublished: z.boolean().default(false),
@@ -82,7 +82,7 @@ export const modelInitialData = {
     modelFileGLB: null,
     modelFileUSD: null,
   },
-  thumbnailImage: [],
+  thumbnailImage: undefined,
 }
 
 export const materialInitialData = {
@@ -105,5 +105,5 @@ export const materialInitialData = {
     ambientOcclusionMap: null,
     heightMap: null,
   },
-  previewImage: [],
+  previewImage: undefined,
 }
