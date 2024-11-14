@@ -61,7 +61,7 @@ export default function ProductForms({
   )
   const router = useRouter()
   const { user } = useUser()
-
+  console.log(initialData)
   const getDefaultValue = (category: string) => {
     const baseData =
       productId && initialData
