@@ -1,5 +1,5 @@
-import firebaseApp from '../firebase/firebase-config'
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import firebaseApp from "../firebase/firebase-config"
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import {
   getDoc,
   collection,
@@ -14,7 +14,7 @@ import {
   getFirestore,
   serverTimestamp,
   Timestamp,
-} from 'firebase/firestore'
+} from "firebase/firestore"
 import {
   ModelData,
   MaterialData,
@@ -23,27 +23,27 @@ import {
   ProductType,
   Product,
   ProductData,
-} from 'types/product'
+} from "types/product"
 
 import {
   ProductFormValues,
   MaterialFormValues,
   ModelFormValues,
-} from '@/lib/validations/product'
+} from "@/lib/validations/product"
 
 const db = getFirestore(firebaseApp)
 const storage = getStorage(firebaseApp)
 
 const COLLECTIONS = {
-  models: 'models',
-  materials: 'materials',
+  models: "models",
+  materials: "materials",
 } as const
 
 export const getUserProductsFromSingleCollection = async (userId: string) => {
   try {
     const productsQuery = query(
-      collection(db, 'products'),
-      where('userId', '==', userId)
+      collection(db, "products"),
+      where("userId", "==", userId)
     )
     const productsSnapshot = await getDocs(productsQuery)
 
@@ -59,7 +59,7 @@ export const getUserProductsFromSingleCollection = async (userId: string) => {
         isPublished: data.isPublished || false,
         createdDate: (data.createdDate as Timestamp)?.toDate() || new Date(),
         lastUpdated: (data.lastUpdated as Timestamp)?.toDate() || new Date(),
-        supplierID: data.supplierID || '',
+        supplierID: data.supplierID || "",
       }
     })
 
@@ -69,7 +69,7 @@ export const getUserProductsFromSingleCollection = async (userId: string) => {
 
     return sortedProducts
   } catch (error) {
-    console.error('Error fetching products:', error)
+    console.error("Error fetching products:", error)
     throw error
   }
 }
@@ -79,12 +79,12 @@ export const getUserProducts = async (userId: string) => {
   try {
     const modelsQuery = query(
       collection(db, COLLECTIONS.models),
-      where('userId', '==', userId)
+      where("userId", "==", userId)
     )
 
     const materialsQuery = query(
       collection(db, COLLECTIONS.materials),
-      where('userId', '==', userId)
+      where("userId", "==", userId)
     )
 
     const [modelsSnapshot, materialsSnapshot] = await Promise.all([
@@ -97,10 +97,10 @@ export const getUserProducts = async (userId: string) => {
       const data = doc.data()
       return {
         itemID: doc.id,
-        type: 'model',
-        itemName: data.itemName || '',
+        type: "model",
+        itemName: data.itemName || "",
         price: data.price || 0,
-        modelDescription: data.modelDescription || '',
+        modelDescription: data.modelDescription || "",
         thumbnailImage: data.thumbnailImage || null,
         itemFiles: {
           modelFileGLB: data.modelFiles?.modelFileGLB || null,
@@ -118,10 +118,10 @@ export const getUserProducts = async (userId: string) => {
       const data = doc.data()
       return {
         materialID: doc.id,
-        type: 'material',
-        materialName: data.materialName || '',
+        type: "material",
+        materialName: data.materialName || "",
         materialPrice: data.materialPrice || 0,
-        materialDescription: data.materialDescription || '',
+        materialDescription: data.materialDescription || "",
         previewImage: data.previewImage || null,
         textureMaps: {
           baseColorMap: data.textureMaps?.baseColorMap || null,
@@ -145,14 +145,14 @@ export const getUserProducts = async (userId: string) => {
 
     return allProducts
   } catch (error) {
-    console.error('Error fetching products:', error)
+    console.error("Error fetching products:", error)
     throw error
   }
 }
 
 // Get Product By ProductId from multiple collections
 export const getProductByProductId = async (id: string) => {
-  const collections = ['models', 'materials']
+  const collections = ["models", "materials"]
   try {
     const productDoc = await Promise.all(
       collections.map(async (collection) => {
@@ -161,7 +161,7 @@ export const getProductByProductId = async (id: string) => {
         if (!productDoc.exists()) return undefined
 
         const modelData = {
-          type: 'models',
+          type: "models",
           itemID: productDoc.id,
           itemName: productDoc.data()?.itemName,
           itemDescription: productDoc.data()?.itemDescription,
@@ -181,7 +181,7 @@ export const getProductByProductId = async (id: string) => {
         } as ModelData
 
         const materialData = {
-          type: 'materials',
+          type: "materials",
           materialID: productDoc.id,
           materialName: productDoc.data()?.materialName,
           materialDescription: productDoc.data()?.materialDescription,
@@ -204,7 +204,7 @@ export const getProductByProductId = async (id: string) => {
           },
         } as MaterialData
 
-        const productData = collection === 'models' ? modelData : materialData
+        const productData = collection === "models" ? modelData : materialData
 
         return productData as ProductData
       })
@@ -213,7 +213,7 @@ export const getProductByProductId = async (id: string) => {
     // Return the product that exists
     return productDoc.find((doc) => doc !== undefined)
   } catch (error) {
-    console.error('Error fetching product:', error)
+    console.error("Error fetching product:", error)
     throw error
   }
 }
@@ -225,7 +225,7 @@ export const createProduct = async (
 ) => {
   try {
     const files =
-      type === 'models'
+      type === "models"
         ? extractModelFiles(data as ModelFormValues)
         : extractMaterialFiles(data as MaterialFormValues)
 
@@ -238,7 +238,7 @@ export const createProduct = async (
     const docRef = await addDoc(collection(db, COLLECTIONS[type]), productData)
     return { id: docRef.id }
   } catch (error) {
-    console.error('Error creating product:', error)
+    console.error("Error creating product:", error)
     throw error
   }
 }
@@ -250,8 +250,13 @@ export const updateProduct = async (
   data: ProductFormValues
 ) => {
   try {
+    // Get current product data first
+    const docRef = doc(db, COLLECTIONS[type], id)
+    const currentDoc = await getDoc(docRef)
+    const currentData = currentDoc.data()
+
     const files =
-      type === 'models'
+      type === "models"
         ? extractModelFiles(data as ModelFormValues)
         : extractMaterialFiles(data as MaterialFormValues)
 
@@ -259,17 +264,54 @@ export const updateProduct = async (
     const cleanedFiles = Object.fromEntries(
       Object.entries(files).filter(([_, file]) => file !== null)
     )
-    const uploadedUrls = await uploadFiles(cleanedFiles)
-    const docRef = doc(db, COLLECTIONS[type], id)
-    const updatedData = prepareProductData(type, data, uploadedUrls)
 
-    await updateDoc(docRef, {
-      ...updatedData,
+    const uploadedUrls = await uploadFiles(cleanedFiles)
+
+    // Merge the uploaded URLs with existing URLs
+    let mergedUrls = {}
+    if (type === "models") {
+      mergedUrls = {
+        thumbnailImage:
+          uploadedUrls.thumbnailImage || currentData?.thumbnailImage,
+        itemFiles: {
+          modelFileGLB:
+            uploadedUrls.modelFileGLB || currentData?.itemFiles?.modelFileGLB,
+          modelFileUSD:
+            uploadedUrls.modelFileUSD || currentData?.itemFiles?.modelFileUSD,
+        },
+      }
+    } else {
+      mergedUrls = {
+        previewImage: uploadedUrls.previewImage || currentData?.previewImage,
+        textureMaps: {
+          baseColorMap:
+            uploadedUrls.baseColorMap || currentData?.textureMaps?.baseColorMap,
+          normalMap:
+            uploadedUrls.normalMap || currentData?.textureMaps?.normalMap,
+          roughnessMap:
+            uploadedUrls.roughnessMap || currentData?.textureMaps?.roughnessMap,
+          metallicMap:
+            uploadedUrls.metallicMap || currentData?.textureMaps?.metallicMap,
+          ambientOcclusionMap:
+            uploadedUrls.ambientOcclusionMap ||
+            currentData?.textureMaps?.ambientOcclusionMap,
+          heightMap:
+            uploadedUrls.heightMap || currentData?.textureMaps?.heightMap,
+        },
+      }
+    }
+
+    const updatedData = {
+      ...data,
+      ...mergedUrls,
       lastUpdated: serverTimestamp(),
-    })
+    }
+    console.log("updatedData", updatedData)
+
+    await updateDoc(docRef, updatedData)
     return { success: true }
   } catch (error) {
-    console.error('Error updating product:', error)
+    console.error("Error updating product:", error)
     throw error
   }
 }
@@ -277,7 +319,7 @@ export const updateProduct = async (
 // Delete product
 export const deleteProduct = async (id: string) => {
   try {
-    const collections = ['models', 'materials']
+    const collections = ["models", "materials"]
     let deletedCount = 0
 
     const checkPromises = collections.map(async (collection) => {
@@ -304,7 +346,7 @@ export const deleteProduct = async (id: string) => {
     if (deletedCount === 0) {
       return {
         success: false,
-        message: 'Document not found in any collection',
+        message: "Document not found in any collection",
       }
     }
 
@@ -314,11 +356,11 @@ export const deleteProduct = async (id: string) => {
       deletedCount,
     }
   } catch (error) {
-    console.error('Error deleting product:', error)
+    console.error("Error deleting product:", error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : 'An unknown error occurred',
+        error instanceof Error ? error.message : "An unknown error occurred",
       error,
     }
   }
@@ -330,16 +372,16 @@ export const deleteProducts = async (ids: string[]) => {
     const batch = writeBatch(db)
 
     ids.forEach((id) => {
-      const productDocRef = doc(db, 'products', id)
+      const productDocRef = doc(db, "products", id)
       batch.delete(productDocRef)
     })
 
     await batch.commit()
-    console.log(`Successfully deleted products with IDs: ${ids.join(', ')}`)
+    console.log(`Successfully deleted products with IDs: ${ids.join(", ")}`)
     return { success: true }
   } catch (error) {
-    console.error('Error deleting products:', error)
-    return { success: false, message: 'Error deleting products' }
+    console.error("Error deleting products:", error)
+    return { success: false, message: "Error deleting products" }
   }
 }
 
@@ -388,12 +430,12 @@ const extractMaterialFiles = (data: MaterialFormValues) => {
 
   if (data.textureMaps) {
     const mapTypes = [
-      'baseColorMap',
-      'normalMap',
-      'roughnessMap',
-      'metallicMap',
-      'ambientOcclusionMap',
-      'heightMap',
+      "baseColorMap",
+      "normalMap",
+      "roughnessMap",
+      "metallicMap",
+      "ambientOcclusionMap",
+      "heightMap",
     ] as const
 
     mapTypes.forEach((mapType) => {
@@ -411,14 +453,14 @@ const uploadFiles = async (files: Record<string, File | null>) => {
     if (!file) return [key, null]
 
     const isImage = [
-      'thumbnailImage',
-      'previewImage',
-      'baseColorMap',
-      'normalMap',
-      'roughnessMap',
-      'metallicMap',
-      'ambientOcclusionMap',
-      'heightMap',
+      "thumbnailImage",
+      "previewImage",
+      "baseColorMap",
+      "normalMap",
+      "roughnessMap",
+      "metallicMap",
+      "ambientOcclusionMap",
+      "heightMap",
     ].includes(key)
 
     const url = await (isImage
@@ -444,7 +486,7 @@ const prepareProductData = (
     lastUpdated: serverTimestamp(),
   }
 
-  if (type === 'models') {
+  if (type === "models") {
     return {
       ...baseData,
       itemFiles: {
@@ -471,7 +513,7 @@ const prepareProductData = (
 }
 
 export const createProductWithoutFiles = async (
-  type: 'models' | 'materials',
+  type: "models" | "materials",
   data: ProductFormValues
 ) => {
   try {
@@ -482,7 +524,7 @@ export const createProductWithoutFiles = async (
     })
     return { id: docRef.id }
   } catch (error) {
-    console.error('Error creating product:', error)
+    console.error("Error creating product:", error)
     throw error
   }
 }
