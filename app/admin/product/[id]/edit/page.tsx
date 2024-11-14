@@ -6,7 +6,6 @@ import { getProductByProductId } from "@/lib/actions/product"
 import { useEffect, useState } from "react"
 import { useUser } from "@/hooks/use-user"
 import ProductForms from "@/components/dashboard/product/productForms"
-import { ProductCreateDto } from "@/lib/product/product-create.dto"
 
 function ProductEditPage({ params }: { params: { id: string } }) {
   const productId = params.id
