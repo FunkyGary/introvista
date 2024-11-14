@@ -57,7 +57,11 @@ export function ModelForm({
             control={control}
             rules={stringValidation}
             render={({ field }) => (
-              <OutlinedInput {...field} label="名稱" disabled={readOnly} />
+              <OutlinedInput
+                {...field}
+                label="名稱"
+                inputProps={{ readOnly: readOnly }}
+              />
             )}
           />
         </FormControl>
@@ -69,7 +73,6 @@ export function ModelForm({
             value={mainCategory || ""}
             onChange={(e) => setMainCategory(e.target.value)}
             label="主分類"
-            disabled={readOnly}
           >
             {Object.keys(categories).map((category) => (
               <MenuItem key={category} value={category}>
@@ -93,7 +96,10 @@ export function ModelForm({
                   {...field}
                   label="子分類"
                   error={!!error}
-                  disabled={!mainCategory || readOnly}
+                  disabled={!mainCategory}
+                  onClick={(event) => {
+                    event.preventDefault() // 阻止下拉選單展開
+                  }}
                 >
                   {mainCategory &&
                     categories[mainCategory as keyof typeof categories].map(
@@ -117,13 +123,17 @@ export function ModelForm({
       </Grid>
       <Grid md={6} xs={12}>
         <FormControl fullWidth required>
-          <InputLabel>品牌名稱</InputLabel>
+          <InputLabel>品牌</InputLabel>
           <Controller
             name="brand"
             control={control}
             rules={stringValidation}
             render={({ field }) => (
-              <OutlinedInput {...field} label="品牌名稱" disabled={readOnly} />
+              <OutlinedInput
+                {...field}
+                label="品牌名稱"
+                inputProps={{ readOnly: readOnly }}
+              />
             )}
           />
         </FormControl>

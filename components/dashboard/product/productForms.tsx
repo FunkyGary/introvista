@@ -61,7 +61,6 @@ export default function ProductForms({
   )
   const router = useRouter()
   const { user } = useUser()
-  console.log(initialData)
   const getDefaultValue = (category: string) => {
     const baseData =
       productId && initialData
@@ -218,7 +217,7 @@ export default function ProductForms({
               {renderFormSection("檔案", <MaterialFile readOnly={readOnly} />)}
             </>
           )}
-          {renderActionButtons()}
+          {!readOnly && renderActionButtons()}
         </form>
       </FormProvider>
     </Grid>

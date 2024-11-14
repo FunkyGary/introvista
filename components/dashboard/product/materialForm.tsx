@@ -122,7 +122,11 @@ export function MaterialForm({
             control={control}
             rules={stringValidation}
             render={({ field }) => (
-              <OutlinedInput {...field} label="品牌名稱" />
+              <OutlinedInput
+                {...field}
+                label="品牌名稱"
+                inputProps={{ readOnly: true }}
+              />
             )}
           />
         </FormControl>
