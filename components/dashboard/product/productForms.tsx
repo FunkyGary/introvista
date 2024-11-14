@@ -160,8 +160,6 @@ export default function ProductForms({
         }
       } else {
         // Create new product
-        console.log(formData)
-
         const result = await createProduct(collectionType, formData)
         if (result.id) {
           enqueueSnackbar("產品上架成功！", { variant: "success" })
