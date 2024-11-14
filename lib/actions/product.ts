@@ -250,7 +250,6 @@ export const updateProduct = async (
   data: ProductFormValues
 ) => {
   try {
-    // Get current product data first
     const docRef = doc(db, COLLECTIONS[type], id)
     const currentDoc = await getDoc(docRef)
     const currentData = currentDoc.data()
@@ -260,14 +259,12 @@ export const updateProduct = async (
         ? extractModelFiles(data as ModelFormValues)
         : extractMaterialFiles(data as MaterialFormValues)
 
-    // Remove null files
     const cleanedFiles = Object.fromEntries(
       Object.entries(files).filter(([_, file]) => file !== null)
     )
 
     const uploadedUrls = await uploadFiles(cleanedFiles)
 
-    // Merge the uploaded URLs with existing URLs
     let mergedUrls = {}
     if (type === "models") {
       mergedUrls = {
@@ -304,10 +301,9 @@ export const updateProduct = async (
     const updatedData = {
       ...data,
       ...mergedUrls,
+      createdDate: currentData?.createdDate,
       lastUpdated: serverTimestamp(),
     }
-    console.log("updatedData", updatedData)
-
     await updateDoc(docRef, updatedData)
     return { success: true }
   } catch (error) {
