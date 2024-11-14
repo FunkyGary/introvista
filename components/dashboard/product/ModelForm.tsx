@@ -20,7 +20,13 @@ import InputAdornment from "@mui/material/InputAdornment"
 import { useState } from "react"
 import { categories, MainCategory } from "@/utils/categories"
 
-export function ModelForm(): React.JSX.Element {
+interface ModelFormProps {
+  readOnly?: boolean
+}
+
+export function ModelForm({
+  readOnly = false,
+}: ModelFormProps): React.JSX.Element {
   const [mainCategory, setMainCategory] = useState<string | undefined>(
     undefined
   )
@@ -50,7 +56,9 @@ export function ModelForm(): React.JSX.Element {
             name="itemName"
             control={control}
             rules={stringValidation}
-            render={({ field }) => <OutlinedInput {...field} label="名稱" />}
+            render={({ field }) => (
+              <OutlinedInput {...field} label="名稱" disabled={readOnly} />
+            )}
           />
         </FormControl>
       </Grid>
@@ -61,6 +69,7 @@ export function ModelForm(): React.JSX.Element {
             value={mainCategory || ""}
             onChange={(e) => setMainCategory(e.target.value)}
             label="主分類"
+            disabled={readOnly}
           >
             {Object.keys(categories).map((category) => (
               <MenuItem key={category} value={category}>
@@ -84,7 +93,7 @@ export function ModelForm(): React.JSX.Element {
                   {...field}
                   label="子分類"
                   error={!!error}
-                  disabled={!mainCategory}
+                  disabled={!mainCategory || readOnly}
                 >
                   {mainCategory &&
                     categories[mainCategory as keyof typeof categories].map(
@@ -114,7 +123,7 @@ export function ModelForm(): React.JSX.Element {
             control={control}
             rules={stringValidation}
             render={({ field }) => (
-              <OutlinedInput {...field} label="品牌名稱" />
+              <OutlinedInput {...field} label="品牌名稱" disabled={readOnly} />
             )}
           />
         </FormControl>
@@ -133,6 +142,7 @@ export function ModelForm(): React.JSX.Element {
                 type="number"
                 label="長"
                 onChange={(e) => field.onChange(Number(e.target.value))}
+                disabled={readOnly}
               />
             )}
           />
@@ -152,6 +162,7 @@ export function ModelForm(): React.JSX.Element {
                 type="number"
                 label="寬"
                 onChange={(e) => field.onChange(Number(e.target.value))}
+                disabled={readOnly}
               />
             )}
           />
@@ -171,6 +182,7 @@ export function ModelForm(): React.JSX.Element {
                 type="number"
                 label="高"
                 onChange={(e) => field.onChange(Number(e.target.value))}
+                disabled={readOnly}
               />
             )}
           />
@@ -193,6 +205,7 @@ export function ModelForm(): React.JSX.Element {
                   min: "0",
                 }}
                 onChange={(e) => field.onChange(Number(e.target.value))}
+                disabled={readOnly}
               />
             )}
           />
@@ -256,6 +269,7 @@ export function ModelForm(): React.JSX.Element {
                 startAdornment={
                   <InputAdornment position="start">NT$</InputAdornment>
                 }
+                disabled={readOnly}
               />
             )}
           />
@@ -275,6 +289,7 @@ export function ModelForm(): React.JSX.Element {
                 maxRows={4}
                 minRows={2}
                 {...field}
+                disabled={readOnly}
               />
             )}
           />

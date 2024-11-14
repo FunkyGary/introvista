@@ -48,11 +48,13 @@ const CATEGORIES = [
 interface ProductFormProps {
   initialData?: ProductFormValues
   productId?: string
+  readOnly?: boolean
 }
 
 export default function ProductForms({
   initialData,
   productId,
+  readOnly = false,
 }: ProductFormProps): React.JSX.Element {
   const [category, setCategory] = React.useState(
     productId && initialData?.type === "materials" ? "material" : "item"
@@ -131,10 +133,7 @@ export default function ProductForms({
             刪除
           </Button>
         )}
-        <Button
-          type="submit"
-          variant="contained"
-        >
+        <Button type="submit" variant="contained">
           {productId ? "更新" : "新增"}
         </Button>
       </CardActions>
@@ -162,7 +161,7 @@ export default function ProductForms({
       } else {
         // Create new product
         console.log(formData)
-        
+
         const result = await createProduct(collectionType, formData)
         if (result.id) {
           enqueueSnackbar("產品上架成功！", { variant: "success" })
@@ -204,15 +203,21 @@ export default function ProductForms({
         <form onSubmit={methods.handleSubmit(onFormSubmit)}>
           {category === "item" ? (
             <>
-              {renderFormSection("家具模型屬性", <ModelForm />)}
+              {renderFormSection(
+                "家具模型屬性",
+                <ModelForm readOnly={readOnly} />
+              )}
               {renderFormSection("圖片", <ModelImage />)}
-              {renderFormSection("檔案", <ModelFile />)}
+              {renderFormSection("檔案", <ModelFile readOnly={readOnly} />)}
             </>
           ) : (
             <>
-              {renderFormSection("材質屬性", <MaterialForm />)}
+              {renderFormSection(
+                "材質屬性",
+                <MaterialForm readOnly={readOnly} />
+              )}
               {renderFormSection("圖片", <MaterialImage />)}
-              {renderFormSection("檔案", <MaterialFile />)}
+              {renderFormSection("檔案", <MaterialFile readOnly={readOnly} />)}
             </>
           )}
           {renderActionButtons()}

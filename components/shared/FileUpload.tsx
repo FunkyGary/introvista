@@ -1,7 +1,7 @@
-import React from 'react'
-import { Button, Typography, Box } from '@mui/material'
-import { CloudArrowUp as CloudUploadIcon } from '@phosphor-icons/react/dist/ssr/CloudArrowUp'
-import { useFormContext } from 'react-hook-form'
+import React from "react"
+import { Button, Typography, Box } from "@mui/material"
+import { CloudArrowUp as CloudUploadIcon } from "@phosphor-icons/react/dist/ssr/CloudArrowUp"
+import { useFormContext } from "react-hook-form"
 
 interface FileUploadProps {
   name: string
@@ -9,6 +9,7 @@ interface FileUploadProps {
   accept?: string
   onChange: (file: File | null) => void
   rules?: Record<string, any>
+  disabled: boolean
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({
@@ -17,6 +18,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   accept,
   onChange,
   rules,
+  disabled = false,
 }) => {
   const { register } = useFormContext()
   const [fileName, setFileName] = React.useState<string | null>(null)
@@ -35,8 +37,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   return (
     <Box>
       <input
-        {...(accept !== '*' ? { accept } : {})}
-        style={{ display: 'none' }}
+        {...(accept !== "*" ? { accept } : {})}
+        style={{ display: "none" }}
         id={`file-upload-${name}`}
         type="file"
         onChange={handleFileChange}
@@ -46,6 +48,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           variant="outlined"
           component="span"
           startIcon={<CloudUploadIcon />}
+          disabled={disabled}
         >
           {label}
         </Button>
