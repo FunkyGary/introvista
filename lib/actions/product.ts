@@ -271,6 +271,7 @@ export const updateProduct = async (
         thumbnailImage:
           uploadedUrls.thumbnailImage || currentData?.thumbnailImage,
         itemFiles: {
+          additionalFiles: currentData?.additionalFiles,
           modelFileGLB:
             uploadedUrls.modelFileGLB || currentData?.itemFiles?.modelFileGLB,
           modelFileUSD:
