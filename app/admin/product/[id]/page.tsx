@@ -2,12 +2,11 @@
 
 import withAuthRequired from "@/components/hoc/with-auth-required"
 import { notFound } from "next/navigation"
-import { ProductCreateDto } from "@/lib/product/product-create.dto"
 import { getProductByProductId } from "@/lib/actions/product"
 import { useEffect, useState } from "react"
 import { useUser } from "@/hooks/use-user"
 import ProductForms from "@/components/dashboard/product/productForms"
-
+import { CircularProgress, Box } from "@mui/material"
 function ProductPage({ params }: { params: { id: string } }) {
   const productId = params.id
   const { user } = useUser()
@@ -27,30 +26,14 @@ function ProductPage({ params }: { params: { id: string } }) {
     fetchProduct()
   }, [productId])
 
-  // Fetch the product data
-  const product: ProductCreateDto = {
-    modelName: "Sample Furniture",
-    category: "item",
-    weight: 0,
-    material: "",
-    modelCategory: "",
-    brand: "",
-    dimensions: "",
-    stockQuantity: 0,
-    price: 0,
-    description: "",
-    thumbnailImages: [],
-    modelFileGLB: undefined,
-    modelFileUSD: undefined,
-  }
-
   if (!isLoading && !data) {
     notFound()
   }
 
   return (
     <main className="flex flex-col justify-between items-center p-1 min-h-screen">
-      {data !== null && data && (
+      {isLoading && <CircularProgress />}
+      {data !== null && (
         <ProductForms
           initialData={data}
           productId={productId}
