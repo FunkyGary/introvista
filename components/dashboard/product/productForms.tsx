@@ -48,11 +48,13 @@ const CATEGORIES = [
 interface ProductFormProps {
   initialData?: ProductFormValues
   productId?: string
+  readOnly?: boolean
 }
 
 export default function ProductForms({
   initialData,
   productId,
+  readOnly = false,
 }: ProductFormProps): React.JSX.Element {
   const [category, setCategory] = React.useState(
     productId && initialData?.type === "materials" ? "material" : "item"
@@ -204,18 +206,24 @@ export default function ProductForms({
         <form onSubmit={methods.handleSubmit(onFormSubmit)}>
           {category === "item" ? (
             <>
-              {renderFormSection("家具模型屬性", <ModelForm />)}
-              {renderFormSection("圖片", <ModelImage />)}
-              {renderFormSection("檔案", <ModelFile />)}
+              {renderFormSection(
+                "家具模型屬性",
+                <ModelForm readOnly={readOnly} />
+              )}
+              {renderFormSection("圖片", <ModelImage readOnly={readOnly} />)}
+              {renderFormSection("檔案", <ModelFile readOnly={readOnly} />)}
             </>
           ) : (
             <>
-              {renderFormSection("材質屬性", <MaterialForm />)}
-              {renderFormSection("圖片", <MaterialImage />)}
-              {renderFormSection("檔案", <MaterialFile />)}
+              {renderFormSection(
+                "材質屬性",
+                <MaterialForm readOnly={readOnly} />
+              )}
+              {renderFormSection("圖片", <MaterialImage readOnly={readOnly} />)}
+              {renderFormSection("檔案", <MaterialFile readOnly={readOnly} />)}
             </>
           )}
-          {renderActionButtons()}
+          {!readOnly && renderActionButtons()}
         </form>
       </FormProvider>
     </Grid>
