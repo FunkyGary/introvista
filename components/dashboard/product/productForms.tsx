@@ -131,10 +131,7 @@ export default function ProductForms({
             刪除
           </Button>
         )}
-        <Button
-          type="submit"
-          variant="contained"
-        >
+        <Button type="submit" variant="contained">
           {productId ? "更新" : "新增"}
         </Button>
       </CardActions>
@@ -154,15 +151,18 @@ export default function ProductForms({
 
       if (productId) {
         // Update existing product
+
+        console.log(formData)
         const result = await updateProduct(productId, collectionType, formData)
         if (result.success) {
           enqueueSnackbar("產品更新成功！", { variant: "success" })
+          /* router.push(paths.dashboard.product + `/${productId}`) */
           router.push(paths.dashboard.products)
         }
       } else {
         // Create new product
         console.log(formData)
-        
+
         const result = await createProduct(collectionType, formData)
         if (result.id) {
           enqueueSnackbar("產品上架成功！", { variant: "success" })

@@ -1,22 +1,29 @@
-import { z } from 'zod'
+import { z } from "zod"
+
+const getFileDataSchema = z.object({
+  name: z.string(),
+  url: z.string(),
+})
 
 // Define a custom file schema that only uses `File` in the browser
 const fileSchema =
-  typeof window !== 'undefined'
-    ? z.instanceof(File).nullable()
+  typeof window !== "undefined"
+    ? z.instanceof(File).nullable().or(getFileDataSchema)
     : z.any().nullable()
 
-export const uploadImageFileSchema = z.array(z.object({ file: fileSchema }))
+export const uploadImageFileSchema = z
+  .array(z.object({ file: fileSchema }))
+  .or(getFileDataSchema)
 
 // Define Zod schemas for ModelForm and MaterialForm
 export const modelFormSchema = z.object({
-  type: z.literal('models').optional(),
+  type: z.literal("models").optional(),
   userId: z.string(),
-  categoryID: z.string().min(1, 'Category ID is required'),
+  categoryID: z.string().min(1, "Category ID is required"),
   isPublished: z.boolean().default(false),
-  itemName: z.string().min(1, 'Model name is required'),
-  itemDescription: z.string().min(1, 'Description is required'),
-  price: z.number().min(0, 'Price must be positive'),
+  itemName: z.string().min(1, "Model name is required"),
+  itemDescription: z.string().min(1, "Description is required"),
+  price: z.number().min(0, "Price must be positive"),
   dimensions: z.object({
     length: z.number().min(0),
     width: z.number().min(0),
@@ -33,13 +40,13 @@ export const modelFormSchema = z.object({
 })
 
 export const materialFormSchema = z.object({
-  type: z.literal('materials').optional(),
+  type: z.literal("materials").optional(),
   userId: z.string(),
-  categoryID: z.string().min(1, 'Category ID is required'),
+  categoryID: z.string().min(1, "Category ID is required"),
   isPublished: z.boolean().default(false),
-  materialName: z.string().min(1, 'Material name is required'),
-  materialDescription: z.string().min(1, 'Description is required'),
-  materialPrice: z.number().min(0, 'Price must be positive'),
+  materialName: z.string().min(1, "Material name is required"),
+  materialDescription: z.string().min(1, "Description is required"),
+  materialPrice: z.number().min(0, "Price must be positive"),
   dimensions: z
     .object({
       length: z.number().min(0),
@@ -67,10 +74,10 @@ export type MaterialFormValues = z.infer<typeof materialFormSchema>
 export type ProductFormValues = ModelFormValues | MaterialFormValues
 
 export const modelInitialData = {
-  categoryID: '',
+  categoryID: "",
   isPublished: false,
-  itemName: '',
-  itemDescription: '',
+  itemName: "",
+  itemDescription: "",
   price: 0,
   dimensions: {
     length: 0,
@@ -86,10 +93,10 @@ export const modelInitialData = {
 }
 
 export const materialInitialData = {
-  categoryID: '',
+  categoryID: "",
   isPublished: false,
-  materialName: '',
-  materialDescription: '',
+  materialName: "",
+  materialDescription: "",
   materialPrice: 0,
   dimensions: {
     length: 0,

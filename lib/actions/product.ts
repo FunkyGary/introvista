@@ -160,57 +160,78 @@ export const getProductByProductId = async (id: string) => {
         const productDoc = await getDoc(productDocRef)
         if (!productDoc.exists()) return undefined
 
-        const modelData = {
-          type: "models",
-          itemID: productDoc.id,
-          itemName: productDoc.data()?.itemName,
-          itemDescription: productDoc.data()?.itemDescription,
-          brand: productDoc.data()?.brand,
-          price: productDoc.data()?.price,
-          categoryID: productDoc.data()?.categoryID,
-          userId: productDoc.data()?.userId,
-          isPublished: productDoc.data()?.isPublished,
-          dimensions: productDoc.data()?.dimensions,
-          weight: productDoc.data()?.weight,
-          tags: productDoc.data()?.tags,
-          thumbnailImage: [],
-          itemFiles: {
-            modelFileGLB: null,
-            modelFileUSD: null,
-          },
-        } as ModelData
+        const data = productDoc.data()
 
-        const materialData = {
-          type: "materials",
-          materialID: productDoc.id,
-          materialName: productDoc.data()?.materialName,
-          materialDescription: productDoc.data()?.materialDescription,
-          materialPrice: productDoc.data()?.materialPrice,
-          brand: productDoc.data()?.brand,
-          isPublished: productDoc.data()?.isPublished,
-          categoryID: productDoc.data()?.categoryID,
-          userId: productDoc.data()?.userId,
-          dimensions: productDoc.data()?.dimensions,
-          weight: productDoc.data()?.weight,
-          tags: productDoc.data()?.tags,
-          previewImage: [],
-          textureMaps: {
-            baseColorMap: null,
-            normalMap: null,
-            roughnessMap: null,
-            metallicMap: null,
-            ambientOcclusionMap: null,
-            heightMap: null,
-          },
-        } as MaterialData
+        // Helper function to safely get download URL
+        const getUrlFromPath = async (path: string | null | undefined) => {
+          if (!path) return { name: "", url: "" }
+          try {
+            const fileRef = ref(storage, path)
+            const filename = fileRef.name
+            const url = await getDownloadURL(fileRef)
+            return { name: filename, url }
+          } catch (error) {
+            console.error(`Error getting download URL for path ${path}:`, error)
+            return { name: "", url: "" }
+          }
+        }
 
-        const productData = collection === "models" ? modelData : materialData
-
-        return productData as ProductData
+        if (collection === "models") {
+          const modelData = {
+            type: "models",
+            itemID: productDoc.id,
+            itemName: data?.itemName,
+            itemDescription: data?.itemDescription,
+            brand: data?.brand,
+            price: data?.price,
+            categoryID: data?.categoryID,
+            userId: data?.userId,
+            isPublished: data?.isPublished,
+            dimensions: data?.dimensions,
+            weight: data?.weight,
+            tags: data?.tags,
+            thumbnailImage: await getUrlFromPath(data?.thumbnailImage),
+            itemFiles: {
+              modelFileGLB: await getUrlFromPath(data?.itemFiles?.modelFileGLB),
+              modelFileUSD: await getUrlFromPath(data?.itemFiles?.modelFileUSD),
+            },
+          } as ModelData
+          return modelData
+        } else {
+          const materialData = {
+            type: "materials",
+            materialID: productDoc.id,
+            materialName: data?.materialName,
+            materialDescription: data?.materialDescription,
+            materialPrice: data?.materialPrice,
+            brand: data?.brand,
+            isPublished: data?.isPublished,
+            categoryID: data?.categoryID,
+            userId: data?.userId,
+            dimensions: data?.dimensions,
+            weight: data?.weight,
+            tags: data?.tags,
+            previewImage: await getUrlFromPath(data?.previewImage),
+            textureMaps: {
+              baseColorMap: await getUrlFromPath(
+                data?.textureMaps?.baseColorMap
+              ),
+              normalMap: await getUrlFromPath(data?.textureMaps?.normalMap),
+              roughnessMap: await getUrlFromPath(
+                data?.textureMaps?.roughnessMap
+              ),
+              metallicMap: await getUrlFromPath(data?.textureMaps?.metallicMap),
+              ambientOcclusionMap: await getUrlFromPath(
+                data?.textureMaps?.ambientOcclusionMap
+              ),
+              heightMap: await getUrlFromPath(data?.textureMaps?.heightMap),
+            },
+          } as MaterialData
+          return materialData
+        }
       })
     )
 
-    // Return the product that exists
     return productDoc.find((doc) => doc !== undefined)
   } catch (error) {
     console.error("Error fetching product:", error)
@@ -305,6 +326,9 @@ export const updateProduct = async (
       createdDate: currentData?.createdDate,
       lastUpdated: serverTimestamp(),
     }
+
+    console.log(updatedData)
+
     await updateDoc(docRef, updatedData)
     return { success: true }
   } catch (error) {
@@ -387,22 +411,20 @@ const uploadProductImage = async (file: File): Promise<string> => {
   const filename = file.name
   const fileRef = ref(storage, `products/images/${filename}`)
   const snapshot = await uploadBytes(fileRef, file)
-
-  return snapshot.ref.toString()
+  return snapshot.ref.fullPath
 }
 
 const uploadProductFile = async (file: File): Promise<string> => {
   const filename = file.name
   const fileRef = ref(storage, `products/files/${filename}`)
   const snapshot = await uploadBytes(fileRef, file)
-
-  return snapshot.ref.toString()
+  return snapshot.ref.fullPath
 }
 
 const extractModelFiles = (data: ModelFormValues) => {
   const files: Record<string, File | null> = {}
 
-  if (data.thumbnailImage?.[0]?.file) {
+  if (Array.isArray(data.thumbnailImage) && data.thumbnailImage[0]?.file) {
     files.thumbnailImage = data.thumbnailImage[0].file
   }
 
@@ -421,7 +443,7 @@ const extractModelFiles = (data: ModelFormValues) => {
 const extractMaterialFiles = (data: MaterialFormValues) => {
   const files: Record<string, File | null> = {}
 
-  if (data.previewImage?.[0]?.file) {
+  if (Array.isArray(data.previewImage) && data.previewImage[0]?.file) {
     files.previewImage = data.previewImage[0].file
   }
 

@@ -6,7 +6,7 @@ interface BaseProduct {
 }
 
 export interface ModelProduct extends BaseProduct {
-  type: 'model'
+  type: "model"
   itemID: string
   itemName: string
   price: number
@@ -20,7 +20,7 @@ export interface ModelProduct extends BaseProduct {
 }
 
 export interface MaterialProduct extends BaseProduct {
-  type: 'material'
+  type: "material"
   materialID: string
   materialName: string
   materialPrice: number
@@ -34,15 +34,16 @@ export interface MaterialProduct extends BaseProduct {
     metallicMap: string | null
     ambientOcclusionMap: string | null
   }
-
 }
 
 export type Product = ModelProduct | MaterialProduct
 
-export type ProductType = 'models' | 'materials'
+export type ProductType = "models" | "materials"
+
+type FileData = { name: string; url: string }
 
 export interface ModelData {
-  type: 'models'
+  type: "models"
   itemName: string
   itemDescription: string
   brand: string
@@ -56,16 +57,16 @@ export interface ModelData {
     height: number
   }
   weight: number
-  thumbnailImage?: [] | null
+  thumbnailImage?: [] | null | string | FileData
   itemFiles?: {
-    modelFileGLB?: File | null
-    modelFileUSD?: File | null
-    additionalFiles?: File | null
+    modelFileGLB?: File | null | string | FileData
+    modelFileUSD?: File | null | string | FileData
+    additionalFiles?: File | null | string | FileData
   }
 }
 
 export interface MaterialData {
-  type: 'materials'
+  type: "materials"
   materialName: string
   materialDescription: string
   materialPrice: number
@@ -79,14 +80,14 @@ export interface MaterialData {
     height: number
   }
   weight?: number
-  previewImage?: [] | null
+  previewImage?: [] | null | string | FileData
   textureMaps?: {
-    baseColorMap?: File | null
-    normalMap?: File | null
-    roughnessMap?: File | null
-    metallicMap?: File | null
-    ambientOcclusionMap?: File | null
-    heightMap?: File | null
+    baseColorMap?: File | null | string | FileData
+    normalMap?: File | null | string | FileData
+    roughnessMap?: File | null | string | FileData
+    metallicMap?: File | null | string | FileData
+    ambientOcclusionMap?: File | null | string | FileData
+    heightMap?: File | null | string | FileData
   }
 }
 

@@ -1,12 +1,12 @@
-'use client'
+"use client"
 
-import withAuthRequired from '@/components/hoc/with-auth-required'
-import { notFound } from 'next/navigation'
-import { ProductCreateDto } from '@/lib/product/product-create.dto'
-import { getProductByProductId } from '@/lib/actions/product'
-import { useEffect, useState } from 'react'
-import { useUser } from '@/hooks/use-user'
-import ProductForms from '@/components/dashboard/product/productForms'
+import withAuthRequired from "@/components/hoc/with-auth-required"
+import { notFound } from "next/navigation"
+import { ProductCreateDto } from "@/lib/product/product-create.dto"
+import { getProductByProductId } from "@/lib/actions/product"
+import { useEffect, useState } from "react"
+import { useUser } from "@/hooks/use-user"
+import ProductForms from "@/components/dashboard/product/productForms"
 
 function ProductPage({ params }: { params: { id: string } }) {
   const productId = params.id
@@ -24,16 +24,16 @@ function ProductPage({ params }: { params: { id: string } }) {
 
   // Fetch the product data
   const product: ProductCreateDto = {
-    modelName: 'Sample Furniture',
-    category: 'item',
+    modelName: "Sample Furniture",
+    category: "item",
     weight: 0,
-    material: '',
-    modelCategory: '',
-    brand: '',
-    dimensions: '',
+    material: "",
+    modelCategory: "",
+    brand: "",
+    dimensions: "",
     stockQuantity: 0,
     price: 0,
-    description: '',
+    description: "",
     thumbnailImages: [],
     modelFileGLB: undefined,
     modelFileUSD: undefined,
