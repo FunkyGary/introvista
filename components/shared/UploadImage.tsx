@@ -1,8 +1,8 @@
-import * as React from 'react'
-import { useFormContext, Controller } from 'react-hook-form'
-import { Upload } from 'antd'
-import type { UploadFile, UploadProps } from 'antd'
-import { message } from 'antd'
+import * as React from "react"
+import { useFormContext, Controller } from "react-hook-form"
+import { Upload } from "antd"
+import type { UploadFile, UploadProps } from "antd"
+import { message } from "antd"
 
 interface ImageUploadProps {
   name: string
@@ -10,35 +10,53 @@ interface ImageUploadProps {
   maxCount?: number
 }
 
-export default function UploadImage({ name, rules, maxCount = 1 }: ImageUploadProps) {
+export default function UploadImage({
+  name,
+  rules,
+  maxCount = 1,
+}: ImageUploadProps) {
   const { control, setValue, register } = useFormContext()
   const [fileList, setFileList] = React.useState<UploadFile[]>([])
 
   register(name, rules)
+  const formValues = useFormContext().getValues(name)
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+  React.useEffect(() => {
+    if (formValues && formValues.url) {
+      setFileList([
+        {
+          uid: "-1",
+          name: formValues.name,
+          status: "done",
+          url: formValues.url,
+        },
+      ])
+    }
+  }, [formValues])
+
+  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList)
 
-    const files = newFileList.map(file => ({
-      file: file.originFileObj
+    const files = newFileList.map((file) => ({
+      file: file.originFileObj,
     }))
     setValue(name, files)
   }
 
   const beforeUpload = (file: File) => {
-    const isImage = file.type.startsWith('image/')
+    const isImage = file.type.startsWith("image/")
     if (!isImage) {
-      message.error('You can only upload image files!')
+      message.error("You can only upload image files!")
       return false
     }
 
     const isLt5M = file.size / 1024 / 1024 < 5
     if (!isLt5M) {
-      message.error('Image must be smaller than 5MB!')
+      message.error("Image must be smaller than 5MB!")
       return false
     }
 
-    return false 
+    return false
   }
 
   const uploadButton = (
@@ -54,6 +72,10 @@ export default function UploadImage({ name, rules, maxCount = 1 }: ImageUploadPr
       defaultValue={[]}
       render={({ field }) => (
         <Upload
+          // style={{
+          //   width: "200px",
+          //   height: "200px",
+          // }}
           listType="picture-card"
           fileList={fileList}
           onChange={handleChange}
@@ -71,7 +93,7 @@ export default function UploadImage({ name, rules, maxCount = 1 }: ImageUploadPr
             }
 
             const image = new Image()
-            image.src = file.url || file.preview || ''
+            image.src = file.url || file.preview || ""
             const imgWindow = window.open(file.url || file.preview)
             imgWindow?.document.write(image.outerHTML)
           }}

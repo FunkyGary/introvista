@@ -29,7 +29,7 @@ function ProductPage({ params }: { params: { id: string } }) {
   if (!isLoading && !data) {
     notFound()
   }
-
+  console.log(data)
   return (
     <main className="flex flex-col justify-between items-center p-1 min-h-screen">
       {isLoading && <CircularProgress />}
