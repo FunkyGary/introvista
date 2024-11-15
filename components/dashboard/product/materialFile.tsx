@@ -1,13 +1,17 @@
-'use client'
+"use client"
 
-import React from 'react'
-import { Grid, Typography } from '@mui/material'
-import { FileUpload } from '@/components/shared/FileUpload'
-import { useFormContext, Controller } from 'react-hook-form'
-import { FormHelperText } from '@mui/material'
-import { FileValidation } from '@/utils/validationRules'
+import React from "react"
+import { Grid, Typography } from "@mui/material"
+import { FileUpload } from "@/components/shared/FileUpload"
+import { useFormContext, Controller } from "react-hook-form"
+import { FormHelperText } from "@mui/material"
+import { FileValidation } from "@/utils/validationRules"
 
-export default function MaterialFile(): React.JSX.Element {
+export default function MaterialFile({
+  readOnly = false,
+}: {
+  readOnly?: boolean
+}): React.JSX.Element {
   const {
     formState: { errors },
     control,
@@ -15,27 +19,27 @@ export default function MaterialFile(): React.JSX.Element {
 
   const fileFields = [
     {
-      name: 'textureMaps.baseColorMap',
-      label: 'BaseColorMap*',
+      name: "textureMaps.baseColorMap",
+      label: "BaseColorMap*",
       required: true,
     },
-    { name: 'textureMaps.normalMap', label: 'Normal Map*', required: true },
+    { name: "textureMaps.normalMap", label: "Normal Map*", required: true },
     {
-      name: 'textureMaps.roughnessMap',
-      label: 'Roughness Map*',
+      name: "textureMaps.roughnessMap",
+      label: "Roughness Map*",
       required: true,
     },
     {
-      name: 'textureMaps.metallicMap',
-      label: 'MetallicMap',
+      name: "textureMaps.metallicMap",
+      label: "MetallicMap",
       required: false,
     },
     {
-      name: 'textureMaps.ambientOcclusionMap',
-      label: 'AmbientOcclusionMap',
+      name: "textureMaps.ambientOcclusionMap",
+      label: "AmbientOcclusionMap",
       required: false,
     },
-    { name: 'textureMaps.heightMap', label: 'HeightMap', required: false },
+    { name: "textureMaps.heightMap", label: "HeightMap", required: false },
   ]
 
   return (
@@ -46,12 +50,12 @@ export default function MaterialFile(): React.JSX.Element {
           md={3}
           xs={12}
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Typography variant="h6" sx={{ paddingBottom: '10px' }}>
+          <Typography variant="h6" sx={{ paddingBottom: "10px" }}>
             {field.label}
           </Typography>
           <Controller

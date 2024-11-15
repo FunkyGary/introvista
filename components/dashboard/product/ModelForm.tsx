@@ -20,7 +20,11 @@ import InputAdornment from "@mui/material/InputAdornment"
 import { useState } from "react"
 import { categories, MainCategory } from "@/utils/categories"
 
-export function ModelForm(): React.JSX.Element {
+export function ModelForm({
+  readOnly = false,
+}: {
+  readOnly?: boolean
+}): React.JSX.Element {
   const [mainCategory, setMainCategory] = useState<string | undefined>(
     undefined
   )

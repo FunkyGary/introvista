@@ -12,12 +12,17 @@ function ProductPage({ params }: { params: { id: string } }) {
   const productId = params.id
   const { user } = useUser()
   const [data, setData] = useState<any | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   // fetch the product data
   useEffect(() => {
     const fetchProduct = async () => {
-      const product = await getProductByProductId(productId)
-      setData(product)
+      try {
+        const product = await getProductByProductId(productId)
+        setData(product)
+      } finally {
+        setIsLoading(false)
+      }
     }
     fetchProduct()
   }, [productId])
@@ -39,14 +44,18 @@ function ProductPage({ params }: { params: { id: string } }) {
     modelFileUSD: undefined,
   }
 
-  if (!product) {
+  if (!isLoading && !data) {
     notFound()
   }
 
   return (
     <main className="flex flex-col justify-between items-center p-1 min-h-screen">
       {data !== null && data && (
-        <ProductForms initialData={data} productId={productId} />
+        <ProductForms
+          initialData={data}
+          productId={productId}
+          readOnly={true}
+        />
       )}
     </main>
   )

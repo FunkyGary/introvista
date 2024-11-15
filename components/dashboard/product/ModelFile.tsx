@@ -1,16 +1,16 @@
-'use client'
+"use client"
 
-import React from 'react'
-import { Grid, Typography } from '@mui/material'
-import { FileUpload } from '@/components/shared/FileUpload'
-import { useFormContext, Controller } from 'react-hook-form'
+import React from "react"
+import { Grid, Typography } from "@mui/material"
+import { FileUpload } from "@/components/shared/FileUpload"
+import { useFormContext, Controller } from "react-hook-form"
 
-export function ModelFile() {
+export function ModelFile({ readOnly = false }: { readOnly?: boolean }) {
   const { control } = useFormContext()
 
   const fileTypes = [
-    { name: 'itemFiles.modelFileGLB', label: 'Model File GLB' },
-    { name: 'itemFiles.modelFileUSD', label: 'Model File USD' },
+    { name: "itemFiles.modelFileGLB", label: "Model File GLB" },
+    { name: "itemFiles.modelFileUSD", label: "Model File USD" },
   ]
 
   return (
@@ -21,12 +21,12 @@ export function ModelFile() {
           md={3}
           xs={12}
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Typography variant="h6" sx={{ paddingBottom: '10px' }}>
+          <Typography variant="h6" sx={{ paddingBottom: "10px" }}>
             {fileType.label}
           </Typography>
           <Controller

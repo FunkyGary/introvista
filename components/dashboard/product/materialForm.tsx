@@ -1,24 +1,28 @@
-'use client'
+"use client"
 
-import * as React from 'react'
-import { useFormContext, Controller } from 'react-hook-form'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import Select from '@mui/material/Select'
-import Grid from '@mui/material/Unstable_Grid2'
-import TextField from '@mui/material/TextField'
-import { stringValidation, numberValidation } from '@/utils/validationRules'
-import Checkbox from '@mui/material/Checkbox'
-import { FormControlLabel } from '@mui/material'
-import { Autocomplete, Chip, FormHelperText } from '@mui/material'
-import InputAdornment from '@mui/material/InputAdornment'
-import { useState } from 'react'
-import { categories, MainCategory } from '@/utils/categories'
-import { Material } from '@/lib/product/material.entity'
+import * as React from "react"
+import { useFormContext, Controller } from "react-hook-form"
+import FormControl from "@mui/material/FormControl"
+import InputLabel from "@mui/material/InputLabel"
+import MenuItem from "@mui/material/MenuItem"
+import OutlinedInput from "@mui/material/OutlinedInput"
+import Select from "@mui/material/Select"
+import Grid from "@mui/material/Unstable_Grid2"
+import TextField from "@mui/material/TextField"
+import { stringValidation, numberValidation } from "@/utils/validationRules"
+import Checkbox from "@mui/material/Checkbox"
+import { FormControlLabel } from "@mui/material"
+import { Autocomplete, Chip, FormHelperText } from "@mui/material"
+import InputAdornment from "@mui/material/InputAdornment"
+import { useState } from "react"
+import { categories, MainCategory } from "@/utils/categories"
+import { Material } from "@/lib/product/material.entity"
 
-export function MaterialForm(): React.JSX.Element {
+export function MaterialForm({
+  readOnly = false,
+}: {
+  readOnly?: boolean
+}): React.JSX.Element {
   const [mainCategory, setMainCategory] = useState<string | undefined>(
     undefined
   )
@@ -33,7 +37,7 @@ export function MaterialForm(): React.JSX.Element {
   }, [])
 
   React.useEffect(() => {
-    const categoryId = getValues('categoryID')
+    const categoryId = getValues("categoryID")
     if (categoryId) {
       mainCategoryFromId(categoryId)
     }
@@ -56,7 +60,7 @@ export function MaterialForm(): React.JSX.Element {
         <FormControl fullWidth required>
           <InputLabel>主分類</InputLabel>
           <Select
-            value={mainCategory || ''}
+            value={mainCategory || ""}
             onChange={(e) => setMainCategory(e.target.value)}
             label="主分類"
           >
@@ -74,7 +78,7 @@ export function MaterialForm(): React.JSX.Element {
             name="categoryID"
             control={control}
             defaultValue=""
-            rules={{ required: '請選擇子分類' }}
+            rules={{ required: "請選擇子分類" }}
             render={({ field, fieldState: { error } }) => (
               <>
                 <InputLabel>子分類</InputLabel>
@@ -230,7 +234,7 @@ export function MaterialForm(): React.JSX.Element {
                 label="價格 (TWD)"
                 type="number"
                 inputProps={{
-                  min: '1',
+                  min: "1",
                 }}
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 startAdornment={
@@ -255,7 +259,7 @@ export function MaterialForm(): React.JSX.Element {
                 label="重量 (kg)"
                 type="number"
                 inputProps={{
-                  min: '0',
+                  min: "0",
                 }}
                 onChange={(e) => field.onChange(Number(e.target.value))}
               />
