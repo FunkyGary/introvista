@@ -153,8 +153,6 @@ export default function ProductForms({
 
       if (productId) {
         // Update existing product
-
-        console.log(formData)
         const result = await updateProduct(productId, collectionType, formData)
         if (result.success) {
           enqueueSnackbar("產品更新成功！", { variant: "success" })
@@ -163,8 +161,6 @@ export default function ProductForms({
         }
       } else {
         // Create new product
-        console.log(formData)
-
         const result = await createProduct(collectionType, formData)
         if (result.id) {
           enqueueSnackbar("產品上架成功！", { variant: "success" })

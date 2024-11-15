@@ -43,7 +43,14 @@ export default function MaterialFile({
   ]
 
   return (
-    <Grid container spacing={3}>
+    <Grid
+      container
+      spacing={3}
+      sx={{
+        paddingLeft: "25px",
+        paddingTop: "20px",
+      }}
+    >
       {fileFields.map((field) => (
         <Grid
           key={field.name}
@@ -52,7 +59,7 @@ export default function MaterialFile({
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
+            paddingBottom: "10px",
           }}
         >
           <Typography variant="h6" sx={{ paddingBottom: "10px" }}>
@@ -70,6 +77,7 @@ export default function MaterialFile({
                 accept="*"
                 onChange={onChange}
                 rules={field.required ? FileValidation : undefined}
+                readOnly={readOnly}
               />
             )}
           />

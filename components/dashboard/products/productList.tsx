@@ -1,7 +1,7 @@
-'use client'
+"use client"
 
-import * as React from 'react'
-import Link from 'next/link'
+import * as React from "react"
+import Link from "next/link"
 import {
   Box,
   Card,
@@ -25,17 +25,17 @@ import {
   MenuItem,
   Select,
   CircularProgress,
-} from '@mui/material'
-import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass'
-import { useSelection } from '@/hooks/use-selection'
-import { getUserProducts } from '@/lib/actions/product'
-import { ProductData, Product } from '@/types/product'
-import { useUser } from '@/hooks/use-user' // Adjust based on your auth setup
+} from "@mui/material"
+import { MagnifyingGlass as MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr/MagnifyingGlass"
+import { useSelection } from "@/hooks/use-selection"
+import { getUserProducts } from "@/lib/actions/product"
+import { ProductData, Product } from "@/types/product"
+import { useUser } from "@/hooks/use-user" // Adjust based on your auth setup
 
 const tabs = [
-  { value: 'all', label: '全部商品' },
-  { value: 'published', label: '上架中商品' },
-  { value: 'unpublished', label: '未上架商品' },
+  { value: "all", label: "全部商品" },
+  { value: "published", label: "上架中商品" },
+  { value: "unpublished", label: "未上架商品" },
 ] as const
 
 export function ProductList(): React.JSX.Element {
@@ -43,15 +43,15 @@ export function ProductList(): React.JSX.Element {
 
   const [products, setProducts] = React.useState<Product[]>([])
   const [loading, setLoading] = React.useState(true)
-  const [activeTab, setActiveTab] = React.useState('all')
-  const [searchQuery, setSearchQuery] = React.useState('')
-  const [mainCategory, setMainCategory] = React.useState('all')
+  const [activeTab, setActiveTab] = React.useState("all")
+  const [searchQuery, setSearchQuery] = React.useState("")
+  const [mainCategory, setMainCategory] = React.useState("all")
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
   // Selection handling
   const productIds = React.useMemo(
-    () => products.map((p) => (p.type === 'model' ? p.itemID : p.materialID)),
+    () => products.map((p) => (p.type === "model" ? p.itemID : p.materialID)),
     [products]
   )
   const { selectAll, deselectAll, selectOne, deselectOne, selected } =
@@ -66,7 +66,7 @@ export function ProductList(): React.JSX.Element {
         const fetchedProducts = await getUserProducts(user.id)
         setProducts(fetchedProducts)
       } catch (error) {
-        console.error('Error fetching products:', error)
+        console.error("Error fetching products:", error)
       } finally {
         setLoading(false)
       }
@@ -78,8 +78,8 @@ export function ProductList(): React.JSX.Element {
   // Filter products based on active tab
   const filteredProducts = React.useMemo(() => {
     return products.filter((product) => {
-      if (activeTab === 'published') return product.isPublished
-      if (activeTab === 'unpublished') return !product.isPublished
+      if (activeTab === "published") return product.isPublished
+      if (activeTab === "unpublished") return !product.isPublished
       return true
     })
   }, [products, activeTab])
@@ -105,8 +105,8 @@ export function ProductList(): React.JSX.Element {
   }
 
   return (
-    <Card sx={{ maxWidth: '1000px', width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', paddingX: '25px' }}>
+    <Card sx={{ maxWidth: "1000px", width: "100%" }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider", paddingX: "25px" }}>
         <Tabs
           value={activeTab}
           onChange={(_, newValue) => setActiveTab(newValue)}
@@ -119,7 +119,7 @@ export function ProductList(): React.JSX.Element {
 
       <CardContent>
         {/* Search and Filter Section */}
-        <Box sx={{ mb: 2, display: 'flex', gap: 2 }}>
+        <Box sx={{ mb: 2, display: "flex", gap: 2 }}>
           <OutlinedInput
             fullWidth
             placeholder="搜尋 商品標號、商品名稱"
@@ -131,13 +131,13 @@ export function ProductList(): React.JSX.Element {
               </InputAdornment>
             }
             size="small"
-            sx={{ maxWidth: '400px' }}
+            sx={{ maxWidth: "400px" }}
           />
           {/* Add your category filters here */}
         </Box>
 
         {/* Products Count and Export */}
-        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}>
           <Typography>{filteredProducts.length} 件商品</Typography>
           <Button variant="outlined" size="small">
             匯出報表
@@ -173,7 +173,7 @@ export function ProductList(): React.JSX.Element {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((product) => {
                 const id =
-                  product.type === 'model' ? product.itemID : product.materialID
+                  product.type === "model" ? product.itemID : product.materialID
                 const isSelected = selected.has(id)
 
                 return (
@@ -188,32 +188,32 @@ export function ProductList(): React.JSX.Element {
                       />
                     </TableCell>
                     <TableCell>
-                      {product.type === 'model' ? '物品' : '材質'}
+                      {product.type === "model" ? "物品" : "材質"}
                     </TableCell>
                     <TableCell>
-                      {product.type === 'model'
+                      {product.type === "model"
                         ? product.itemName
                         : product.materialName}
                     </TableCell>
                     <TableCell>
                       $
-                      {product.type === 'model'
+                      {product.type === "model"
                         ? product.price
                         : product.materialPrice}
                     </TableCell>
                     <TableCell>
-                      {product.isPublished ? '已上架' : '未上架'}
+                      {product.isPublished ? "已上架" : "未上架"}
                     </TableCell>
                     <TableCell>
                       {product.createdDate.toLocaleDateString()}
                     </TableCell>
                     <TableCell>
                       <ButtonGroup variant="text" size="small">
-                        <Button>預覽</Button>
+                        <Button href={`/admin/product/${id}`}>預覽</Button>
                         <Button>
-                          <Link href={`/admin/product/${id}`}>編輯</Link>
+                          <Link href={`/admin/product/${id}/edit`}>編輯</Link>
                         </Button>
-                        <Button>推廣</Button>
+                        <Button disabled>推廣</Button>
                       </ButtonGroup>
                     </TableCell>
                   </TableRow>

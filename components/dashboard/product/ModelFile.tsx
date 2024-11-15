@@ -14,7 +14,14 @@ export function ModelFile({ readOnly = false }: { readOnly?: boolean }) {
   ]
 
   return (
-    <Grid container spacing={2}>
+    <Grid
+      container
+      spacing={2}
+      sx={{
+        paddingLeft: "25px",
+        paddingTop: "20px",
+      }}
+    >
       {fileTypes.map((fileType) => (
         <Grid
           key={fileType.name}
@@ -23,7 +30,7 @@ export function ModelFile({ readOnly = false }: { readOnly?: boolean }) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
+            paddingY: "10px",
           }}
         >
           <Typography variant="h6" sx={{ paddingBottom: "10px" }}>
@@ -38,6 +45,7 @@ export function ModelFile({ readOnly = false }: { readOnly?: boolean }) {
                 label="Upload"
                 accept="*"
                 onChange={(file) => field.onChange(file)}
+                readOnly={readOnly}
               />
             )}
           />

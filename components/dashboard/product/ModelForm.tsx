@@ -54,7 +54,13 @@ export function ModelForm({
             name="itemName"
             control={control}
             rules={stringValidation}
-            render={({ field }) => <OutlinedInput {...field} label="名稱" />}
+            render={({ field }) => (
+              <OutlinedInput
+                inputProps={{ readOnly: readOnly }}
+                {...field}
+                label="名稱"
+              />
+            )}
           />
         </FormControl>
       </Grid>

@@ -33,7 +33,11 @@ export default function MaterialImage({
           預覽圖*
         </Typography>
         {/* <ImageUpload name="previewImage" rules={imageValidation} /> */}
-        <UploadImage name="previewImage" rules={imageValidation} />
+        <UploadImage
+          name="previewImage"
+          rules={imageValidation}
+          readOnly={readOnly}
+        />
         {errors.previewImage && (
           <FormHelperText error>
             {errors.previewImage.message as string}
