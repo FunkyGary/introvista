@@ -29,16 +29,11 @@ function ProductPage({ params }: { params: { id: string } }) {
   if (!isLoading && !data) {
     notFound()
   }
-
   return (
     <main className="flex flex-col justify-between items-center p-1 min-h-screen">
       {isLoading && <CircularProgress />}
       {data !== null && (
-        <ProductForms
-          initialData={data}
-          productId={productId}
-          readOnly={true}
-        />
+        <ProductForms initialData={data} productId={productId} />
       )}
     </main>
   )

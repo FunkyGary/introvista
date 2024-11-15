@@ -8,12 +8,14 @@ interface ImageUploadProps {
   name: string
   rules?: Record<string, any>
   maxCount?: number
+  readOnly?: boolean
 }
 
 export default function UploadImage({
   name,
   rules,
   maxCount = 1,
+  readOnly = false,
 }: ImageUploadProps) {
   const { control, setValue, register } = useFormContext()
   const [fileList, setFileList] = React.useState<UploadFile[]>([])
@@ -72,16 +74,13 @@ export default function UploadImage({
       defaultValue={[]}
       render={({ field }) => (
         <Upload
-          // style={{
-          //   width: "200px",
-          //   height: "200px",
-          // }}
           listType="picture-card"
           fileList={fileList}
           onChange={handleChange}
           beforeUpload={beforeUpload}
           maxCount={maxCount}
           accept="image/*"
+          disabled={readOnly}
           // Customize the preview modal
           onPreview={async (file) => {
             if (!file.url && !file.preview) {
