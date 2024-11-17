@@ -52,7 +52,13 @@ export function MaterialForm({
             name="materialName"
             control={control}
             rules={stringValidation}
-            render={({ field }) => <OutlinedInput {...field} label="名稱" />}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                label="名稱"
+                inputProps={{ readOnly: readOnly }}
+              />
+            )}
           />
         </FormControl>
       </Grid>
@@ -63,6 +69,9 @@ export function MaterialForm({
             value={mainCategory || ""}
             onChange={(e) => setMainCategory(e.target.value)}
             label="主分類"
+            inputProps={{
+              readOnly: readOnly, // Set the readOnly prop
+            }}
           >
             {Object.keys(categories).map((category) => (
               <MenuItem key={category} value={category}>
@@ -87,6 +96,9 @@ export function MaterialForm({
                   label="子分類"
                   error={!!error}
                   disabled={!mainCategory}
+                  inputProps={{
+                    readOnly: readOnly, // Set the readOnly prop
+                  }}
                 >
                   {mainCategory &&
                     categories[mainCategory as keyof typeof categories].map(
@@ -117,7 +129,11 @@ export function MaterialForm({
             control={control}
             rules={stringValidation}
             render={({ field }) => (
-              <OutlinedInput {...field} label="品牌名稱" />
+              <OutlinedInput
+                {...field}
+                label="品牌名稱"
+                inputProps={{ readOnly: readOnly }}
+              />
             )}
           />
         </FormControl>
@@ -134,6 +150,7 @@ export function MaterialForm({
             render={({ field }) => (
               <OutlinedInput
                 {...field}
+                inputProps={{ readOnly: readOnly }}
                 type="number"
                 label="長"
                 onChange={(e) => field.onChange(Number(e.target.value))}
@@ -155,6 +172,7 @@ export function MaterialForm({
                 {...field}
                 type="number"
                 label="寬"
+                inputProps={{ readOnly: readOnly }}
                 onChange={(e) => field.onChange(Number(e.target.value))}
               />
             )}
@@ -172,6 +190,7 @@ export function MaterialForm({
             render={({ field }) => (
               <OutlinedInput
                 {...field}
+                inputProps={{ readOnly: readOnly }}
                 type="number"
                 label="高"
                 onChange={(e) => field.onChange(Number(e.target.value))}
@@ -194,7 +213,9 @@ export function MaterialForm({
                 options={[]}
                 value={field.value}
                 onChange={(_, newValue) => {
-                  field.onChange(newValue)
+                  if (!readOnly) {
+                    field.onChange(newValue)
+                  }
                 }}
                 renderTags={(value, getTagProps) =>
                   value.map((option, index) => (
@@ -211,7 +232,7 @@ export function MaterialForm({
                     {...params}
                     variant="outlined"
                     label="標籤"
-                    placeholder="新增標籤"
+                    placeholder={readOnly ? "" : "新增標籤"}
                   />
                 )}
               />
@@ -235,6 +256,7 @@ export function MaterialForm({
                 type="number"
                 inputProps={{
                   min: "1",
+                  readOnly: readOnly,
                 }}
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 startAdornment={
@@ -260,6 +282,7 @@ export function MaterialForm({
                 type="number"
                 inputProps={{
                   min: "0",
+                  readOnly: readOnly,
                 }}
                 onChange={(e) => field.onChange(Number(e.target.value))}
               />
@@ -280,13 +303,13 @@ export function MaterialForm({
                 multiline
                 maxRows={4}
                 minRows={2}
+                inputProps={{ readOnly: readOnly }}
                 {...field}
               />
             )}
           />
         </FormControl>
       </Grid>
-
       <Grid md={6} xs={12}>
         <Controller
           name="isPublished"
@@ -296,6 +319,7 @@ export function MaterialForm({
             <FormControlLabel
               control={
                 <Checkbox
+                  disabled={readOnly}
                   checked={field.value}
                   onChange={(e) => field.onChange(e.target.checked)}
                 />
