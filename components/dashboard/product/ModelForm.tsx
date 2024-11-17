@@ -71,6 +71,9 @@ export function ModelForm({
             value={mainCategory || ""}
             onChange={(e) => setMainCategory(e.target.value)}
             label="主分類"
+            inputProps={{
+              readOnly: readOnly, // Set the readOnly prop
+            }}
           >
             {Object.keys(categories).map((category) => (
               <MenuItem key={category} value={category}>
@@ -95,6 +98,9 @@ export function ModelForm({
                   label="子分類"
                   error={!!error}
                   disabled={!mainCategory}
+                  inputProps={{
+                    readOnly: readOnly, // Set the readOnly prop
+                  }}
                 >
                   {mainCategory &&
                     categories[mainCategory as keyof typeof categories].map(
@@ -124,7 +130,11 @@ export function ModelForm({
             control={control}
             rules={stringValidation}
             render={({ field }) => (
-              <OutlinedInput {...field} label="品牌名稱" />
+              <OutlinedInput
+                {...field}
+                label="品牌名稱"
+                inputProps={{ readOnly: readOnly }}
+              />
             )}
           />
         </FormControl>
@@ -143,6 +153,7 @@ export function ModelForm({
                 type="number"
                 label="長"
                 onChange={(e) => field.onChange(Number(e.target.value))}
+                inputProps={{ readOnly: readOnly }}
               />
             )}
           />
@@ -162,6 +173,7 @@ export function ModelForm({
                 type="number"
                 label="寬"
                 onChange={(e) => field.onChange(Number(e.target.value))}
+                inputProps={{ readOnly: readOnly }}
               />
             )}
           />
@@ -181,6 +193,7 @@ export function ModelForm({
                 type="number"
                 label="高"
                 onChange={(e) => field.onChange(Number(e.target.value))}
+                inputProps={{ readOnly: readOnly }}
               />
             )}
           />
@@ -201,6 +214,7 @@ export function ModelForm({
                 type="number"
                 inputProps={{
                   min: "0",
+                  readOnly: readOnly,
                 }}
                 onChange={(e) => field.onChange(Number(e.target.value))}
               />
@@ -221,7 +235,9 @@ export function ModelForm({
                 options={[]}
                 value={field.value}
                 onChange={(_, newValue) => {
-                  field.onChange(newValue)
+                  if (!readOnly) {
+                    field.onChange(newValue)
+                  }
                 }}
                 renderTags={(value, getTagProps) =>
                   value.map((option, index) => (
@@ -238,7 +254,7 @@ export function ModelForm({
                     {...params}
                     variant="outlined"
                     label="標籤"
-                    placeholder="新增標籤"
+                    placeholder={readOnly ? "" : "新增標籤"}
                   />
                 )}
               />
@@ -261,6 +277,7 @@ export function ModelForm({
                 type="number"
                 inputProps={{
                   min: "1",
+                  readOnly: readOnly,
                 }}
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 startAdornment={
@@ -279,6 +296,7 @@ export function ModelForm({
             rules={stringValidation}
             render={({ field }) => (
               <TextField
+                inputProps={{ readOnly: readOnly }}
                 required
                 label="描述"
                 multiline
