@@ -17,6 +17,7 @@ body {
   height: 100%;
 }
 
+.ant-upload-select,
 .ant-upload-list-item-container {
   width: 250px !important;
   height: 250px !important;
