@@ -6,84 +6,26 @@ import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Alert from "@mui/material/Alert"
 import Button from "@mui/material/Button"
-import Checkbox from "@mui/material/Checkbox"
+import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
-import FormControlLabel from "@mui/material/FormControlLabel"
+import Select from "@mui/material/Select"
 import FormHelperText from "@mui/material/FormHelperText"
 import InputLabel from "@mui/material/InputLabel"
 import Link from "@mui/material/Link"
 import OutlinedInput from "@mui/material/OutlinedInput"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
+import FormControlLabel from "@mui/material/FormControlLabel"
+import Checkbox from "@mui/material/Checkbox"
 import { Controller, FormProvider, useForm } from "react-hook-form"
-import { z as zod } from "zod"
-import Select from "@mui/material/Select"
-import MenuItem from "@mui/material/MenuItem"
+import {
+  signUpSchema,
+  SignUpValues,
+  defaultSignUpValues,
+} from "@/lib/auth/schemas"
 
 import { paths } from "@/paths"
 import { useAuthClient } from "@/hooks/use-auth-client"
-
-const schema = zod.object({
-  username: zod.string().min(1, { message: "Username is required" }),
-  email: zod.string().min(1, { message: "Email is required" }).email(),
-  password: zod
-    .string()
-    .min(6, { message: "Password should be at least 6 characters" }),
-  role: zod.enum(["supplier", "designer"], {
-    required_error: "Please select a role",
-  }),
-  contactInfo: zod.object({
-    phone: zod.string().min(1, { message: "Phone number is required" }),
-    address: zod.string().optional(),
-    website: zod.string().optional(),
-  }),
-  supplierInfo: zod
-    .object({
-      companyName: zod.string().optional(),
-      taxID: zod.string().optional(),
-      companyDescription: zod.string().optional(),
-    })
-    .optional(),
-  designerInfo: zod
-    .object({
-      portfolioUrl: zod.string().optional(),
-    })
-    .optional(),
-  preferences: zod.object({
-    language: zod.string().default("zh-TW"),
-    currency: zod.string().default("TWD"),
-  }),
-  terms: zod
-    .boolean()
-    .refine((value) => value, "You must accept the terms and conditions"),
-})
-
-type Values = zod.infer<typeof schema>
-
-const defaultValues = {
-  username: "",
-  email: "",
-  password: "",
-  role: "designer" as const,
-  contactInfo: {
-    phone: "",
-    address: "",
-    website: "",
-  },
-  supplierInfo: {
-    companyName: "",
-    taxID: "",
-    companyDescription: "",
-  },
-  designerInfo: {
-    portfolioUrl: "",
-  },
-  preferences: {
-    language: "zh-TW",
-    currency: "TWD",
-  },
-  terms: false,
-} satisfies Values
 
 export function SignUpForm(): React.JSX.Element {
   const router = useRouter()
@@ -95,11 +37,14 @@ export function SignUpForm(): React.JSX.Element {
     setError,
     formState: { errors },
     watch,
-  } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) })
+  } = useForm<SignUpValues>({
+    defaultValues: defaultSignUpValues,
+    resolver: zodResolver(signUpSchema),
+  })
 
   const authClient = useAuthClient()
   const onSubmit = React.useCallback(
-    async (data: Values) => {
+    async (data: SignUpValues) => {
       setIsPending(true)
 
       const { error } = await authClient.signUp(data)
