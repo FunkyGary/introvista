@@ -1,4 +1,4 @@
-import 'reflect-metadata'
+import "reflect-metadata"
 import {
   type User as FirebaseUser,
   type Auth,
@@ -12,8 +12,8 @@ import {
   onAuthStateChanged,
   signOut,
   getAuth,
-} from 'firebase/auth'
-import firebaseApp from '../firebase/firebase-config'
+} from "firebase/auth"
+import firebaseApp from "../firebase/firebase-config"
 import {
   type Firestore,
   getFirestore,
@@ -26,23 +26,24 @@ import {
   deleteDoc,
   Timestamp,
   query,
-  where
-} from 'firebase/firestore'
+  where,
+  setDoc,
+} from "firebase/firestore"
 import type {
   ResetPasswordParams,
   SignInWithPasswordParams,
   SignUpParams,
   UpdatePasswordParams,
   UpdateEmailParams,
-} from './client'
-import type { User, UserData } from '@/types/user'
-import { FirebaseError } from 'firebase/app'
-import { UserRole } from '@/types/user-role'
-import { injectable } from 'inversify'
+} from "./client"
+import type { User, UserData } from "@/types/user"
+import { FirebaseError } from "firebase/app"
+import { UserRole } from "@/types/user-role"
+import { injectable } from "inversify"
 
 @injectable()
 class AuthApi {
-  userCollectionName = 'users'
+  userCollectionName = "users"
   auth: Auth
   user: User | null
   db: Firestore
@@ -57,31 +58,34 @@ class AuthApi {
     this.db = getFirestore(firebaseApp)
   }
 
-  async signUp({
-    firstName,
-    lastName,
-    email,
-    password,
-  }: SignUpParams): Promise<{ error?: string }> {
+  async signUp(params: SignUpParams): Promise<{ error?: string }> {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         this.auth,
-        email,
-        password
+        params.email,
+        params.password
       )
       await updateProfile(userCredential.user, {
-        displayName: `${firstName},${lastName}`,
+        displayName: params.username,
       })
 
       const userData = {
         userID: userCredential.user.uid,
-        role: 'user',
-        tags: [],
-        username: `${firstName} ${lastName}`,
-        email: userCredential.user.email as string,
-        passwordHash: userCredential.user.email as string,
+        email: params.email,
+        username: params.username,
+        role: params.role,
+        contactInfo: params.contactInfo,
+        supplierInfo: params.supplierInfo,
+        designerInfo: params.designerInfo,
+        preferences: params.preferences,
+        createDate: serverTimestamp(),
+        updateDate: serverTimestamp(),
       }
-      await addDoc(collection(this.db, this.userCollectionName), userData)
+
+      await setDoc(
+        doc(this.db, this.userCollectionName, userCredential.user.uid),
+        userData
+      )
     } catch (error) {
       console.error(error)
       return { error: this.getErrorMessage(error) }
@@ -97,14 +101,12 @@ class AuthApi {
     try {
       await signInWithEmailAndPassword(this.auth, email, password)
 
-      // get user data by email from firestore
       const userQuery = query(
         collection(this.db, this.userCollectionName),
-        where('email', '==', email)
+        where("email", "==", email)
       )
       const userQuerySnapshot = await getDocs(userQuery)
 
-      // update last login timestamp
       userQuerySnapshot.docs.map((doc) => {
         return { lastLoginDate: serverTimestamp() }
       })
@@ -118,7 +120,7 @@ class AuthApi {
 
   async updateProfile(data: Partial<User>): Promise<{ error?: string }> {
     if (!this.auth.currentUser) {
-      return { error: 'Not logged in' }
+      return { error: "Not logged in" }
     }
 
     try {
@@ -170,8 +172,7 @@ class AuthApi {
 
       const idTokenResult = await currentFirebaseUser.getIdTokenResult()
       const userRole = {
-        manufacturer: !!idTokenResult.claims.manufacturer,
-        admin: !!idTokenResult.claims.admin,
+        superAdmin: !!idTokenResult.claims.superAdmin,
         supplier: !!idTokenResult.claims.supplier,
         designer: !!idTokenResult.claims.designer,
       } satisfies UserRole
@@ -216,7 +217,7 @@ class AuthApi {
     try {
       const user = this.auth.currentUser
       if (!user) {
-        return { error: 'User not found' }
+        return { error: "User not found" }
       }
 
       await updatePassword(user, newPassword)
@@ -235,7 +236,7 @@ class AuthApi {
       const user = this.auth.currentUser
 
       if (!user) {
-        return { error: 'User not found' }
+        return { error: "User not found" }
       }
 
       await updateEmail(user, newEmail)
@@ -260,18 +261,14 @@ class AuthApi {
   }
 
   private mapFirebaseUserToUser(firebaseUser: FirebaseUser): User {
-    const email = firebaseUser.email ?? ''
-    const displayName = firebaseUser.displayName
-    const firstName = displayName?.split(',')[0] ?? ''
-    const lastName = displayName?.split(',')[1] ?? ''
+    const email = firebaseUser.email ?? ""
+    const username = firebaseUser.displayName
     const avatar = firebaseUser.photoURL || undefined
 
     return {
       id: firebaseUser.uid,
-      name: `${firstName} ${lastName}`,
+      username,
       avatar,
-      firstName,
-      lastName,
       email,
     }
   }
@@ -284,29 +281,133 @@ class AuthApi {
       return error.message
     }
 
-    return 'Something went wrong'
+    return "Something went wrong"
   }
 
   private formatFirebaseErrorCode(errorCode: string): string {
     switch (errorCode) {
-      case 'auth/invalid-credential':
-        return 'Email or password is invalid'
-      case 'auth/email-already-in-use':
-        return 'Email already in use'
-      case 'auth/invalid-email':
-        return 'Invalid email'
-      case 'auth/operation-not-allowed':
-        return 'Operation not allowed'
-      case 'auth/weak-password':
-        return 'Weak password'
-      case 'auth/user-disabled':
-        return 'User disabled'
-      case 'auth/user-not-found':
-        return 'User not found'
-      case 'auth/wrong-password':
-        return 'Wrong password'
+      case "auth/invalid-credential":
+        return "Email or password is invalid"
+      case "auth/email-already-in-use":
+        return "Email already in use"
+      case "auth/invalid-email":
+        return "Invalid email"
+      case "auth/operation-not-allowed":
+        return "Operation not allowed"
+      case "auth/weak-password":
+        return "Weak password"
+      case "auth/user-disabled":
+        return "User disabled"
+      case "auth/user-not-found":
+        return "User not found"
+      case "auth/wrong-password":
+        return "Wrong password"
       default:
-        return 'Something went wrong'
+        return "Something went wrong"
+    }
+  }
+
+  async createUser(
+    userData: UserData
+  ): Promise<{ error?: string; id?: string }> {
+    try {
+      const docRef = await addDoc(
+        collection(this.db, this.userCollectionName),
+        {
+          ...userData,
+          createdDate: serverTimestamp(),
+          updatedDate: serverTimestamp(),
+        }
+      )
+      return { id: docRef.id }
+    } catch (error) {
+      console.error(error)
+      return { error: this.getErrorMessage(error) }
+    }
+  }
+
+  async getUserById(
+    userId: string
+  ): Promise<{ data?: UserData; error?: string }> {
+    try {
+      const q = query(
+        collection(this.db, this.userCollectionName),
+        where("userID", "==", userId)
+      )
+      const querySnapshot = await getDocs(q)
+
+      if (querySnapshot.empty) {
+        return { error: "User not found" }
+      }
+
+      const userData = querySnapshot.docs[0].data() as UserData
+      return { data: userData }
+    } catch (error) {
+      console.error(error)
+      return { error: this.getErrorMessage(error) }
+    }
+  }
+
+  async getAllUsers(): Promise<{ data?: UserData[]; error?: string }> {
+    try {
+      const querySnapshot = await getDocs(
+        collection(this.db, this.userCollectionName)
+      )
+      const users = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+      })) as UserData[]
+
+      return { data: users }
+    } catch (error) {
+      console.error(error)
+      return { error: this.getErrorMessage(error) }
+    }
+  }
+
+  async updateUser(
+    userId: string,
+    userData: Partial<UserData>
+  ): Promise<{ error?: string }> {
+    try {
+      const q = query(
+        collection(this.db, this.userCollectionName),
+        where("userID", "==", userId)
+      )
+      const querySnapshot = await getDocs(q)
+
+      if (querySnapshot.empty) {
+        return { error: "User not found" }
+      }
+
+      await updateDoc(querySnapshot.docs[0].ref, {
+        ...userData,
+        updatedAt: serverTimestamp(),
+      })
+
+      return {}
+    } catch (error) {
+      console.error(error)
+      return { error: this.getErrorMessage(error) }
+    }
+  }
+
+  async deleteUser(userId: string): Promise<{ error?: string }> {
+    try {
+      const q = query(
+        collection(this.db, this.userCollectionName),
+        where("userID", "==", userId)
+      )
+      const querySnapshot = await getDocs(q)
+
+      if (querySnapshot.empty) {
+        return { error: "User not found" }
+      }
+
+      await deleteDoc(querySnapshot.docs[0].ref)
+      return {}
+    } catch (error) {
+      console.error(error)
+      return { error: this.getErrorMessage(error) }
     }
   }
 }

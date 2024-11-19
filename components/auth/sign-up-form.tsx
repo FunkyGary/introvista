@@ -15,7 +15,7 @@ import Link from "@mui/material/Link"
 import OutlinedInput from "@mui/material/OutlinedInput"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
-import { Controller, useForm } from "react-hook-form"
+import { Controller, FormProvider, useForm } from "react-hook-form"
 import { z as zod } from "zod"
 import Select from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
@@ -96,6 +96,7 @@ export function SignUpForm(): React.JSX.Element {
     setError,
     formState: { errors },
     watch,
+    getValues,
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) })
 
   const authClient = useAuthClient()
@@ -108,6 +109,8 @@ export function SignUpForm(): React.JSX.Element {
       if (error) {
         setError("root", { type: "server", message: error })
         setIsPending(false)
+        console.log(error)
+
         return
       }
 
