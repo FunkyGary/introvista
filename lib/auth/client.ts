@@ -73,8 +73,6 @@ class AuthClient {
     try {
       // Make API request
       const result = await this.authApi.signUp(params)
-      console.log("SignUp attempt:", params)
-      console.log("SignUp result:", result)
 
       return {
         error: result.error,

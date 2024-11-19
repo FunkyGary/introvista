@@ -305,12 +305,12 @@ class AuthApi {
 
   private mapFirebaseUserToUser(firebaseUser: FirebaseUser): User {
     const email = firebaseUser.email ?? ""
-    const username = firebaseUser.displayName
+    const name = firebaseUser.displayName ?? ""
     const avatar = firebaseUser.photoURL || undefined
 
     return {
       id: firebaseUser.uid,
-      username,
+      name,
       avatar,
       email,
     }
