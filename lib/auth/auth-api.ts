@@ -1,4 +1,5 @@
 import "reflect-metadata"
+import bcrypt from "bcryptjs"
 import {
   type User as FirebaseUser,
   type Auth,
@@ -73,10 +74,11 @@ class AuthApi {
         userID: userCredential.user.uid,
         email: params.email,
         username: params.username,
+        passwordHash: bcrypt.hash(params.password, 10),
         role: params.role,
         contactInfo: params.contactInfo,
-        supplierInfo: params.supplierInfo,
-        designerInfo: params.designerInfo,
+        /* supplierInfo: params.supplierInfo, */
+        /* designerInfo: params.designerInfo, */
         preferences: params.preferences,
         createDate: serverTimestamp(),
         updateDate: serverTimestamp(),

@@ -109,7 +109,6 @@ export function SignUpForm(): React.JSX.Element {
       if (error) {
         setError("root", { type: "server", message: error })
         setIsPending(false)
-        console.log(error)
 
         return
       }
@@ -120,6 +119,8 @@ export function SignUpForm(): React.JSX.Element {
     },
     [router, setError, authClient]
   )
+
+  console.log(getValues())
 
   return (
     <Stack spacing={3}>
