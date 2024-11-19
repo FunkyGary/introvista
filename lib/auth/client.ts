@@ -70,12 +70,21 @@ class AuthClient {
   constructor(@inject(AuthApi) private authApi: AuthApi) {}
 
   async signUp(params: SignUpParams): Promise<{ error?: string }> {
-    // Make API request
+    try {
+      // Make API request
+      const result = await this.authApi.signUp(params)
+      console.log("SignUp attempt:", params)
+      console.log("SignUp result:", result)
 
-    const result = await this.authApi.signUp(params)
-
-    return {
-      error: result.error,
+      return {
+        error: result.error,
+      }
+    } catch (error) {
+      console.error("SignUp error:", error)
+      return {
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      }
     }
   }
 

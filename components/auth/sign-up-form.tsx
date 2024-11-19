@@ -87,7 +87,6 @@ const defaultValues = {
 
 export function SignUpForm(): React.JSX.Element {
   const router = useRouter()
-
   const [isPending, setIsPending] = React.useState<boolean>(false)
 
   const {
@@ -96,7 +95,6 @@ export function SignUpForm(): React.JSX.Element {
     setError,
     formState: { errors },
     watch,
-    getValues,
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) })
 
   const authClient = useAuthClient()
@@ -109,7 +107,6 @@ export function SignUpForm(): React.JSX.Element {
       if (error) {
         setError("root", { type: "server", message: error })
         setIsPending(false)
-
         return
       }
 
@@ -119,8 +116,6 @@ export function SignUpForm(): React.JSX.Element {
     },
     [router, setError, authClient]
   )
-
-  console.log(getValues())
 
   return (
     <Stack spacing={3}>
@@ -252,26 +247,11 @@ export function SignUpForm(): React.JSX.Element {
               </FormControl>
             )}
           />
-          {/* <Controller
-            control={control}
-            name="preferences.currency"
-            render={({ field }) => (
-              <FormControl error={Boolean(errors.preferences?.currency)}>
-                <InputLabel>Currency</InputLabel>
-                <OutlinedInput {...field} label="Currency" />
-                {errors.preferences?.currency ? (
-                  <FormHelperText>
-                    {errors.preferences.currency.message}
-                  </FormHelperText>
-                ) : null}
-              </FormControl>
-            )}
-          /> */}
-          {/* <Controller
+          <Controller
             control={control}
             name="terms"
             render={({ field }) => (
-              <div>
+              <FormControl error={Boolean(errors.terms)}>
                 <FormControlLabel
                   control={<Checkbox {...field} />}
                   label={
@@ -280,21 +260,18 @@ export function SignUpForm(): React.JSX.Element {
                     </React.Fragment>
                   }
                 />
-                {errors.terms ? (
-                  <FormHelperText error>{errors.terms.message}</FormHelperText>
-                ) : null}
-              </div>
+                {errors.terms && (
+                  <FormHelperText>{errors.terms.message}</FormHelperText>
+                )}
+              </FormControl>
             )}
-          /> */}
-          {errors.root ? (
-            <Alert color="error">{errors.root.message}</Alert>
-          ) : null}
+          />
+          {errors.root && <Alert color="error">{errors.root.message}</Alert>}
           <Button disabled={isPending} type="submit" variant="contained">
             註冊
           </Button>
         </Stack>
       </form>
-      {/* <Alert color="warning">Created users are not persisted</Alert> */}
     </Stack>
   )
 }

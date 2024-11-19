@@ -29,6 +29,7 @@ import {
   query,
   where,
   setDoc,
+  getDoc,
 } from "firebase/firestore"
 import type {
   ResetPasswordParams,
@@ -70,18 +71,31 @@ class AuthApi {
         displayName: params.username,
       })
 
+      const roleSpecificInfo =
+        params.role === "supplier"
+          ? { supplierInfo: params.supplierInfo }
+          : { designerInfo: params.designerInfo }
+
       const userData = {
         userID: userCredential.user.uid,
         email: params.email,
         username: params.username,
-        passwordHash: bcrypt.hash(params.password, 10),
+        passwordHash: await bcrypt.hash(params.password, 10),
         role: params.role,
         contactInfo: params.contactInfo,
-        /* supplierInfo: params.supplierInfo, */
-        /* designerInfo: params.designerInfo, */
-        preferences: params.preferences,
+        preferences: {
+          notificationSettings: {
+            emailNotifications: false,
+            smsNotifications: false,
+          },
+          ...params.preferences,
+        },
+        tags: [],
+        profileImageUrl: "",
         createDate: serverTimestamp(),
         updateDate: serverTimestamp(),
+        lastLoginDate: serverTimestamp(),
+        ...roleSpecificInfo,
       }
 
       await setDoc(
@@ -203,13 +217,27 @@ class AuthApi {
     email,
   }: ResetPasswordParams): Promise<{ error?: string }> {
     try {
+      const userQuery = query(
+        collection(this.db, this.userCollectionName),
+        where("email", "==", email)
+      )
+      const querySnapshot = await getDocs(userQuery)
+
+      let languageCode = "zh-TW"
+
+      if (!querySnapshot.empty) {
+        const userData = querySnapshot.docs[0].data()
+        languageCode = userData.preferences?.language || "zh-TW"
+      }
+
+      this.auth.languageCode = languageCode
+
       await sendPasswordResetEmail(this.auth, email)
+      return {}
     } catch (error) {
-      console.error(error)
+      console.error("ResetPassword error:", error)
       return { error: this.getErrorMessage(error) }
     }
-
-    return {}
   }
 
   async updatePassword({
@@ -236,19 +264,32 @@ class AuthApi {
   }: UpdateEmailParams): Promise<{ error?: string }> {
     try {
       const user = this.auth.currentUser
-
       if (!user) {
         return { error: "User not found" }
       }
 
+      const userDoc = await getDoc(
+        doc(this.db, this.userCollectionName, user.uid)
+      )
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data()
+        this.auth.languageCode = userData.preferences?.language || "zh-TW"
+      }
+
       await updateEmail(user, newEmail)
       await sendEmailVerification(user)
+
+      await updateDoc(doc(this.db, this.userCollectionName, user.uid), {
+        email: newEmail,
+        updatedAt: serverTimestamp(),
+      })
+
+      return {}
     } catch (error) {
-      console.error(error)
+      console.error("UpdateEmail error:", error)
       return { error: this.getErrorMessage(error) }
     }
-
-    return {}
   }
 
   async signOut(): Promise<{ error?: string }> {
