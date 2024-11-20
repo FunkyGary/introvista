@@ -1,45 +1,61 @@
+"use client"
+
 import * as React from "react"
-import Avatar from "@mui/material/Avatar"
+import { useForm, Controller } from "react-hook-form"
 import Button from "@mui/material/Button"
 import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
 import CardContent from "@mui/material/CardContent"
+import CardHeader from "@mui/material/CardHeader"
 import Divider from "@mui/material/Divider"
-import Stack from "@mui/material/Stack"
+import FormControl from "@mui/material/FormControl"
+import InputLabel from "@mui/material/InputLabel"
+import MenuItem from "@mui/material/MenuItem"
+import OutlinedInput from "@mui/material/OutlinedInput"
+import Select, { SelectChangeEvent } from "@mui/material/Select"
+import Grid from "@mui/material/Unstable_Grid2"
+import { SignUpValues } from "@/lib/auth/schemas"
 import Typography from "@mui/material/Typography"
+import Stack from "@mui/material/Stack"
+import Avatar from "@mui/material/Avatar"
 
-const user = {
-  name: "Sofia Rivers",
-  avatar: "/assets/avatar.png",
-  jobTitle: "Senior Developer",
-  country: "USA",
-  city: "Los Angeles",
-  timezone: "GTM-7",
-} as const
+export function AccountDetailsForm(): React.JSX.Element {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
 
-export function AccountInfo(): React.JSX.Element {
   return (
     <Card>
+      <CardHeader title="Profile" />
+      <Divider />
       <CardContent>
-        <Stack spacing={2} sx={{ alignItems: "center" }}>
-          <div>
-            <Avatar src={user.avatar} sx={{ height: "80px", width: "80px" }} />
-          </div>
-          <Stack spacing={1} sx={{ textAlign: "center" }}>
-            <Typography variant="h5">{user.name}</Typography>
-            <Typography color="text.secondary" variant="body2">
-              {user.city} {user.country}
-            </Typography>
-            <Typography color="text.secondary" variant="body2">
-              {user.timezone}
-            </Typography>
-          </Stack>
-        </Stack>
+        <Grid container spacing={3}>
+          {/* 基本資訊 */}
+          <Grid md={6} xs={12}>
+            <FormControl fullWidth required>
+              <InputLabel>Username</InputLabel>
+              <Controller
+                name="username"
+                control={control}
+                rules={{ required: "Username is required" }}
+                render={({ field }) => (
+                  <OutlinedInput
+                    {...field}
+                    label="Username"
+                    error={!!errors.username}
+                  />
+                )}
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
       </CardContent>
       <Divider />
-      <CardActions>
-        <Button fullWidth variant="text">
-          Upload picture
+      <CardActions sx={{ justifyContent: "flex-end" }}>
+        <Button type="submit" variant="contained">
+          Save details
         </Button>
       </CardActions>
     </Card>

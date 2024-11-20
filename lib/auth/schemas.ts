@@ -9,6 +9,7 @@ export const signUpSchema = zod.object({
   role: zod.enum(["supplier", "designer"], {
     required_error: "Please select a role",
   }),
+  profileImageUrl: zod.string().optional(),
   contactInfo: zod.object({
     phone: zod.string().min(1, { message: "Phone number is required" }),
     address: zod.string().optional(),
@@ -42,6 +43,7 @@ export const defaultSignUpValues: SignUpValues = {
   email: "",
   password: "",
   role: "designer",
+  profileImageUrl: "",
   contactInfo: {
     phone: "",
     address: "",

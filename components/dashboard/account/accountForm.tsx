@@ -15,14 +15,16 @@ import OutlinedInput from "@mui/material/OutlinedInput"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
 import Grid from "@mui/material/Unstable_Grid2"
 import { SignUpValues } from "@/lib/auth/schemas"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import Checkbox from "@mui/material/Checkbox"
+import Typography from "@mui/material/Typography"
+import Stack from "@mui/material/Stack"
+import Avatar from "@mui/material/Avatar"
 
 const initialValues: SignUpValues = {
   role: "supplier", // 或從 props 傳入
   email: "", // 從 props 傳入
   password: "",
   username: "",
+  profileImageUrl: "",
   contactInfo: {
     phone: "",
     address: "",
@@ -42,6 +44,38 @@ const initialValues: SignUpValues = {
   },
 }
 
+export default function AccountForm(): React.JSX.Element {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpValues>({
+    defaultValues: initialValues,
+  })
+  const onSubmit = (data: SignUpValues) => {
+    console.log(data)
+    // 處理表單提交
+  }
+
+  return (
+    <Stack spacing={3}>
+      {/* <div>
+        <Typography variant="h4">Account</Typography>
+      </div> */}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={3}>
+          <Grid lg={4} md={6} xs={12}>
+            <AccountInfo />
+          </Grid>
+          <Grid lg={8} md={6} xs={12}>
+            <AccountDetailsForm />
+          </Grid>
+        </Grid>
+      </form>
+    </Stack>
+  )
+}
+
 export function AccountDetailsForm(): React.JSX.Element {
   const {
     control,
@@ -51,94 +85,88 @@ export function AccountDetailsForm(): React.JSX.Element {
     defaultValues: initialValues,
   })
 
-  const onSubmit = (data: SignUpValues) => {
-    console.log(data)
-    // 處理表單提交
-  }
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Card>
-        <CardHeader subheader="The information can be edited" title="Profile" />
-        <Divider />
-        <CardContent>
-          <Grid container spacing={3}>
-            {/* 基本資訊 */}
-            <Grid md={6} xs={12}>
-              <FormControl fullWidth required>
-                <InputLabel>Username</InputLabel>
-                <Controller
-                  name="username"
-                  control={control}
-                  rules={{ required: "Username is required" }}
-                  render={({ field }) => (
-                    <OutlinedInput
-                      {...field}
-                      label="Username"
-                      error={!!errors.username}
-                    />
-                  )}
-                />
-              </FormControl>
-            </Grid>
+    <Card>
+      <CardHeader title="Profile" />
+      <Divider />
+      <CardContent>
+        <Grid container spacing={3}>
+          {/* 基本資訊 */}
+          <Grid md={6} xs={12}>
+            <FormControl fullWidth required>
+              <InputLabel>Username</InputLabel>
+              <Controller
+                name="username"
+                control={control}
+                rules={{ required: "Username is required" }}
+                render={({ field }) => (
+                  <OutlinedInput
+                    {...field}
+                    label="Username"
+                    error={!!errors.username}
+                  />
+                )}
+              />
+            </FormControl>
+          </Grid>
 
-            {/* 聯絡資訊 */}
-            <Grid md={6} xs={12}>
-              <FormControl fullWidth>
-                <InputLabel>Phone</InputLabel>
-                <Controller
-                  name="contactInfo.phone"
-                  control={control}
-                  render={({ field }) => (
-                    <OutlinedInput {...field} label="Phone" />
-                  )}
-                />
-              </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
-              <FormControl fullWidth>
-                <InputLabel>Address</InputLabel>
-                <Controller
-                  name="contactInfo.address"
-                  control={control}
-                  render={({ field }) => (
-                    <OutlinedInput {...field} label="Address" />
-                  )}
-                />
-              </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
-              <FormControl fullWidth>
-                <InputLabel>Website</InputLabel>
-                <Controller
-                  name="contactInfo.website"
-                  control={control}
-                  render={({ field }) => (
-                    <OutlinedInput {...field} label="Website" />
-                  )}
-                />
-              </FormControl>
-            </Grid>
+          {/* 聯絡資訊 */}
+          <Grid md={6} xs={12}>
+            <FormControl fullWidth>
+              <InputLabel>Phone</InputLabel>
+              <Controller
+                name="contactInfo.phone"
+                control={control}
+                render={({ field }) => (
+                  <OutlinedInput {...field} label="Phone" />
+                )}
+              />
+            </FormControl>
+          </Grid>
+          <Grid md={6} xs={12}>
+            <FormControl fullWidth>
+              <InputLabel>Address</InputLabel>
+              <Controller
+                name="contactInfo.address"
+                control={control}
+                render={({ field }) => (
+                  <OutlinedInput {...field} label="Address" />
+                )}
+              />
+            </FormControl>
+          </Grid>
+          <Grid md={6} xs={12}>
+            <FormControl fullWidth>
+              <InputLabel>Website</InputLabel>
+              <Controller
+                name="contactInfo.website"
+                control={control}
+                render={({ field }) => (
+                  <OutlinedInput {...field} label="Website" />
+                )}
+              />
+            </FormControl>
+          </Grid>
 
-            {/* 偏好設定 */}
-            <Grid md={6} xs={12}>
-              <FormControl fullWidth>
-                <InputLabel>Language</InputLabel>
-                <Controller
-                  name="preferences.language"
-                  control={control}
-                  render={({ field }) => (
-                    <Select {...field} label="Language">
-                      <MenuItem value="zh-TW">繁體中文</MenuItem>
-                      <MenuItem value="en">English</MenuItem>
-                    </Select>
-                  )}
-                />
-              </FormControl>
-            </Grid>
+          {/* 偏好設定 */}
+          <Grid md={6} xs={12}>
+            <FormControl fullWidth>
+              <InputLabel>Language</InputLabel>
+              <Controller
+                name="preferences.language"
+                control={control}
+                render={({ field }) => (
+                  <Select {...field} label="Language">
+                    <MenuItem value="zh-TW">繁體中文</MenuItem>
+                    <MenuItem value="en">English</MenuItem>
+                  </Select>
+                )}
+              />
+            </FormControl>
+          </Grid>
 
-            {/* Supplier 特定欄位 */}
-            {values.role === "supplier" && (
+          {/* Supplier 特定欄位 */}
+          {/* {values.role === "supplier" && (
               <>
                 <Grid md={6} xs={12}>
                   <FormControl fullWidth>
@@ -177,10 +205,10 @@ export function AccountDetailsForm(): React.JSX.Element {
                   </FormControl>
                 </Grid>
               </>
-            )}
+            )} */}
 
-            {/* Designer 特定欄位 */}
-            {values.role === "designer" && (
+          {/* Designer 特定欄位 */}
+          {/* {values.role === "designer" && (
               <Grid md={6} xs={12}>
                 <FormControl fullWidth>
                   <InputLabel>Portfolio URL</InputLabel>
@@ -193,16 +221,79 @@ export function AccountDetailsForm(): React.JSX.Element {
                   />
                 </FormControl>
               </Grid>
-            )}
-          </Grid>
-        </CardContent>
-        <Divider />
-        <CardActions sx={{ justifyContent: "flex-end" }}>
-          <Button type="submit" variant="contained">
-            Save details
-          </Button>
-        </CardActions>
-      </Card>
-    </form>
+            )} */}
+        </Grid>
+      </CardContent>
+      <Divider />
+      <CardActions sx={{ justifyContent: "flex-end" }}>
+        <Button type="submit" variant="contained">
+          Save details
+        </Button>
+      </CardActions>
+    </Card>
+  )
+}
+
+const user = {
+  avatar: "/assets/avatar.png",
+  email: "mock@gmail.com",
+  role: "designer",
+} as const
+
+export function AccountInfo(): React.JSX.Element {
+  const { control } = useForm<SignUpValues>({
+    defaultValues: initialValues,
+  })
+
+  return (
+    <Card>
+      <CardContent>
+        <Stack spacing={2} sx={{ alignItems: "center" }}>
+          <div>
+            <Controller
+              name="profileImageUrl"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <Avatar
+                  src={value || user.avatar}
+                  sx={{ height: "80px", width: "80px" }}
+                />
+              )}
+            />
+          </div>
+          <Stack spacing={1} sx={{ textAlign: "center" }}>
+            <Typography variant="h5">{user.email}</Typography>
+            <Typography color="text.secondary" variant="body2">
+              {user.role}
+            </Typography>
+          </Stack>
+        </Stack>
+      </CardContent>
+      <Divider />
+      <CardActions>
+        <Controller
+          name="profileImageUrl"
+          control={control}
+          render={({ field: { onChange } }) => (
+            <Button fullWidth variant="text" component="label">
+              Upload picture
+              <input
+                type="file"
+                hidden
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) {
+                    // Create a URL for preview
+                    const imageUrl = URL.createObjectURL(file)
+                    onChange(imageUrl)
+                  }
+                }}
+              />
+            </Button>
+          )}
+        />
+      </CardActions>
+    </Card>
   )
 }
