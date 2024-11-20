@@ -93,7 +93,7 @@ class AuthApi {
         tags: [],
         profileImageUrl: "",
         createDate: serverTimestamp(),
-        updateDate: serverTimestamp(),
+        lastUpdated: serverTimestamp(),
         lastLoginDate: serverTimestamp(),
         ...roleSpecificInfo,
       }
@@ -126,7 +126,7 @@ class AuthApi {
       userQuerySnapshot.docs.forEach(async (doc) => {
         await updateDoc(doc.ref, {
           lastLoginDate: serverTimestamp(),
-          updateDate: serverTimestamp(),
+          lastUpdated: serverTimestamp(),
         })
       })
     } catch (error) {
@@ -253,6 +253,11 @@ class AuthApi {
       }
 
       await updatePassword(user, newPassword)
+
+      await updateDoc(doc(this.db, this.userCollectionName, user.uid), {
+        passwordHash: await bcrypt.hash(newPassword, 10),
+        lastUpdated: serverTimestamp(),
+      })
     } catch (error) {
       console.error(error)
       return { error: this.getErrorMessage(error) }
@@ -284,7 +289,7 @@ class AuthApi {
 
       await updateDoc(doc(this.db, this.userCollectionName, user.uid), {
         email: newEmail,
-        updatedAt: serverTimestamp(),
+        lastUpdated: serverTimestamp(),
       })
 
       return {}
@@ -375,11 +380,11 @@ class AuthApi {
     userId: string
   ): Promise<{ data?: UserData; error?: string }> {
     try {
-      const q = query(
+      const queryUserRef = query(
         collection(this.db, this.userCollectionName),
         where("userID", "==", userId)
       )
-      const querySnapshot = await getDocs(q)
+      const querySnapshot = await getDocs(queryUserRef)
 
       if (querySnapshot.empty) {
         return { error: "User not found" }
@@ -426,7 +431,7 @@ class AuthApi {
 
       await updateDoc(querySnapshot.docs[0].ref, {
         ...userData,
-        updatedDate: serverTimestamp(),
+        lastUpdated: serverTimestamp(),
       })
 
       return {}

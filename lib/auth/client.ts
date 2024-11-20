@@ -57,7 +57,6 @@ export interface ResetPasswordParams {
 }
 
 export interface UpdatePasswordParams {
-  oldPassword: string
   newPassword: string
 }
 
@@ -117,13 +116,21 @@ class AuthClient {
   }
 
   async updatePassword({
-    oldPassword,
     newPassword,
   }: UpdatePasswordParams): Promise<{ error?: string }> {
     const result = await this.authApi.updatePassword({
-      oldPassword,
       newPassword,
     })
+
+    return {
+      error: result.error,
+    }
+  }
+
+  async updateEmail({
+    newEmail,
+  }: UpdateEmailParams): Promise<{ error?: string }> {
+    const result = await this.authApi.updateEmail({ newEmail })
 
     return {
       error: result.error,
@@ -197,6 +204,29 @@ class AuthClient {
       }
     } catch (error) {
       console.error("UpdateUserData error:", error)
+      return {
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      }
+    }
+  }
+
+  async getUserById(
+    userId: string
+  ): Promise<{ data?: UserData | null; error?: string }> {
+    try {
+      const result = await this.authApi.getUserById(userId)
+
+      if (result.error) {
+        console.warn(`Error fetching user by ID ${userId}: ${result.error}`)
+        return { error: result.error }
+      }
+
+      return {
+        data: result.data,
+      }
+    } catch (error) {
+      console.error(`Failed to get user by ID ${userId}:`, error)
       return {
         error:
           error instanceof Error ? error.message : "Unknown error occurred",
