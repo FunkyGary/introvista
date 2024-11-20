@@ -123,8 +123,11 @@ class AuthApi {
       )
       const userQuerySnapshot = await getDocs(userQuery)
 
-      userQuerySnapshot.docs.map((doc) => {
-        return { lastLoginDate: serverTimestamp() }
+      userQuerySnapshot.docs.forEach(async (doc) => {
+        await updateDoc(doc.ref, {
+          lastLoginDate: serverTimestamp(),
+          updateDate: serverTimestamp(),
+        })
       })
     } catch (error) {
       console.error(error)
@@ -241,7 +244,6 @@ class AuthApi {
   }
 
   async updatePassword({
-    oldPassword,
     newPassword,
   }: UpdatePasswordParams): Promise<{ error?: string }> {
     try {
@@ -424,7 +426,7 @@ class AuthApi {
 
       await updateDoc(querySnapshot.docs[0].ref, {
         ...userData,
-        updatedAt: serverTimestamp(),
+        updatedDate: serverTimestamp(),
       })
 
       return {}

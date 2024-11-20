@@ -327,8 +327,6 @@ export const updateProduct = async (
       lastUpdated: serverTimestamp(),
     }
 
-    console.log(updatedData)
-
     await updateDoc(docRef, updatedData)
     return { success: true }
   } catch (error) {

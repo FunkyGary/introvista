@@ -1,6 +1,6 @@
 "use client"
 
-import type { User } from "@/types/user"
+import type { User, UserData } from "@/types/user"
 import { UserRole } from "@/types/user-role"
 import { inject, injectable } from "inversify"
 import AuthApi from "./auth-api"
@@ -163,6 +163,44 @@ class AuthClient {
     const result = await this.authApi.signOut()
     return {
       error: result.error,
+    }
+  }
+
+  /**
+   * Updates specific fields of a user's data in the system.
+   *
+   * @param {string} userId - The unique identifier of the user.
+   * @param {Partial<UserData>} userData - The fields to update. All fields are optional.
+   * @return {Promise<{ error?: string }>} A promise that resolves to an object:
+   *   - If successful, error will be undefined.
+   *   - If failed, contains an error message.
+   * @throws {Error} If there's a network or server error.
+   *
+   * @example
+   * // Update just the email
+   * await updateUserData('123', { email: 'new@example.com' });
+   *
+   * // Update multiple fields
+   * await updateUserData('123', {
+   *   firstName: 'John',
+   *   lastName: 'Doe'
+   * });
+   */
+  async updateUserData(
+    userId: string,
+    userData: Partial<UserData>
+  ): Promise<{ error?: string }> {
+    try {
+      const result = await this.authApi.updateUser(userId, userData)
+      return {
+        error: result.error,
+      }
+    } catch (error) {
+      console.error("UpdateUserData error:", error)
+      return {
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      }
     }
   }
 }
