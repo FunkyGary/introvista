@@ -58,7 +58,7 @@ export interface UserData {
   passwordHash: string
   profileImageUrl?: string
   contactInfo?: {
-    phone: string
+    phone?: string
     address?: string
     website?: string
   }
@@ -66,8 +66,8 @@ export interface UserData {
   designerInfo?: DesignerInfo
   preferences?: {
     language: string
-    currency: string
-    notificationSettings: {
+    currency?: string
+    notificationSettings?: {
       emailNotifications: boolean
       smsNotifications: boolean
     }

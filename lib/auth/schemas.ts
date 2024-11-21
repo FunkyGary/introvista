@@ -29,7 +29,7 @@ export const signUpSchema = zod.object({
     .optional(),
   preferences: zod.object({
     language: zod.string().default("zh-TW"),
-    currency: zod.string().default("TWD").optional(),
+    currency: zod.string().default("TWD"),
   }),
   terms: zod
     .boolean()
@@ -62,4 +62,32 @@ export const defaultSignUpValues: SignUpValues = {
     currency: "TWD",
   },
   terms: false,
+}
+
+export const accountSchema = zod.object({
+  username: zod.string().min(1, { message: "Username is required" }),
+  profileImageUrl: zod.string().optional(),
+  contactInfo: zod.object({
+    phone: zod.string().optional(),
+    address: zod.string().optional(),
+    website: zod.string().optional(),
+  }),
+  preferences: zod.object({
+    language: zod.string().default("zh-TW"),
+  }),
+})
+
+export type AccountValues = zod.infer<typeof accountSchema>
+
+export const defaultAccountValues: AccountValues = {
+  username: "",
+  profileImageUrl: "",
+  contactInfo: {
+    phone: "",
+    address: "",
+    website: "",
+  },
+  preferences: {
+    language: "zh-TW",
+  },
 }

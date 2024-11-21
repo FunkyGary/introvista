@@ -41,6 +41,7 @@ export function ResetPasswordCard(): React.JSX.Element {
   const {
     control,
     handleSubmit,
+    reset,
     setError,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) })
@@ -53,7 +54,8 @@ export function ResetPasswordCard(): React.JSX.Element {
         const result = await authClient.updatePassword(values)
 
         if (result) {
-          enqueueSnackbar("產品更新成功！", { variant: "success" })
+          enqueueSnackbar("更新密碼成功！", { variant: "success" })
+          reset(defaultValues)
           router.refresh()
         }
       } catch (err) {
@@ -65,7 +67,7 @@ export function ResetPasswordCard(): React.JSX.Element {
         setIsPending(false)
       }
     },
-    [setError, authClient, router]
+    [setError, authClient, router, reset]
   )
 
   return (

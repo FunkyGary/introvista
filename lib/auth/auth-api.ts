@@ -94,7 +94,7 @@ class AuthApi {
         },
         tags: [],
         profileImageUrl: "",
-        createDate: serverTimestamp(),
+        createdDate: serverTimestamp(),
         lastUpdated: serverTimestamp(),
         lastLoginDate: serverTimestamp(),
         ...roleSpecificInfo,
@@ -403,13 +403,16 @@ class AuthApi {
     }
   }
 
-  async getUserById(
-    userId: string
-  ): Promise<{ data?: UserData; error?: string }> {
+  async getUserData(): Promise<{ data?: UserData; error?: string }> {
     try {
+      const user = this.auth.currentUser
+      if (!user) {
+        return { error: "User not found" }
+      }
+
       const queryUserRef = query(
         collection(this.db, this.userCollectionName),
-        where("userID", "==", userId)
+        where("userID", "==", user.uid)
       )
       const querySnapshot = await getDocs(queryUserRef)
 
@@ -441,16 +444,13 @@ class AuthApi {
     }
   }
 
-  async updateUser(
-    userId: string,
-    userData: Partial<UserData>
-  ): Promise<{ error?: string }> {
+  async updateUser(userData: Partial<UserData>): Promise<{ error?: string }> {
     try {
-      const q = query(
+      const queryUserRef = query(
         collection(this.db, this.userCollectionName),
-        where("userID", "==", userId)
+        where("userID", "==", this.auth.currentUser?.uid)
       )
-      const querySnapshot = await getDocs(q)
+      const querySnapshot = await getDocs(queryUserRef)
 
       if (querySnapshot.empty) {
         return { error: "User not found" }
@@ -470,11 +470,11 @@ class AuthApi {
 
   async deleteUser(userId: string): Promise<{ error?: string }> {
     try {
-      const q = query(
+      const queryUserRef = query(
         collection(this.db, this.userCollectionName),
         where("userID", "==", userId)
       )
-      const querySnapshot = await getDocs(q)
+      const querySnapshot = await getDocs(queryUserRef)
 
       if (querySnapshot.empty) {
         return { error: "User not found" }

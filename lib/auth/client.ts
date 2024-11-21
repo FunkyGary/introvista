@@ -179,7 +179,6 @@ class AuthClient {
   /**
    * Updates specific fields of a user's data in the system.
    *
-   * @param {string} userId - The unique identifier of the user.
    * @param {Partial<UserData>} userData - The fields to update. All fields are optional.
    * @return {Promise<{ error?: string }>} A promise that resolves to an object:
    *   - If successful, error will be undefined.
@@ -197,11 +196,10 @@ class AuthClient {
    * });
    */
   async updateUserData(
-    userId: string,
     userData: Partial<UserData>
   ): Promise<{ error?: string }> {
     try {
-      const result = await this.authApi.updateUser(userId, userData)
+      const result = await this.authApi.updateUser(userData)
       return {
         error: result.error,
       }
@@ -214,14 +212,12 @@ class AuthClient {
     }
   }
 
-  async getUserById(
-    userId: string
-  ): Promise<{ data?: UserData | null; error?: string }> {
+  async getUserData(): Promise<{ data?: UserData | null; error?: string }> {
     try {
-      const result = await this.authApi.getUserById(userId)
+      const result = await this.authApi.getUserData()
 
       if (result.error) {
-        console.warn(`Error fetching user by ID ${userId}: ${result.error}`)
+        console.warn(`Error fetching: ${result.error}`)
         return { error: result.error }
       }
 
@@ -229,7 +225,7 @@ class AuthClient {
         data: result.data,
       }
     } catch (error) {
-      console.error(`Failed to get user by ID ${userId}:`, error)
+      console.error(`Failed to get user data:`, error)
       return {
         error:
           error instanceof Error ? error.message : "Unknown error occurred",

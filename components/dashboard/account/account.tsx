@@ -1,7 +1,12 @@
 "use client"
 
 import * as React from "react"
-import { useForm, Controller } from "react-hook-form"
+import {
+  useForm,
+  Controller,
+  FormProvider,
+  useFormContext,
+} from "react-hook-form"
 import Button from "@mui/material/Button"
 import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
@@ -14,67 +19,125 @@ import MenuItem from "@mui/material/MenuItem"
 import OutlinedInput from "@mui/material/OutlinedInput"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
 import Grid from "@mui/material/Unstable_Grid2"
-import { SignUpValues } from "@/lib/auth/schemas"
 import Typography from "@mui/material/Typography"
 import Stack from "@mui/material/Stack"
 import Avatar from "@mui/material/Avatar"
 import { ResetPasswordCard } from "./resetPasswordCard"
+import { useAuthClient } from "@/hooks/use-auth-client"
+import { useRouter } from "next/navigation"
+import { enqueueSnackbar } from "notistack"
+import {
+  SignUpValues,
+  AccountValues,
+  defaultAccountValues,
+} from "@/lib/auth/schemas"
 
-const initialValues: SignUpValues = {
-  role: "supplier", // 或從 props 傳入
-  email: "", // 從 props 傳入
-  password: "",
-  username: "",
-  profileImageUrl: "",
-  contactInfo: {
-    phone: "",
-    address: "",
-    website: "",
-  },
-  preferences: {
-    language: "zh-TW",
-  },
-  terms: false,
-  supplierInfo: {
-    taxID: "",
-    companyDescription: "",
-    companyName: "",
-  },
-  designerInfo: {
-    portfolioUrl: "",
-  },
-}
+/* const initialValues: SignUpValues = { */
+/*   role: "supplier", // 或從 props 傳入 */
+/*   email: "", // 從 props 傳入 */
+/*   password: "", */
+/*   username: "", */
+/*   profileImageUrl: "", */
+/*   contactInfo: { */
+/*     phone: "", */
+/*     address: "", */
+/*     website: "", */
+/*   }, */
+/*   preferences: { */
+/*     language: "zh-TW", */
+/*   }, */
+/*   terms: false, */
+/*   supplierInfo: { */
+/*     taxID: "", */
+/*     companyDescription: "", */
+/*     companyName: "", */
+/*   }, */
+/*   designerInfo: { */
+/*     portfolioUrl: "", */
+/*   }, */
+/* } */
 
 export default function Account(): React.JSX.Element {
-  const {
-    control,
-    handleSubmit,
-    getValues,
-    formState: { errors },
-  } = useForm<SignUpValues>({
-    defaultValues: initialValues,
+  const [isPending, setIsPending] = React.useState<boolean>(false)
+  const authClient = useAuthClient()
+  const router = useRouter()
+
+  const form = useForm<AccountValues>({
+    defaultValues: defaultAccountValues,
   })
-  const onSubmit = (data: SignUpValues) => {
-    console.log(data)
-    // 處理表單提交
-    console.log(getValues())
+
+  const {
+    handleSubmit,
+    setError,
+    getValues,
+    reset,
+    formState: { errors },
+  } = form
+
+  const onSubmit = async (data: AccountValues) => {
+    if (isPending) return
+    setIsPending(true)
+    try {
+      // clear null or '' values including nested objects
+      const cleanData = (data: any) => {
+        return Object.entries(data).reduce((acc, [key, value]) => {
+          if (value !== null && value !== "") {
+            if (typeof value === "object") {
+              const cleanedValue = cleanData(value)
+              if (Object.keys(cleanedValue).length > 0) {
+                acc[key] = cleanedValue
+              }
+            } else {
+              acc[key] = value
+            }
+          }
+          return acc
+        }, {} as any)
+      }
+
+      const result = await authClient.updateUserData(cleanData(data))
+
+      if (!result) {
+        throw new Error("Failed to update user data")
+      }
+      enqueueSnackbar("更新資料成功！", { variant: "success" })
+      reset(defaultAccountValues)
+      router.refresh()
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "An error occurred while updating your profile"
+
+      setError("root", {
+        type: "server",
+        message: errorMessage,
+      })
+
+      enqueueSnackbar(errorMessage, { variant: "error" })
+    } finally {
+      setIsPending(false)
+    }
   }
+
+  React.useEffect(() => {
+    console.log(getValues())
+  }, [getValues])
 
   return (
     <Stack spacing={3}>
-      {/* <div>
-        <Typography variant="h4">Account</Typography>
-      </div> */}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={3}>
-          <Grid lg={4} md={6} xs={12}>
-            <AccountInfo />
+      <FormProvider {...form}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={3}>
+            <Grid lg={4} md={6} xs={12}>
+              <AccountInfo />
+            </Grid>
+            <Grid lg={8} md={6} xs={12}>
+              <AccountDetailsForm />
+            </Grid>
           </Grid>
-          <Grid lg={8} md={6} xs={12}>
-            <AccountDetailsForm />
-          </Grid>
-        </Grid>
-      </form>
+        </form>
+      </FormProvider>
       <Grid container spacing={3}>
         <Grid lg={4} md={6} xs={12}></Grid>
         <Grid lg={8} md={6} xs={12}>
@@ -88,11 +151,8 @@ export default function Account(): React.JSX.Element {
 export function AccountDetailsForm(): React.JSX.Element {
   const {
     control,
-    handleSubmit,
     formState: { errors },
-  } = useForm<SignUpValues>({
-    defaultValues: initialValues,
-  })
+  } = useFormContext<AccountValues>()
 
   return (
     <Card>
@@ -250,9 +310,30 @@ const user = {
 } as const
 
 export function AccountInfo(): React.JSX.Element {
-  const { control } = useForm<SignUpValues>({
-    defaultValues: initialValues,
+  const { control } = useForm<AccountValues>({
+    defaultValues: defaultAccountValues,
   })
+  const authClient = useAuthClient()
+
+  const [userData, setUserData] = React.useState<any | null>(null)
+  const [isLoading, setIsLoading] = React.useState(true)
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true)
+        const data = await authClient.getUserData()
+        setUserData(data)
+      } catch (error) {
+        enqueueSnackbar("Failed to load user data", { variant: "error" })
+        console.error("Error fetching user data:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [authClient])
 
   return (
     <Card>
@@ -264,16 +345,16 @@ export function AccountInfo(): React.JSX.Element {
               control={control}
               render={({ field: { value, onChange } }) => (
                 <Avatar
-                  src={value || user.avatar}
+                  src={value || userData?.data?.profileImageUrl}
                   sx={{ height: "80px", width: "80px" }}
                 />
               )}
             />
           </div>
           <Stack spacing={1} sx={{ textAlign: "center" }}>
-            <Typography variant="h5">{user.email}</Typography>
+            <Typography variant="h5">{userData?.data?.email}</Typography>
             <Typography color="text.secondary" variant="body2">
-              {user.role}
+              {userData?.data?.role}
             </Typography>
           </Stack>
         </Stack>
