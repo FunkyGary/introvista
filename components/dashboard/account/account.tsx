@@ -49,6 +49,7 @@ export default function Account(): React.JSX.Element {
   const {
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<SignUpValues>({
     defaultValues: initialValues,
@@ -56,6 +57,7 @@ export default function Account(): React.JSX.Element {
   const onSubmit = (data: SignUpValues) => {
     console.log(data)
     // 處理表單提交
+    console.log(getValues())
   }
 
   return (

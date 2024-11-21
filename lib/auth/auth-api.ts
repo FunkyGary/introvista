@@ -13,6 +13,8 @@ import {
   onAuthStateChanged,
   signOut,
   getAuth,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
 } from "firebase/auth"
 import firebaseApp from "../firebase/firebase-config"
 import {
@@ -244,12 +246,37 @@ class AuthApi {
   }
 
   async updatePassword({
+    oldPassword,
     newPassword,
   }: UpdatePasswordParams): Promise<{ error?: string }> {
     try {
+      if (!oldPassword || !newPassword) {
+        return { error: "Both old and new passwords are required" }
+      }
+
       const user = this.auth.currentUser
-      if (!user) {
+      if (!user || !user.email) {
         return { error: "User not found" }
+      }
+
+      try {
+        const credential = EmailAuthProvider.credential(user.email, oldPassword)
+        await reauthenticateWithCredential(user, credential)
+      } catch (reAuthError) {
+        console.error("Reauthentication failed:", reAuthError)
+        if (reAuthError instanceof FirebaseError) {
+          switch (reAuthError.code) {
+            case "auth/wrong-password":
+              return { error: "Current password is incorrect" }
+            case "auth/missing-password":
+              return { error: "Please enter your current password" }
+            case "auth/too-many-requests":
+              return { error: "Too many attempts. Please try again later" }
+            default:
+              return { error: "Authentication failed. Please try again" }
+          }
+        }
+        return { error: "Authentication failed. Please try again" }
       }
 
       await updatePassword(user, newPassword)
@@ -258,12 +285,12 @@ class AuthApi {
         passwordHash: await bcrypt.hash(newPassword, 10),
         lastUpdated: serverTimestamp(),
       })
+
+      return {}
     } catch (error) {
       console.error(error)
       return { error: this.getErrorMessage(error) }
     }
-
-    return {}
   }
 
   async updateEmail({

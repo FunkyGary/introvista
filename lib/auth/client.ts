@@ -57,6 +57,7 @@ export interface ResetPasswordParams {
 }
 
 export interface UpdatePasswordParams {
+  oldPassword: string
   newPassword: string
 }
 
@@ -116,9 +117,11 @@ class AuthClient {
   }
 
   async updatePassword({
+    oldPassword,
     newPassword,
   }: UpdatePasswordParams): Promise<{ error?: string }> {
     const result = await this.authApi.updatePassword({
+      oldPassword,
       newPassword,
     })
 

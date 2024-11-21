@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { enqueueSnackbar } from "notistack"
 import Alert from "@mui/material/Alert"
 import Button from "@mui/material/Button"
 import FormControl from "@mui/material/FormControl"
@@ -14,21 +15,28 @@ import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
 import CardContent from "@mui/material/CardContent"
 import CardHeader from "@mui/material/CardHeader"
+import { Stack } from "@mui/material"
 import { Controller, useForm } from "react-hook-form"
 import { z as zod } from "zod"
+import { useAuthClient } from "@/hooks/use-auth-client"
+import { useRouter } from "next/navigation"
 
 const schema = zod.object({
-  password: zod.string().min(8, { message: "密碼至少需要 8 個字元" }),
+  oldPassword: zod.string().min(1, { message: "請輸入舊密碼" }),
+  newPassword: zod.string().min(6, { message: "密碼至少需要 6 個字元" }),
 })
 
 type Values = zod.infer<typeof schema>
 
 const defaultValues = {
-  password: "",
+  oldPassword: "",
+  newPassword: "",
 } satisfies Values
 
 export function ResetPasswordCard(): React.JSX.Element {
   const [isPending, setIsPending] = React.useState<boolean>(false)
+  const authClient = useAuthClient()
+  const router = useRouter()
 
   const {
     control,
@@ -42,11 +50,12 @@ export function ResetPasswordCard(): React.JSX.Element {
       setIsPending(true)
 
       try {
-        // const { error } = await authClient.resetPassword(values)
-        // if (error) {
-        //   setError("root", { type: "server", message: error })
-        //   return
-        // }
+        const result = await authClient.updatePassword(values)
+
+        if (result) {
+          enqueueSnackbar("產品更新成功！", { variant: "success" })
+          router.refresh()
+        }
       } catch (err) {
         setError("root", {
           type: "server",
@@ -56,7 +65,7 @@ export function ResetPasswordCard(): React.JSX.Element {
         setIsPending(false)
       }
     },
-    [setError]
+    [setError, authClient, router]
   )
 
   return (
@@ -65,21 +74,39 @@ export function ResetPasswordCard(): React.JSX.Element {
         <CardHeader title="重設密碼" />
         <Divider />
         <CardContent>
-          <Grid xs={6}>
-            <FormControl fullWidth>
-              <InputLabel>新密碼</InputLabel>
-              <Controller
-                name="password"
-                control={control}
-                render={({ field }) => (
-                  <OutlinedInput {...field} type="password" label="新密碼" />
-                )}
-              />
-            </FormControl>
-            {errors.root ? (
-              <Alert color="error">{errors.root.message}</Alert>
-            ) : null}
-          </Grid>
+          <Stack spacing={3} maxWidth={300}>
+            <Grid xs={6}>
+              <FormControl fullWidth>
+                <InputLabel>舊密碼</InputLabel>
+                <Controller
+                  name="oldPassword"
+                  control={control}
+                  render={({ field }) => (
+                    <OutlinedInput {...field} type="password" label="新密碼" />
+                  )}
+                />
+              </FormControl>
+              {errors.root ? (
+                <Alert color="error">{errors.root.message}</Alert>
+              ) : null}
+            </Grid>
+
+            <Grid xs={6}>
+              <FormControl fullWidth>
+                <InputLabel>新密碼</InputLabel>
+                <Controller
+                  name="newPassword"
+                  control={control}
+                  render={({ field }) => (
+                    <OutlinedInput {...field} type="password" label="新密碼" />
+                  )}
+                />
+              </FormControl>
+              {errors.root ? (
+                <Alert color="error">{errors.root.message}</Alert>
+              ) : null}
+            </Grid>
+          </Stack>
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: "flex-end" }}>

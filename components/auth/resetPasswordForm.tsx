@@ -12,6 +12,7 @@ import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import { Controller, useForm } from "react-hook-form"
 import { z as zod } from "zod"
+import { useAuthClient } from "@/hooks/use-auth-client"
 
 const schema = zod.object({
   password: zod.string().min(8, { message: "密碼至少需要 8 個字元" }),
@@ -25,6 +26,7 @@ const defaultValues = {
 
 export function ResetPasswordForm(): React.JSX.Element {
   const [isPending, setIsPending] = React.useState<boolean>(false)
+  const authClient = useAuthClient()
 
   const {
     control,
