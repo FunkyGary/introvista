@@ -65,6 +65,11 @@ export interface UpdateEmailParams {
   newEmail: string
 }
 
+export interface ResetPasswordConfirmParams {
+  code: string
+  newPassword: string
+}
+
 @injectable()
 class AuthClient {
   constructor(@inject(AuthApi) private authApi: AuthApi) {}
@@ -106,13 +111,45 @@ class AuthClient {
     }
   }
 
-  async resetPassword({
+  async sendPasswordResetEmail({
     email,
   }: ResetPasswordParams): Promise<{ error?: string }> {
-    const result = await this.authApi.resetPassword({ email })
+    try {
+      const result = await this.authApi.sendPasswordResetEmail({ email })
+      return {
+        error: result.error,
+      }
+    } catch (error) {
+      console.error("SendPasswordResetEmail error:", error)
+      return {
+        error:
+          error instanceof Error
+            ? error.message
+            : "An error occurred while sending the password reset email",
+      }
+    }
+  }
 
-    return {
-      error: result.error,
+  async confirmPasswordReset({
+    code,
+    newPassword,
+  }: ResetPasswordConfirmParams): Promise<{ error?: string }> {
+    try {
+      const result = await this.authApi.confirmPasswordReset({
+        code,
+        newPassword,
+      })
+      return {
+        error: result.error,
+      }
+    } catch (error) {
+      console.error("ConfirmPasswordReset error:", error)
+      return {
+        error:
+          error instanceof Error
+            ? error.message
+            : "An error occurred while confirming the password reset",
+      }
     }
   }
 

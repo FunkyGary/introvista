@@ -10,8 +10,12 @@ import InputLabel from "@mui/material/InputLabel"
 import OutlinedInput from "@mui/material/OutlinedInput"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
+import { enqueueSnackbar } from "notistack"
 import { Controller, useForm } from "react-hook-form"
 import { z as zod } from "zod"
+import { useAuthClient } from "@/hooks/use-auth-client"
+import { useRouter } from "next/navigation"
+import { paths } from "@/paths"
 
 const schema = zod.object({
   email: zod.string().min(1, { message: "Email is required" }).email(),
@@ -23,6 +27,8 @@ const defaultValues = { email: "" } satisfies Values
 
 export function ForgetPasswordForm(): React.JSX.Element {
   const [isPending, setIsPending] = React.useState<boolean>(false)
+  const authClient = useAuthClient()
+  const router = useRouter()
 
   const {
     control,
@@ -36,11 +42,12 @@ export function ForgetPasswordForm(): React.JSX.Element {
       setIsPending(true)
 
       try {
-        // const { error } = await authClient.resetPassword(values)
-        // if (error) {
-        //   setError("root", { type: "server", message: error })
-        //   return
-        // }
+        const result = await authClient.sendPasswordResetEmail(values)
+
+        if (result) {
+          enqueueSnackbar("Password reset email sent", { variant: "success" })
+          router.push(paths.auth.signIn)
+        }
       } catch (err) {
         setError("root", {
           type: "server",
@@ -50,7 +57,7 @@ export function ForgetPasswordForm(): React.JSX.Element {
         setIsPending(false)
       }
     },
-    [setError]
+    [setError, authClient, router]
   )
 
   return (

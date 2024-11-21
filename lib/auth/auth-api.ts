@@ -5,7 +5,7 @@ import {
   type Auth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  sendPasswordResetEmail,
+  sendPasswordResetEmail as firebaseSendPasswordResetEmail,
   sendEmailVerification,
   updateProfile,
   updatePassword,
@@ -15,6 +15,7 @@ import {
   getAuth,
   EmailAuthProvider,
   reauthenticateWithCredential,
+  confirmPasswordReset as firebaseConfirmPasswordReset,
 } from "firebase/auth"
 import firebaseApp from "../firebase/firebase-config"
 import {
@@ -42,6 +43,7 @@ import {
 } from "firebase/storage"
 
 import type {
+  ResetPasswordConfirmParams,
   ResetPasswordParams,
   SignInWithPasswordParams,
   SignUpParams,
@@ -228,7 +230,7 @@ class AuthApi {
     })
   }
 
-  async resetPassword({
+  async sendPasswordResetEmail({
     email,
   }: ResetPasswordParams): Promise<{ error?: string }> {
     try {
@@ -247,7 +249,7 @@ class AuthApi {
 
       this.auth.languageCode = languageCode
 
-      await sendPasswordResetEmail(this.auth, email)
+      await firebaseSendPasswordResetEmail(this.auth, email)
       return {}
     } catch (error) {
       console.error("ResetPassword error:", error)
@@ -389,8 +391,18 @@ class AuthApi {
         return "User not found"
       case "auth/wrong-password":
         return "Wrong password"
+      case "auth/invalid-action-code":
+        return "Password reset link has expired or been used"
+      case "auth/expired-action-code":
+        return "Password reset link has expired"
+      case "auth/user-disabled":
+        return "This account has been disabled"
+      case "auth/user-not-found":
+        return "No account found for this email"
+      case "auth/weak-password":
+        return "Password strength is insufficient"
       default:
-        return "Something went wrong"
+        return "An error occurred, please try again later"
     }
   }
 
@@ -518,6 +530,28 @@ class AuthApi {
       return {}
     } catch (error) {
       console.error(error)
+      return { error: this.getErrorMessage(error) }
+    }
+  }
+
+  async confirmPasswordReset({
+    code,
+    newPassword,
+  }: ResetPasswordConfirmParams): Promise<{ error?: string }> {
+    try {
+      await firebaseConfirmPasswordReset(this.auth, code, newPassword)
+
+      const user = this.auth.currentUser
+      if (user) {
+        await updateDoc(doc(this.db, this.userCollectionName, user.uid), {
+          passwordHash: await bcrypt.hash(newPassword, 10),
+          lastUpdated: serverTimestamp(),
+        })
+      }
+
+      return {}
+    } catch (error) {
+      console.error("ConfirmPasswordReset error:", error)
       return { error: this.getErrorMessage(error) }
     }
   }
