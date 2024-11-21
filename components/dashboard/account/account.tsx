@@ -73,7 +73,12 @@ export default function Account(): React.JSX.Element {
           </Grid>
         </Grid>
       </form>
-      <ResetPasswordCard />
+      <Grid container spacing={3}>
+        <Grid lg={4} md={6} xs={12}></Grid>
+        <Grid lg={8} md={6} xs={12}>
+          <ResetPasswordCard />
+        </Grid>
+      </Grid>
     </Stack>
   )
 }
