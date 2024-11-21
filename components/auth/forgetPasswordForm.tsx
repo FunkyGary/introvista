@@ -55,7 +55,7 @@ export function ForgetPasswordForm(): React.JSX.Element {
 
   return (
     <Stack spacing={4}>
-      <Typography variant="h5">Reset password</Typography>
+      <Typography variant="h5">Forget password</Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           <Controller
