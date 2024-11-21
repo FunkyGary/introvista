@@ -33,6 +33,14 @@ import {
   setDoc,
   getDoc,
 } from "firebase/firestore"
+import {
+  FirebaseStorage,
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage"
+
 import type {
   ResetPasswordParams,
   SignInWithPasswordParams,
@@ -51,6 +59,7 @@ class AuthApi {
   auth: Auth
   user: User | null
   db: Firestore
+  storage: FirebaseStorage
 
   constructor() {
     this.auth = getAuth(firebaseApp)
@@ -60,6 +69,7 @@ class AuthApi {
     })
 
     this.db = getFirestore(firebaseApp)
+    this.storage = getStorage(firebaseApp)
   }
 
   async signUp(params: SignUpParams): Promise<{ error?: string }> {
@@ -445,10 +455,16 @@ class AuthApi {
   }
 
   async updateUser(userData: Partial<UserData>): Promise<{ error?: string }> {
+    const user = this.auth.currentUser
+
+    if (!user) {
+      return { error: "User not found" }
+    }
+
     try {
       const queryUserRef = query(
         collection(this.db, this.userCollectionName),
-        where("userID", "==", this.auth.currentUser?.uid)
+        where("userID", "==", user.uid)
       )
       const querySnapshot = await getDocs(queryUserRef)
 
@@ -456,10 +472,28 @@ class AuthApi {
         return { error: "User not found" }
       }
 
+      let avatarUrl = userData.profileImageUrl ?? ""
+
+      if (userData.profileImageUrl instanceof File) {
+        const storageRef = ref(this.storage, `profile-images/${user.uid}`)
+        await uploadBytes(storageRef, userData.profileImageUrl)
+        avatarUrl = await getDownloadURL(storageRef)
+      } else {
+        avatarUrl = userData.profileImageUrl || ""
+      }
+
       await updateDoc(querySnapshot.docs[0].ref, {
         ...userData,
+        profileImageUrl: avatarUrl,
         lastUpdated: serverTimestamp(),
       })
+
+      if (userData.username || avatarUrl) {
+        await updateProfile(user, {
+          displayName: userData.username || user.displayName,
+          photoURL: avatarUrl || user.photoURL,
+        })
+      }
 
       return {}
     } catch (error) {

@@ -56,7 +56,7 @@ export interface UserData {
   username: string
   email: string
   passwordHash: string
-  profileImageUrl?: string
+  profileImageUrl?: string | File
   contactInfo?: {
     phone?: string
     address?: string

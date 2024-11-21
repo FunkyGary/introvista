@@ -6,7 +6,7 @@ const getFileDataSchema = z.object({
 })
 
 // Define a custom file schema that only uses `File` in the browser
-const fileSchema =
+export const fileSchema =
   typeof window !== "undefined"
     ? z.instanceof(File).nullable().or(getFileDataSchema)
     : z.any().nullable()

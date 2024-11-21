@@ -64,9 +64,14 @@ export const defaultSignUpValues: SignUpValues = {
   terms: false,
 }
 
+const fileSchema =
+  typeof window !== "undefined"
+    ? zod.instanceof(File).nullable().or(zod.string().optional())
+    : zod.any().nullable()
+
 export const accountSchema = zod.object({
   username: zod.string().min(1, { message: "Username is required" }),
-  profileImageUrl: zod.string().optional(),
+  profileImageUrl: fileSchema,
   contactInfo: zod.object({
     phone: zod.string().optional(),
     address: zod.string().optional(),

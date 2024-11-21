@@ -22,6 +22,7 @@ import Grid from "@mui/material/Unstable_Grid2"
 import Typography from "@mui/material/Typography"
 import Stack from "@mui/material/Stack"
 import Avatar from "@mui/material/Avatar"
+import { paths } from "@/paths"
 import { ResetPasswordCard } from "./resetPasswordCard"
 import { useAuthClient } from "@/hooks/use-auth-client"
 import { useRouter } from "next/navigation"
@@ -62,47 +63,60 @@ export default function Account(): React.JSX.Element {
   const authClient = useAuthClient()
   const router = useRouter()
 
-  const form = useForm<AccountValues>({
+  const methods = useForm<AccountValues>({
     defaultValues: defaultAccountValues,
   })
 
   const {
+    control,
     handleSubmit,
-    setError,
-    getValues,
     reset,
+    getValues,
+    setError,
     formState: { errors },
-  } = form
+  } = methods
+
+  React.useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const data = await authClient.getUserData()
+        if (data?.data && data?.data?.preferences) {
+          const newUserData = {
+            username: data.data.username,
+            contactInfo: data.data.contactInfo,
+            preferences: {
+              language: data.data.preferences.language,
+            },
+            profileImageUrl: data.data.profileImageUrl,
+          }
+
+          reset({
+            ...defaultAccountValues,
+            ...newUserData,
+          })
+        }
+      } catch (error) {
+        enqueueSnackbar("Failed to load user data", { variant: "error" })
+        console.error("Error loading user data:", error)
+      }
+    }
+
+    loadUserData()
+  }, [authClient, reset])
 
   const onSubmit = async (data: AccountValues) => {
     if (isPending) return
+
     setIsPending(true)
     try {
-      // clear null or '' values including nested objects
-      const cleanData = (data: any) => {
-        return Object.entries(data).reduce((acc, [key, value]) => {
-          if (value !== null && value !== "") {
-            if (typeof value === "object") {
-              const cleanedValue = cleanData(value)
-              if (Object.keys(cleanedValue).length > 0) {
-                acc[key] = cleanedValue
-              }
-            } else {
-              acc[key] = value
-            }
-          }
-          return acc
-        }, {} as any)
-      }
-
-      const result = await authClient.updateUserData(cleanData(data))
+      const result = await authClient.updateUserData(data)
 
       if (!result) {
         throw new Error("Failed to update user data")
       }
+
       enqueueSnackbar("更新資料成功！", { variant: "success" })
-      reset(defaultAccountValues)
-      router.refresh()
+      router.push(paths.dashboard.account)
     } catch (err) {
       const errorMessage =
         err instanceof Error
@@ -120,20 +134,16 @@ export default function Account(): React.JSX.Element {
     }
   }
 
-  React.useEffect(() => {
-    console.log(getValues())
-  }, [getValues])
-
   return (
     <Stack spacing={3}>
-      <FormProvider {...form}>
+      <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={3}>
             <Grid lg={4} md={6} xs={12}>
               <AccountInfo />
             </Grid>
             <Grid lg={8} md={6} xs={12}>
-              <AccountDetailsForm />
+              <AccountDetailsForm isPending={isPending} />
             </Grid>
           </Grid>
         </form>
@@ -148,7 +158,11 @@ export default function Account(): React.JSX.Element {
   )
 }
 
-export function AccountDetailsForm(): React.JSX.Element {
+export function AccountDetailsForm({
+  isPending,
+}: {
+  isPending: boolean
+}): React.JSX.Element {
   const {
     control,
     formState: { errors },
@@ -295,7 +309,7 @@ export function AccountDetailsForm(): React.JSX.Element {
       </CardContent>
       <Divider />
       <CardActions sx={{ justifyContent: "flex-end" }}>
-        <Button type="submit" variant="contained">
+        <Button type="submit" variant="contained" disabled={isPending}>
           Save details
         </Button>
       </CardActions>
@@ -310,9 +324,7 @@ const user = {
 } as const
 
 export function AccountInfo(): React.JSX.Element {
-  const { control } = useForm<AccountValues>({
-    defaultValues: defaultAccountValues,
-  })
+  const { control, setValue } = useFormContext<AccountValues>()
   const authClient = useAuthClient()
 
   const [userData, setUserData] = React.useState<any | null>(null)
@@ -335,6 +347,24 @@ export function AccountInfo(): React.JSX.Element {
     fetchData()
   }, [authClient])
 
+  const handleFileUpload = async (file: File) => {
+    try {
+      setValue("profileImageUrl", file)
+
+      const previewUrl = URL.createObjectURL(file)
+      setUserData((prev: any) => ({
+        ...prev,
+        data: {
+          ...prev.data,
+          profileImageUrl: previewUrl,
+        },
+      }))
+    } catch (error) {
+      enqueueSnackbar("Failed to process image", { variant: "error" })
+      console.error("Error processing file:", error)
+    }
+  }
+
   return (
     <Card>
       <CardContent>
@@ -343,9 +373,13 @@ export function AccountInfo(): React.JSX.Element {
             <Controller
               name="profileImageUrl"
               control={control}
-              render={({ field: { value, onChange } }) => (
+              render={({ field }) => (
                 <Avatar
-                  src={value || userData?.data?.profileImageUrl}
+                  src={
+                    field.value instanceof File
+                      ? URL.createObjectURL(field.value)
+                      : field.value || userData?.data?.profileImageUrl
+                  }
                   sx={{ height: "80px", width: "80px" }}
                 />
               )}
@@ -364,7 +398,7 @@ export function AccountInfo(): React.JSX.Element {
         <Controller
           name="profileImageUrl"
           control={control}
-          render={({ field: { onChange } }) => (
+          render={({ field }) => (
             <Button fullWidth variant="text" component="label">
               Upload picture
               <input
@@ -374,9 +408,7 @@ export function AccountInfo(): React.JSX.Element {
                 onChange={(e) => {
                   const file = e.target.files?.[0]
                   if (file) {
-                    // Create a URL for preview
-                    const imageUrl = URL.createObjectURL(file)
-                    onChange(imageUrl)
+                    handleFileUpload(file)
                   }
                 }}
               />
