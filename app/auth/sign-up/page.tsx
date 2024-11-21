@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 
-import { SignUpForm } from "@/components/auth/sign-up-form";
-import withAuthOnly from "@/components/hoc/with-auth-only";
+import { SignUpForm } from "@/components/auth/signUpForm"
+import withAuthOnly from "@/components/hoc/with-auth-only"
 
 function Page(): React.JSX.Element {
-  return <SignUpForm />;
+  return <SignUpForm />
 }
 
-export default withAuthOnly(Page);
+export default withAuthOnly(Page)

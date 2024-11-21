@@ -18,6 +18,7 @@ import { SignUpValues } from "@/lib/auth/schemas"
 import Typography from "@mui/material/Typography"
 import Stack from "@mui/material/Stack"
 import Avatar from "@mui/material/Avatar"
+import { ResetPasswordCard } from "./resetPasswordCard"
 
 const initialValues: SignUpValues = {
   role: "supplier", // 或從 props 傳入
@@ -44,7 +45,7 @@ const initialValues: SignUpValues = {
   },
 }
 
-export default function AccountForm(): React.JSX.Element {
+export default function Account(): React.JSX.Element {
   const {
     control,
     handleSubmit,
@@ -72,6 +73,7 @@ export default function AccountForm(): React.JSX.Element {
           </Grid>
         </Grid>
       </form>
+      <ResetPasswordCard />
     </Stack>
   )
 }
