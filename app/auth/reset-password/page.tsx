@@ -12,7 +12,8 @@ export const metadata = {
 export default function Page(): React.JSX.Element {
   return (
     <Layout>
-      <ResetPasswordView />
+      {/* <ResetPasswordView /> */}
+      <ResetPasswordForm />
     </Layout>
   )
 }
