@@ -234,22 +234,29 @@ class AuthApi {
     email,
   }: ResetPasswordParams): Promise<{ error?: string }> {
     try {
-      const userQuery = query(
-        collection(this.db, this.userCollectionName),
-        where("email", "==", email)
-      )
-      const querySnapshot = await getDocs(userQuery)
+      this.auth.languageCode = "zh-TW"
 
-      let languageCode = "zh-TW"
-
-      if (!querySnapshot.empty) {
-        const userData = querySnapshot.docs[0].data()
-        languageCode = userData.preferences?.language || "zh-TW"
+      const actionCodeSettings = {
+        url: "https://introvista.vercel.app/auth/reset-password",
+        handleCodeInApp: true,
       }
 
-      this.auth.languageCode = languageCode
+      try {
+        const userQuery = query(
+          collection(this.db, this.userCollectionName),
+          where("email", "==", email)
+        )
+        const querySnapshot = await getDocs(userQuery)
 
-      await firebaseSendPasswordResetEmail(this.auth, email)
+        if (!querySnapshot.empty) {
+          const userData = querySnapshot.docs[0].data()
+          this.auth.languageCode = userData.preferences?.language || "zh-TW"
+        }
+      } catch (dbError) {
+        console.warn("Could not fetch user language preference:", dbError)
+      }
+
+      await firebaseSendPasswordResetEmail(this.auth, email, actionCodeSettings)
       return {}
     } catch (error) {
       console.error("ResetPassword error:", error)

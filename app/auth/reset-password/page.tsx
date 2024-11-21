@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 
 import { Layout } from "@/components/auth/layout"
 import { ResetPasswordForm } from "@/components/auth/resetPasswordForm"
+import { ResetPasswordView } from "@/components/auth/resetPasswordView"
 
 export const metadata = {
   title: `Forget password | Innova`,
@@ -11,7 +12,7 @@ export const metadata = {
 export default function Page(): React.JSX.Element {
   return (
     <Layout>
-      <ResetPasswordForm />
+      <ResetPasswordView />
     </Layout>
   )
 }
