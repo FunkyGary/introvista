@@ -30,8 +30,8 @@ export interface SignUpParams {
     website?: string
   }
   supplierInfo?: {
-    companyName?: string
-    taxID?: string
+    companyName: string
+    taxID: string
     companyDescription?: string
   }
   designerInfo?: {
