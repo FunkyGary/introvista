@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation"
 import { paths } from "@/paths"
 
 const schema = zod.object({
-  password: zod.string().min(8, { message: "密碼至少需要 8 個字元" }),
+  password: zod.string().min(1, { message: "Password is required." }),
 })
 
 type Values = zod.infer<typeof schema>
@@ -45,6 +45,7 @@ export function ResetPasswordForm(): React.JSX.Element {
 
       try {
         const code = new URLSearchParams(window.location.search).get("oobCode")
+
         if (!code) {
           setError("root", {
             type: "server",
