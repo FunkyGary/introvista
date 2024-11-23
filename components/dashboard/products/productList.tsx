@@ -148,7 +148,7 @@ export function ProductList(): React.JSX.Element {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              {/* <TableCell padding="checkbox">
                 <Checkbox
                   checked={selected.size === productIds.length}
                   indeterminate={
@@ -159,7 +159,7 @@ export function ProductList(): React.JSX.Element {
                     else deselectAll()
                   }}
                 />
-              </TableCell>
+              </TableCell> */}
               <TableCell>類型</TableCell>
               <TableCell>名稱</TableCell>
               <TableCell>價格</TableCell>
@@ -178,7 +178,7 @@ export function ProductList(): React.JSX.Element {
 
                 return (
                   <TableRow hover key={id}>
-                    <TableCell padding="checkbox">
+                    {/* <TableCell padding="checkbox">
                       <Checkbox
                         checked={isSelected}
                         onChange={(event) => {
@@ -186,7 +186,7 @@ export function ProductList(): React.JSX.Element {
                           else deselectOne(id)
                         }}
                       />
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell>
                       {product.type === "model" ? "物品" : "材質"}
                     </TableCell>

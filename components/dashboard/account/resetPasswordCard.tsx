@@ -71,13 +71,13 @@ export function ResetPasswordCard(): React.JSX.Element {
   )
 
   return (
-    <Card>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Card>
         <CardHeader title="重設密碼" />
         <Divider />
         <CardContent>
-          <Stack spacing={3} maxWidth={300}>
-            <Grid xs={6}>
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
               <FormControl fullWidth>
                 <InputLabel>舊密碼</InputLabel>
                 <Controller
@@ -92,8 +92,7 @@ export function ResetPasswordCard(): React.JSX.Element {
                 <Alert color="error">{errors.root.message}</Alert>
               ) : null}
             </Grid>
-
-            <Grid xs={6}>
+            <Grid item xs={6}>
               <FormControl fullWidth>
                 <InputLabel>新密碼</InputLabel>
                 <Controller
@@ -108,7 +107,7 @@ export function ResetPasswordCard(): React.JSX.Element {
                 <Alert color="error">{errors.root.message}</Alert>
               ) : null}
             </Grid>
-          </Stack>
+          </Grid>
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: "flex-end" }}>
@@ -116,7 +115,7 @@ export function ResetPasswordCard(): React.JSX.Element {
             更新密碼
           </Button>
         </CardActions>
-      </form>
-    </Card>
+      </Card>
+    </form>
   )
 }

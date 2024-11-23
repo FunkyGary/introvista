@@ -17,8 +17,8 @@ export const signUpSchema = zod.object({
   }),
   supplierInfo: zod
     .object({
-      companyName: zod.string().optional(),
-      taxID: zod.string().optional(),
+      companyName: zod.string(),
+      taxID: zod.string(),
       companyDescription: zod.string().optional(),
     })
     .optional(),
@@ -77,9 +77,17 @@ export const accountSchema = zod.object({
     address: zod.string().optional(),
     website: zod.string().optional(),
   }),
+  supplierInfo: zod
+    .object({
+      companyName: zod.string(),
+      taxID: zod.string(),
+      companyDescription: zod.string().optional(),
+    })
+    .optional(),
   preferences: zod.object({
     language: zod.string().default("zh-TW"),
   }),
+  role: zod.string().optional(),
 })
 
 export type AccountValues = zod.infer<typeof accountSchema>
@@ -92,7 +100,13 @@ export const defaultAccountValues: AccountValues = {
     address: "",
     website: "",
   },
+  supplierInfo: {
+    companyName: "",
+    taxID: "",
+    companyDescription: "",
+  },
   preferences: {
     language: "zh-TW",
   },
+  role: "",
 }

@@ -27,36 +27,7 @@ import { ResetPasswordCard } from "./resetPasswordCard"
 import { useAuthClient } from "@/hooks/use-auth-client"
 import { useRouter } from "next/navigation"
 import { enqueueSnackbar } from "notistack"
-import {
-  SignUpValues,
-  AccountValues,
-  defaultAccountValues,
-} from "@/lib/auth/schemas"
-
-/* const initialValues: SignUpValues = { */
-/*   role: "supplier", // 或從 props 傳入 */
-/*   email: "", // 從 props 傳入 */
-/*   password: "", */
-/*   username: "", */
-/*   profileImageUrl: "", */
-/*   contactInfo: { */
-/*     phone: "", */
-/*     address: "", */
-/*     website: "", */
-/*   }, */
-/*   preferences: { */
-/*     language: "zh-TW", */
-/*   }, */
-/*   terms: false, */
-/*   supplierInfo: { */
-/*     taxID: "", */
-/*     companyDescription: "", */
-/*     companyName: "", */
-/*   }, */
-/*   designerInfo: { */
-/*     portfolioUrl: "", */
-/*   }, */
-/* } */
+import { AccountValues, defaultAccountValues } from "@/lib/auth/schemas"
 
 export default function Account(): React.JSX.Element {
   const [isPending, setIsPending] = React.useState<boolean>(false)
@@ -88,6 +59,7 @@ export default function Account(): React.JSX.Element {
               language: data.data.preferences.language,
             },
             profileImageUrl: data.data.profileImageUrl,
+            role: data.data.role,
           }
 
           reset({
@@ -165,6 +137,7 @@ export function AccountDetailsForm({
 }): React.JSX.Element {
   const {
     control,
+    watch,
     formState: { errors },
   } = useFormContext<AccountValues>()
 
@@ -249,46 +222,46 @@ export function AccountDetailsForm({
           </Grid>
 
           {/* Supplier 特定欄位 */}
-          {/* {values.role === "supplier" && (
-              <>
-                <Grid md={6} xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel>Company Name</InputLabel>
-                    <Controller
-                      name="supplierInfo.companyName"
-                      control={control}
-                      render={({ field }) => (
-                        <OutlinedInput {...field} label="Company Name" />
-                      )}
-                    />
-                  </FormControl>
-                </Grid>
-                <Grid md={6} xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel>統一編號</InputLabel>
-                    <Controller
-                      name="supplierInfo.taxID"
-                      control={control}
-                      render={({ field }) => (
-                        <OutlinedInput {...field} label="Tax ID" />
-                      )}
-                    />
-                  </FormControl>
-                </Grid>
-                <Grid md={6} xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel>Company Description</InputLabel>
-                    <Controller
-                      name="supplierInfo.companyDescription"
-                      control={control}
-                      render={({ field }) => (
-                        <OutlinedInput {...field} label="Company Description" />
-                      )}
-                    />
-                  </FormControl>
-                </Grid>
-              </>
-            )} */}
+          {watch("role") === "supplier" && (
+            <>
+              <Grid md={6} xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel>Company Name</InputLabel>
+                  <Controller
+                    name="supplierInfo.companyName"
+                    control={control}
+                    render={({ field }) => (
+                      <OutlinedInput {...field} label="Company Name" />
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid md={6} xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel>統一編號</InputLabel>
+                  <Controller
+                    name="supplierInfo.taxID"
+                    control={control}
+                    render={({ field }) => (
+                      <OutlinedInput {...field} label="Tax ID" />
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid md={6} xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel>Company Description</InputLabel>
+                  <Controller
+                    name="supplierInfo.companyDescription"
+                    control={control}
+                    render={({ field }) => (
+                      <OutlinedInput {...field} label="Company Description" />
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+            </>
+          )}
 
           {/* Designer 特定欄位 */}
           {/* {values.role === "designer" && (
