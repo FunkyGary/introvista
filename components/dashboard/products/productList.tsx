@@ -25,12 +25,17 @@ import {
   MenuItem,
   Select,
   CircularProgress,
+  FormControl,
+  FormHelperText,
+  Grid,
 } from "@mui/material"
 import { MagnifyingGlass as MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr/MagnifyingGlass"
 import { useSelection } from "@/hooks/use-selection"
 import { getUserProducts } from "@/lib/actions/product"
 import { ProductData, Product } from "@/types/product"
 import { useUser } from "@/hooks/use-user" // Adjust based on your auth setup
+import { categories, MainCategory } from "@/utils/categories"
+import { useForm, Controller } from "react-hook-form"
 
 const tabs = [
   { value: "all", label: "全部商品" },
@@ -38,16 +43,60 @@ const tabs = [
   { value: "unpublished", label: "未上架商品" },
 ] as const
 
+interface SearchFormData {
+  mainCategory: string
+  categoryID: string
+  searchQuery: string
+  priceStart: string
+  priceEnd: string
+  tags: string
+  brands: string
+  minLength: string
+  maxLength: string
+  minWidth: string
+  maxWidth: string
+  minHeight: string
+  maxHeight: string
+}
+
 export function ProductList(): React.JSX.Element {
   const { user } = useUser()
 
   const [products, setProducts] = React.useState<Product[]>([])
   const [loading, setLoading] = React.useState(true)
   const [activeTab, setActiveTab] = React.useState("all")
-  const [searchQuery, setSearchQuery] = React.useState("")
-  const [mainCategory, setMainCategory] = React.useState("all")
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
+
+  const { control, handleSubmit, watch, reset } = useForm<SearchFormData>({
+    defaultValues: {
+      mainCategory: "all",
+      categoryID: "",
+      searchQuery: "",
+      priceStart: "",
+      priceEnd: "",
+      tags: "",
+      brands: "",
+      minLength: "",
+      maxLength: "",
+      minWidth: "",
+      maxWidth: "",
+      minHeight: "",
+      maxHeight: "",
+    },
+  })
+
+  const mainCategoryWatch = watch("mainCategory")
+
+  const onSubmit = (data: SearchFormData) => {
+    console.log("Search form data:", data)
+    // 實現搜索邏輯
+  }
+
+  const handleReset = () => {
+    reset()
+    // 重置搜索結果
+  }
 
   // Selection handling
   const productIds = React.useMemo(
@@ -120,22 +169,238 @@ export function ProductList(): React.JSX.Element {
       <CardContent>
         {/* Search and Filter Section */}
         <Box sx={{ mb: 2, display: "flex", gap: 2 }}>
-          <OutlinedInput
-            fullWidth
-            placeholder="搜尋 商品標號、商品名稱"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            startAdornment={
-              <InputAdornment position="start">
-                <MagnifyingGlassIcon />
-              </InputAdornment>
-            }
-            size="small"
-            sx={{ maxWidth: "400px" }}
+          <Controller
+            name="searchQuery"
+            control={control}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                fullWidth
+                placeholder="搜尋商品名稱"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <MagnifyingGlassIcon />
+                  </InputAdornment>
+                }
+                size="small"
+                sx={{ maxWidth: "400px" }}
+              />
+            )}
           />
-          {/* Add your category filters here */}
+          <Controller
+            name="tags"
+            control={control}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                fullWidth
+                placeholder="搜尋標籤"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <MagnifyingGlassIcon />
+                  </InputAdornment>
+                }
+                sx={{ maxWidth: "400px" }}
+              />
+            )}
+          />
+          <Controller
+            name="brands"
+            control={control}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                fullWidth
+                placeholder="搜尋品牌"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <MagnifyingGlassIcon />
+                  </InputAdornment>
+                }
+                sx={{ maxWidth: "400px" }}
+              />
+            )}
+          />
         </Box>
+        <Box sx={{ mb: 2, display: "flex", gap: 2 }}>
+          <FormControl fullWidth>
+            <InputLabel>主分類</InputLabel>
+            <Controller
+              name="mainCategory"
+              control={control}
+              render={({ field }) => (
+                <Select {...field} label="主分類">
+                  {Object.keys(categories).map((category) => (
+                    <MenuItem key={category} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+          </FormControl>
 
+          <FormControl fullWidth>
+            <InputLabel>子分類</InputLabel>
+            <Controller
+              name="categoryID"
+              control={control}
+              rules={{ required: "請選擇子分類" }}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Select
+                    {...field}
+                    label="子分類"
+                    error={!!error}
+                    disabled={!mainCategoryWatch || mainCategoryWatch === "all"}
+                  >
+                    {mainCategoryWatch &&
+                      mainCategoryWatch !== "all" &&
+                      categories[
+                        mainCategoryWatch as keyof typeof categories
+                      ].map((subCategory) => (
+                        <MenuItem
+                          key={subCategory.value}
+                          value={subCategory.value}
+                        >
+                          {subCategory.label}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                  {error && (
+                    <FormHelperText error>{error.message}</FormHelperText>
+                  )}
+                </>
+              )}
+            />
+          </FormControl>
+          <Controller
+            name="priceStart"
+            control={control}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                fullWidth
+                type="number"
+                placeholder="最低價格"
+                startAdornment={
+                  <InputAdornment position="start">$</InputAdornment>
+                }
+              />
+            )}
+          />
+          <Controller
+            name="priceEnd"
+            control={control}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                type="number"
+                fullWidth
+                placeholder="最高價格"
+                startAdornment={
+                  <InputAdornment position="start">$</InputAdornment>
+                }
+              />
+            )}
+          />
+        </Box>
+        <Box sx={{ mb: 2, display: "flex", gap: 2 }}>
+          <Controller
+            name="minHeight"
+            control={control}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                fullWidth
+                type="number"
+                placeholder="最小高"
+              />
+            )}
+          />
+          <Controller
+            name="maxHeight"
+            control={control}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                type="number"
+                fullWidth
+                placeholder="最大高"
+              />
+            )}
+          />
+          <Controller
+            name="minWidth"
+            control={control}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                fullWidth
+                type="number"
+                placeholder="最小寬"
+              />
+            )}
+          />
+          <Controller
+            name="maxWidth"
+            control={control}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                type="number"
+                fullWidth
+                placeholder="最大寬"
+              />
+            )}
+          />
+          <Controller
+            name="minLength"
+            control={control}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                fullWidth
+                type="number"
+                placeholder="最小長"
+              />
+            )}
+          />
+          <Controller
+            name="maxLength"
+            control={control}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                type="number"
+                fullWidth
+                placeholder="最大長"
+              />
+            )}
+          />
+          <Box sx={{ display: "flex" }}>
+            <Button
+              variant="outlined"
+              onClick={handleSubmit(onSubmit)}
+              sx={{
+                width: "80px",
+                color: "#9900FF",
+                borderColor: "#9900FF",
+              }}
+            >
+              搜尋
+            </Button>
+          </Box>
+
+          {/* <Button
+                variant="outlined"
+                color="info"
+                onClick={handleReset}
+                sx={{ width: "80px" }}
+              >
+                重設
+              </Button> */}
+        </Box>
         {/* Products Count and Export */}
         <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}>
           <Typography>{filteredProducts.length} 件商品</Typography>
