@@ -1,45 +1,49 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import RouterLink from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { SignOut as SignOutIcon } from "@phosphor-icons/react/dist/ssr/SignOut";
-import { grey } from "@mui/material/colors";
+import * as React from "react"
+import RouterLink from "next/link"
+import { usePathname, useRouter } from "next/navigation"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Divider from "@mui/material/Divider"
+import Stack from "@mui/material/Stack"
+import Typography from "@mui/material/Typography"
+import { SignOut as SignOutIcon } from "@phosphor-icons/react/dist/ssr/SignOut"
+import { grey } from "@mui/material/colors"
 
-import type { NavItemConfig } from "@/types/nav";
-import { paths } from "@/paths";
-import { isNavItemActive } from "@/lib/is-nav-item-active";
-import { Logo } from "@/components/core/logo";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { navItems } from "./config";
-import { navIcons } from "./nav-icons";
-import { useUserRole } from "@/hooks/user-user-role";
-import { useAuthClient } from "@/hooks/use-auth-client";
+import type { NavItemConfig } from "@/types/nav"
+import { paths } from "@/paths"
+import { isNavItemActive } from "@/lib/is-nav-item-active"
+import { Logo } from "@/components/core/logo"
+import InputLabel from "@mui/material/InputLabel"
+import MenuItem from "@mui/material/MenuItem"
+import FormControl from "@mui/material/FormControl"
+import Select, { SelectChangeEvent } from "@mui/material/Select"
+import { navItems, getNavItems } from "./config"
+import { navIcons } from "./nav-icons"
+import { useUserRole } from "@/hooks/user-user-role"
+import { useUser } from "@/hooks/use-user" // Adjust based on your auth setup
+import { useAuthClient } from "@/hooks/use-auth-client"
 
 export function SideNav(): React.JSX.Element {
-  const pathname = usePathname();
-  const [age, setAge] = React.useState("10");
+  const pathname = usePathname()
+  const [age, setAge] = React.useState("10")
 
   const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
-  };
+    setAge(event.target.value as string)
+  }
 
-  const authClient = useAuthClient();
-  const router = useRouter();
+  const authClient = useAuthClient()
+  const router = useRouter()
   const handleLogout = async () => {
-    await authClient.signOut();
-    router.refresh();
-  };
+    await authClient.signOut()
+    router.refresh()
+  }
 
-  const sessionRole = useUserRole();
+  const sessionRole = useUserRole()
+
+  console.log(sessionRole)
+
   // TODO: Implement user role related logic
   // sessionRole.userRole
 
@@ -86,7 +90,7 @@ export function SideNav(): React.JSX.Element {
         </Box>
       </Stack>
       <Box component="nav" sx={{ flex: "1 1 auto", p: "12px" }}>
-        {renderNavItems({ pathname, items: navItems })}
+        {renderNavItems({ pathname, items: getNavItems(sessionRole.userRole) })}
       </Box>
       <Stack sx={{ px: "15px", py: "20px" }}>
         <FormControl fullWidth>
@@ -118,15 +122,15 @@ export function SideNav(): React.JSX.Element {
         </Button>
       </Stack>
     </Box>
-  );
+  )
 }
 
 function renderNavItems({
   items = [],
   pathname,
 }: {
-  items?: NavItemConfig[];
-  pathname: string;
+  items?: NavItemConfig[]
+  pathname: string
 }): React.JSX.Element {
   const children = items.reduce(
     (
@@ -134,7 +138,7 @@ function renderNavItems({
       curr: NavItemConfig,
       index: number
     ): React.ReactNode[] => {
-      const { key, ...item } = curr;
+      const { key, ...item } = curr
       if (index === 0 || index === 3 || index === 7) {
         acc.push(
           <Box
@@ -149,25 +153,25 @@ function renderNavItems({
               {index === 7 && "系統設定"}
             </Typography>
           </Box>
-        );
+        )
       }
 
-      acc.push(<NavItem key={key} pathname={pathname} {...item} />);
+      acc.push(<NavItem key={key} pathname={pathname} {...item} />)
 
-      return acc;
+      return acc
     },
     []
-  );
+  )
 
   return (
     <Stack component="ul" spacing={1} sx={{ listStyle: "none", m: 0, p: 0 }}>
       {children}
     </Stack>
-  );
+  )
 }
 
 interface NavItemProps extends Omit<NavItemConfig, "items"> {
-  pathname: string;
+  pathname: string
 }
 
 function NavItem({
@@ -185,8 +189,8 @@ function NavItem({
     href,
     matcher,
     pathname,
-  });
-  const Icon = icon ? navIcons[icon] : null;
+  })
+  const Icon = icon ? navIcons[icon] : null
   return (
     <li>
       <Box
@@ -255,5 +259,5 @@ function NavItem({
         </Box>
       </Box>
     </li>
-  );
+  )
 }
