@@ -193,23 +193,23 @@ class AuthApi {
   async getUserRole(): Promise<{ data?: string | null; error?: string }> {
     try {
       const currentFirebaseUser = await new Promise<FirebaseUser | null>(
-        (resolve, reject) => {
-          onAuthStateChanged(this.auth, (user) => {
-            return resolve(user)
-          })
-        }
+        (resolve) => onAuthStateChanged(this.auth, resolve)
       )
+
       if (!currentFirebaseUser) {
         return { data: null }
       }
 
-      const idTokenResult = await currentFirebaseUser.getIdTokenResult()
+      const userDoc = await getDoc(
+        doc(this.db, this.userCollectionName, currentFirebaseUser.uid)
+      )
 
-      if (idTokenResult.claims.superAdmin) return { data: "superAdmin" }
-      if (idTokenResult.claims.supplier) return { data: "supplier" }
-      if (idTokenResult.claims.designer) return { data: "designer" }
+      if (!userDoc.exists()) {
+        return { error: "User not found" }
+      }
 
-      return { data: "user" }
+      const userRole = userDoc.data()?.role
+      return { data: userRole }
     } catch (error) {
       console.error(error)
       return { error: this.getErrorMessage(error) }
