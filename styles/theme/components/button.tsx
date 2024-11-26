@@ -1,6 +1,6 @@
-import type { Components } from '@mui/material/styles';
+import type { Components } from '@mui/material/styles'
 
-import type { Theme } from '../types';
+import type { Theme } from '../types'
 
 export const MuiButton = {
   styleOverrides: {
@@ -12,4 +12,4 @@ export const MuiButton = {
     textSizeMedium: { padding: '9px 16px' },
     textSizeLarge: { padding: '12px 16px' },
   },
-} satisfies Components<Theme>['MuiButton'];
+} satisfies Components<Theme>['MuiButton']

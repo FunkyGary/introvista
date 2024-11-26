@@ -1,5 +1,5 @@
-import firebaseApp from "../firebase/firebase-config"
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import firebaseApp from '../firebase/firebase-config'
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import {
   type Query,
   type DocumentData,
@@ -16,7 +16,7 @@ import {
   getFirestore,
   serverTimestamp,
   Timestamp,
-} from "firebase/firestore"
+} from 'firebase/firestore'
 import {
   ModelData,
   MaterialData,
@@ -25,20 +25,20 @@ import {
   ProductType,
   Product,
   ProductData,
-} from "types/product"
+} from 'types/product'
 
 import {
   ProductFormValues,
   MaterialFormValues,
   ModelFormValues,
-} from "@/lib/validations/product"
+} from '@/lib/validations/product'
 
 const db = getFirestore(firebaseApp)
 const storage = getStorage(firebaseApp)
 
 const COLLECTIONS = {
-  models: "models",
-  materials: "materials",
+  models: 'models',
+  materials: 'materials',
 } as const
 
 export interface ProductFilters {
@@ -74,8 +74,8 @@ interface DimensionRange {
 export const getUserProductsFromSingleCollection = async (userId: string) => {
   try {
     const productsQuery = query(
-      collection(db, "products"),
-      where("userId", "==", userId)
+      collection(db, 'products'),
+      where('userId', '==', userId)
     )
     const productsSnapshot = await getDocs(productsQuery)
 
@@ -91,7 +91,7 @@ export const getUserProductsFromSingleCollection = async (userId: string) => {
         isPublished: data.isPublished || false,
         createdDate: (data.createdDate as Timestamp)?.toDate() || new Date(),
         lastUpdated: (data.lastUpdated as Timestamp)?.toDate() || new Date(),
-        supplierID: data.supplierID || "",
+        supplierID: data.supplierID || '',
       }
     })
 
@@ -101,7 +101,7 @@ export const getUserProductsFromSingleCollection = async (userId: string) => {
 
     return sortedProducts
   } catch (error) {
-    console.error("Error fetching products:", error)
+    console.error('Error fetching products:', error)
     throw error
   }
 }
@@ -111,12 +111,12 @@ export const getUserProducts = async (userId: string) => {
   try {
     const modelsQuery = query(
       collection(db, COLLECTIONS.models),
-      where("userId", "==", userId)
+      where('userId', '==', userId)
     )
 
     const materialsQuery = query(
       collection(db, COLLECTIONS.materials),
-      where("userId", "==", userId)
+      where('userId', '==', userId)
     )
 
     const [modelsSnapshot, materialsSnapshot] = await Promise.all([
@@ -129,8 +129,8 @@ export const getUserProducts = async (userId: string) => {
       const data = doc.data()
       return {
         itemID: doc.id,
-        type: "model",
-        itemName: data.itemName || "",
+        type: 'model',
+        itemName: data.itemName || '',
         price: data.price || 0,
         isPublished: data.isPublished || false,
         createdDate: (data.createdDate as Timestamp)?.toDate() || new Date(),
@@ -142,8 +142,8 @@ export const getUserProducts = async (userId: string) => {
       const data = doc.data()
       return {
         materialID: doc.id,
-        type: "material",
-        materialName: data.materialName || "",
+        type: 'material',
+        materialName: data.materialName || '',
         materialPrice: data.materialPrice || 0,
         isPublished: data.isPublished || false,
         createdDate: (data.createdDate as Timestamp)?.toDate() || new Date(),
@@ -157,14 +157,14 @@ export const getUserProducts = async (userId: string) => {
 
     return allProducts
   } catch (error) {
-    console.error("Error fetching products:", error)
+    console.error('Error fetching products:', error)
     throw error
   }
 }
 
 // Get Product By ProductId from multiple collections
 export const getProductByProductId = async (id: string) => {
-  const collections = ["models", "materials"]
+  const collections = ['models', 'materials']
   try {
     const productDoc = await Promise.all(
       collections.map(async (collection) => {
@@ -176,7 +176,7 @@ export const getProductByProductId = async (id: string) => {
 
         // Helper function to safely get download URL
         const getUrlFromPath = async (path: string | null | undefined) => {
-          if (!path) return { name: "", url: "" }
+          if (!path) return { name: '', url: '' }
           try {
             const fileRef = ref(storage, path)
             const filename = fileRef.name
@@ -184,13 +184,13 @@ export const getProductByProductId = async (id: string) => {
             return { name: filename, url }
           } catch (error) {
             console.error(`Error getting download URL for path ${path}:`, error)
-            return { name: "", url: "" }
+            return { name: '', url: '' }
           }
         }
 
-        if (collection === "models") {
+        if (collection === 'models') {
           const modelData = {
-            type: "models",
+            type: 'models',
             itemID: productDoc.id,
             itemName: data?.itemName,
             itemDescription: data?.itemDescription,
@@ -211,7 +211,7 @@ export const getProductByProductId = async (id: string) => {
           return modelData
         } else {
           const materialData = {
-            type: "materials",
+            type: 'materials',
             materialID: productDoc.id,
             materialName: data?.materialName,
             materialDescription: data?.materialDescription,
@@ -246,7 +246,7 @@ export const getProductByProductId = async (id: string) => {
 
     return productDoc.find((doc) => doc !== undefined)
   } catch (error) {
-    console.error("Error fetching product:", error)
+    console.error('Error fetching product:', error)
     throw error
   }
 }
@@ -258,7 +258,7 @@ export const createProduct = async (
 ) => {
   try {
     const files =
-      type === "models"
+      type === 'models'
         ? extractModelFiles(data as ModelFormValues)
         : extractMaterialFiles(data as MaterialFormValues)
 
@@ -271,7 +271,7 @@ export const createProduct = async (
     const docRef = await addDoc(collection(db, COLLECTIONS[type]), productData)
     return { id: docRef.id }
   } catch (error) {
-    console.error("Error creating product:", error)
+    console.error('Error creating product:', error)
     throw error
   }
 }
@@ -288,7 +288,7 @@ export const updateProduct = async (
     const currentData = currentDoc.data()
 
     const files =
-      type === "models"
+      type === 'models'
         ? extractModelFiles(data as ModelFormValues)
         : extractMaterialFiles(data as MaterialFormValues)
 
@@ -299,7 +299,7 @@ export const updateProduct = async (
     const uploadedUrls = await uploadFiles(cleanedFiles)
 
     let mergedUrls = {}
-    if (type === "models") {
+    if (type === 'models') {
       mergedUrls = {
         thumbnailImage:
           uploadedUrls.thumbnailImage || currentData?.thumbnailImage,
@@ -342,7 +342,7 @@ export const updateProduct = async (
     await updateDoc(docRef, updatedData)
     return { success: true }
   } catch (error) {
-    console.error("Error updating product:", error)
+    console.error('Error updating product:', error)
     throw error
   }
 }
@@ -350,7 +350,7 @@ export const updateProduct = async (
 // Delete product
 export const deleteProduct = async (id: string) => {
   try {
-    const collections = ["models", "materials"]
+    const collections = ['models', 'materials']
     let deletedCount = 0
 
     const checkPromises = collections.map(async (collection) => {
@@ -377,7 +377,7 @@ export const deleteProduct = async (id: string) => {
     if (deletedCount === 0) {
       return {
         success: false,
-        message: "Document not found in any collection",
+        message: 'Document not found in any collection',
       }
     }
 
@@ -387,11 +387,11 @@ export const deleteProduct = async (id: string) => {
       deletedCount,
     }
   } catch (error) {
-    console.error("Error deleting product:", error)
+    console.error('Error deleting product:', error)
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : "An unknown error occurred",
+        error instanceof Error ? error.message : 'An unknown error occurred',
       error,
     }
   }
@@ -403,16 +403,16 @@ export const deleteProducts = async (ids: string[]) => {
     const batch = writeBatch(db)
 
     ids.forEach((id) => {
-      const productDocRef = doc(db, "products", id)
+      const productDocRef = doc(db, 'products', id)
       batch.delete(productDocRef)
     })
 
     await batch.commit()
-    console.log(`Successfully deleted products with IDs: ${ids.join(", ")}`)
+    console.log(`Successfully deleted products with IDs: ${ids.join(', ')}`)
     return { success: true }
   } catch (error) {
-    console.error("Error deleting products:", error)
-    return { success: false, message: "Error deleting products" }
+    console.error('Error deleting products:', error)
+    return { success: false, message: 'Error deleting products' }
   }
 }
 
@@ -459,12 +459,12 @@ const extractMaterialFiles = (data: MaterialFormValues) => {
 
   if (data.textureMaps) {
     const mapTypes = [
-      "baseColorMap",
-      "normalMap",
-      "roughnessMap",
-      "metallicMap",
-      "ambientOcclusionMap",
-      "heightMap",
+      'baseColorMap',
+      'normalMap',
+      'roughnessMap',
+      'metallicMap',
+      'ambientOcclusionMap',
+      'heightMap',
     ] as const
 
     mapTypes.forEach((mapType) => {
@@ -482,14 +482,14 @@ const uploadFiles = async (files: Record<string, File | null>) => {
     if (!file) return [key, null]
 
     const isImage = [
-      "thumbnailImage",
-      "previewImage",
-      "baseColorMap",
-      "normalMap",
-      "roughnessMap",
-      "metallicMap",
-      "ambientOcclusionMap",
-      "heightMap",
+      'thumbnailImage',
+      'previewImage',
+      'baseColorMap',
+      'normalMap',
+      'roughnessMap',
+      'metallicMap',
+      'ambientOcclusionMap',
+      'heightMap',
     ].includes(key)
 
     const url = await (isImage
@@ -515,7 +515,7 @@ const prepareProductData = (
     lastUpdated: serverTimestamp(),
   }
 
-  if (type === "models") {
+  if (type === 'models') {
     return {
       ...baseData,
       itemFiles: {
@@ -542,7 +542,7 @@ const prepareProductData = (
 }
 
 export const createProductWithoutFiles = async (
-  type: "models" | "materials",
+  type: 'models' | 'materials',
   data: ProductFormValues
 ) => {
   try {
@@ -553,7 +553,7 @@ export const createProductWithoutFiles = async (
     })
     return { id: docRef.id }
   } catch (error) {
-    console.error("Error creating product:", error)
+    console.error('Error creating product:', error)
     throw error
   }
 }
@@ -564,19 +564,19 @@ export const filterProducts = async (filters: ProductFilters) => {
     // Base queries for both collections
     const modelsBaseQuery = query(
       collection(db, COLLECTIONS.models),
-      where("userId", "==", filters.userId)
+      where('userId', '==', filters.userId)
     )
     const materialsBaseQuery = query(
       collection(db, COLLECTIONS.materials),
-      where("userId", "==", filters.userId)
+      where('userId', '==', filters.userId)
     )
 
     // Build queries using the helper function
     const modelsQuery = buildQuery(modelsBaseQuery, filters, {
-      nameField: "itemName",
+      nameField: 'itemName',
     })
     const materialsQuery = buildQuery(materialsBaseQuery, filters, {
-      nameField: "materialName",
+      nameField: 'materialName',
     })
 
     // Fetch data
@@ -588,7 +588,7 @@ export const filterProducts = async (filters: ProductFilters) => {
     // Transform and filter results
     const models = modelsSnapshot.docs.map((doc) => ({
       itemID: doc.id,
-      type: "model",
+      type: 'model',
       itemName: doc.data().itemName,
       isPublished: doc.data().isPublished,
       price: doc.data().price,
@@ -598,7 +598,7 @@ export const filterProducts = async (filters: ProductFilters) => {
 
     const materials = materialsSnapshot.docs.map((doc) => ({
       materialID: doc.id,
-      type: "material",
+      type: 'material',
       materialName: doc.data().materialName,
       isPublished: doc.data().isPublished,
       materialPrice: doc.data().materialPrice,
@@ -612,7 +612,7 @@ export const filterProducts = async (filters: ProductFilters) => {
 
     return products
   } catch (error) {
-    console.error("Error filtering products:", error)
+    console.error('Error filtering products:', error)
     throw error
   }
 }
@@ -625,34 +625,34 @@ const buildQuery = (
   let queryRef = baseQuery
 
   // Name filter
-  if (filters.searchFilters.searchQuery !== "") {
+  if (filters.searchFilters.searchQuery !== '') {
     queryRef = query(
       queryRef,
-      where(fieldMappings.nameField, "==", filters.searchFilters.searchQuery)
+      where(fieldMappings.nameField, '==', filters.searchFilters.searchQuery)
     )
   }
 
   // Tags filter
-  if (filters.searchFilters.tags !== "") {
+  if (filters.searchFilters.tags !== '') {
     queryRef = query(
       queryRef,
-      where("tags", "array-contains", filters.searchFilters.tags)
+      where('tags', 'array-contains', filters.searchFilters.tags)
     )
   }
 
   // Brand filter
-  if (filters.searchFilters.brands !== "") {
+  if (filters.searchFilters.brands !== '') {
     queryRef = query(
       queryRef,
-      where("brand", "==", filters.searchFilters.brands)
+      where('brand', '==', filters.searchFilters.brands)
     )
   }
 
   // Category ID filter
-  if (filters.searchFilters.categoryID !== "") {
+  if (filters.searchFilters.categoryID !== '') {
     queryRef = query(
       queryRef,
-      where("categoryID", "==", filters.searchFilters.categoryID)
+      where('categoryID', '==', filters.searchFilters.categoryID)
     )
   }
 
@@ -660,14 +660,14 @@ const buildQuery = (
   if (filters.searchFilters.priceRange) {
     const { min, max } = filters.searchFilters.priceRange
     const priceField =
-      fieldMappings.nameField === "itemName" ? "price" : "materialPrice"
+      fieldMappings.nameField === 'itemName' ? 'price' : 'materialPrice'
 
-    if (min !== "" && min !== undefined) {
-      queryRef = query(queryRef, where(priceField, ">=", Number(min)))
+    if (min !== '' && min !== undefined) {
+      queryRef = query(queryRef, where(priceField, '>=', Number(min)))
     }
 
-    if (max !== "" && max !== undefined) {
-      queryRef = query(queryRef, where(priceField, "<=", Number(max)))
+    if (max !== '' && max !== undefined) {
+      queryRef = query(queryRef, where(priceField, '<=', Number(max)))
     }
   }
 
@@ -676,44 +676,44 @@ const buildQuery = (
     const { length, width, height } = filters.searchFilters.dimensions
 
     // Length filter
-    if (length?.min !== undefined && length?.min !== "") {
+    if (length?.min !== undefined && length?.min !== '') {
       queryRef = query(
         queryRef,
-        where("dimensions.length", ">=", Number(length.min))
+        where('dimensions.length', '>=', Number(length.min))
       )
     }
-    if (length?.max !== undefined && length?.max !== "") {
+    if (length?.max !== undefined && length?.max !== '') {
       queryRef = query(
         queryRef,
-        where("dimensions.length", "<=", Number(length.max))
+        where('dimensions.length', '<=', Number(length.max))
       )
     }
 
     // Width filter
-    if (width?.min !== undefined && width?.min !== "") {
+    if (width?.min !== undefined && width?.min !== '') {
       queryRef = query(
         queryRef,
-        where("dimensions.width", ">=", Number(width.min))
+        where('dimensions.width', '>=', Number(width.min))
       )
     }
-    if (width?.max !== undefined && width?.max !== "") {
+    if (width?.max !== undefined && width?.max !== '') {
       queryRef = query(
         queryRef,
-        where("dimensions.width", "<=", Number(width.max))
+        where('dimensions.width', '<=', Number(width.max))
       )
     }
 
     // Height filter
-    if (height?.min !== undefined && height?.min !== "") {
+    if (height?.min !== undefined && height?.min !== '') {
       queryRef = query(
         queryRef,
-        where("dimensions.height", ">=", Number(height.min))
+        where('dimensions.height', '>=', Number(height.min))
       )
     }
-    if (height?.max !== undefined && height?.max !== "") {
+    if (height?.max !== undefined && height?.max !== '') {
       queryRef = query(
         queryRef,
-        where("dimensions.height", "<=", Number(height.max))
+        where('dimensions.height', '<=', Number(height.max))
       )
     }
   }

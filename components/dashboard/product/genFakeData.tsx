@@ -1,19 +1,19 @@
-"use client"
+'use client'
 
-import { createProductWithoutFiles } from "@/lib/actions/product"
-import { useUser } from "@/hooks/use-user"
-import { faker } from "@faker-js/faker"
+import { createProductWithoutFiles } from '@/lib/actions/product'
+import { useUser } from '@/hooks/use-user'
+import { faker } from '@faker-js/faker'
 
 export default function GenFakeData() {
   const { user } = useUser()
   const handleModel = () => {
     const modelData = {
-      type: "model",
+      type: 'model',
       tags: faker.helpers.arrayElements([
-        "office",
-        "furniture",
-        "ergonomic",
-        "modern",
+        'office',
+        'furniture',
+        'ergonomic',
+        'modern',
       ]),
       modelName: faker.commerce.productName(),
       categoryID: faker.string.uuid(),
@@ -44,9 +44,9 @@ export default function GenFakeData() {
 
   const handleMaterial = () => {
     const materialData = {
-      type: "material",
+      type: 'material',
       materialID: faker.string.uuid(),
-      tags: faker.helpers.arrayElements(["wood", "metal", "plastic", "fabric"]),
+      tags: faker.helpers.arrayElements(['wood', 'metal', 'plastic', 'fabric']),
       materialName: faker.commerce.productName(),
       categoryID: faker.string.uuid(),
       supplierID: faker.string.uuid(),

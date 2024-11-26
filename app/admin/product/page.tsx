@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import ProductForms from "@/components/dashboard/product/productForms"
-import withAuthRequired from "@/components/hoc/with-auth-required"
+import ProductForms from '@/components/dashboard/product/productForms'
+import withAuthRequired from '@/components/hoc/with-auth-required'
 
 function CreateProductPage() {
   return (

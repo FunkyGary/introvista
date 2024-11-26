@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import Link from "next/link"
+import * as React from 'react'
+import Link from 'next/link'
 import {
   Box,
   Card,
@@ -28,20 +28,20 @@ import {
   FormControl,
   FormHelperText,
   Grid,
-} from "@mui/material"
-import { MagnifyingGlass as MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr/MagnifyingGlass"
-import { useSelection } from "@/hooks/use-selection"
-import { getUserProducts } from "@/lib/actions/product"
-import { ProductData, Product } from "@/types/product"
-import { useUser } from "@/hooks/use-user" // Adjust based on your auth setup
-import { categories, MainCategory } from "@/utils/categories"
-import { useForm, Controller } from "react-hook-form"
-import { filterProducts, ProductFilters } from "@/lib/actions/product"
+} from '@mui/material'
+import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass'
+import { useSelection } from '@/hooks/use-selection'
+import { getUserProducts } from '@/lib/actions/product'
+import { ProductData, Product } from '@/types/product'
+import { useUser } from '@/hooks/use-user' // Adjust based on your auth setup
+import { categories, MainCategory } from '@/utils/categories'
+import { useForm, Controller } from 'react-hook-form'
+import { filterProducts, ProductFilters } from '@/lib/actions/product'
 
 const tabs = [
-  { value: "all", label: "全部商品" },
-  { value: "published", label: "上架中商品" },
-  { value: "unpublished", label: "未上架商品" },
+  { value: 'all', label: '全部商品' },
+  { value: 'published', label: '上架中商品' },
+  { value: 'unpublished', label: '未上架商品' },
 ] as const
 
 interface SearchFormData {
@@ -65,29 +65,29 @@ export function ProductList(): React.JSX.Element {
 
   const [products, setProducts] = React.useState<Product[]>([])
   const [loading, setLoading] = React.useState(true)
-  const [activeTab, setActiveTab] = React.useState("all")
+  const [activeTab, setActiveTab] = React.useState('all')
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
   const { control, handleSubmit, watch, reset } = useForm<SearchFormData>({
     defaultValues: {
-      mainCategory: "all",
-      categoryID: "",
-      searchQuery: "",
-      priceStart: "",
-      priceEnd: "",
-      tags: "",
-      brands: "",
-      minLength: "",
-      maxLength: "",
-      minWidth: "",
-      maxWidth: "",
-      minHeight: "",
-      maxHeight: "",
+      mainCategory: 'all',
+      categoryID: '',
+      searchQuery: '',
+      priceStart: '',
+      priceEnd: '',
+      tags: '',
+      brands: '',
+      minLength: '',
+      maxLength: '',
+      minWidth: '',
+      maxWidth: '',
+      minHeight: '',
+      maxHeight: '',
     },
   })
 
-  const mainCategoryWatch = watch("mainCategory")
+  const mainCategoryWatch = watch('mainCategory')
 
   const onSubmit = async (data: SearchFormData) => {
     if (!user?.id) return
@@ -124,7 +124,7 @@ export function ProductList(): React.JSX.Element {
       const filteredProducts = await filterProducts(filterParams)
       setProducts(filteredProducts as Product[])
     } catch (error) {
-      console.error("Error filtering products:", error)
+      console.error('Error filtering products:', error)
     } finally {
       setLoading(false)
     }
@@ -137,7 +137,7 @@ export function ProductList(): React.JSX.Element {
 
   // Selection handling
   const productIds = React.useMemo(
-    () => products?.map((p) => (p.type === "model" ? p.itemID : p.materialID)),
+    () => products?.map((p) => (p.type === 'model' ? p.itemID : p.materialID)),
     [products]
   )
   const { selectAll, deselectAll, selectOne, deselectOne, selected } =
@@ -152,7 +152,7 @@ export function ProductList(): React.JSX.Element {
         const fetchedProducts = await getUserProducts(user.id)
         setProducts(fetchedProducts)
       } catch (error) {
-        console.error("Error fetching products:", error)
+        console.error('Error fetching products:', error)
       } finally {
         setLoading(false)
       }
@@ -164,8 +164,8 @@ export function ProductList(): React.JSX.Element {
   // Filter products based on active tab
   const filteredProducts = React.useMemo(() => {
     return products.filter((product) => {
-      if (activeTab === "published") return product.isPublished
-      if (activeTab === "unpublished") return !product.isPublished
+      if (activeTab === 'published') return product.isPublished
+      if (activeTab === 'unpublished') return !product.isPublished
       return true
     })
   }, [products, activeTab])
@@ -191,8 +191,8 @@ export function ProductList(): React.JSX.Element {
   }
 
   return (
-    <Card sx={{ maxWidth: "1000px", width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider", paddingX: "25px" }}>
+    <Card sx={{ maxWidth: '1000px', width: '100%' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', paddingX: '25px' }}>
         <Tabs
           value={activeTab}
           onChange={(_, newValue) => setActiveTab(newValue)}
@@ -205,7 +205,7 @@ export function ProductList(): React.JSX.Element {
 
       <CardContent>
         {/* Search and Filter Section */}
-        <Box sx={{ mb: 2, display: "flex", gap: 2 }}>
+        <Box sx={{ mb: 2, display: 'flex', gap: 2 }}>
           <Controller
             name="searchQuery"
             control={control}
@@ -220,7 +220,7 @@ export function ProductList(): React.JSX.Element {
                   </InputAdornment>
                 }
                 size="small"
-                sx={{ maxWidth: "400px" }}
+                sx={{ maxWidth: '400px' }}
               />
             )}
           />
@@ -237,7 +237,7 @@ export function ProductList(): React.JSX.Element {
                     <MagnifyingGlassIcon />
                   </InputAdornment>
                 }
-                sx={{ maxWidth: "400px" }}
+                sx={{ maxWidth: '400px' }}
               />
             )}
           />
@@ -254,12 +254,12 @@ export function ProductList(): React.JSX.Element {
                     <MagnifyingGlassIcon />
                   </InputAdornment>
                 }
-                sx={{ maxWidth: "400px" }}
+                sx={{ maxWidth: '400px' }}
               />
             )}
           />
         </Box>
-        <Box sx={{ mb: 2, display: "flex", gap: 2 }}>
+        <Box sx={{ mb: 2, display: 'flex', gap: 2 }}>
           <FormControl fullWidth>
             <InputLabel>主分類</InputLabel>
             <Controller
@@ -289,10 +289,10 @@ export function ProductList(): React.JSX.Element {
                     {...field}
                     label="子分類"
                     error={!!error}
-                    disabled={!mainCategoryWatch || mainCategoryWatch === "all"}
+                    disabled={!mainCategoryWatch || mainCategoryWatch === 'all'}
                   >
                     {mainCategoryWatch &&
-                      mainCategoryWatch !== "all" &&
+                      mainCategoryWatch !== 'all' &&
                       categories[
                         mainCategoryWatch as keyof typeof categories
                       ].map((subCategory) => (
@@ -342,7 +342,7 @@ export function ProductList(): React.JSX.Element {
             )}
           />
         </Box>
-        <Box sx={{ mb: 2, display: "flex", gap: 2 }}>
+        <Box sx={{ mb: 2, display: 'flex', gap: 2 }}>
           <Controller
             name="minHeight"
             control={control}
@@ -415,14 +415,14 @@ export function ProductList(): React.JSX.Element {
               />
             )}
           />
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{ display: 'flex' }}>
             <Button
               variant="outlined"
               onClick={handleSubmit(onSubmit)}
               sx={{
-                width: "80px",
-                color: "#9900FF",
-                borderColor: "#9900FF",
+                width: '80px',
+                color: '#9900FF',
+                borderColor: '#9900FF',
               }}
             >
               搜尋
@@ -439,7 +439,7 @@ export function ProductList(): React.JSX.Element {
               </Button> */}
         </Box>
         {/* Products Count and Export */}
-        <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
           <Typography>{filteredProducts.length} 件商品</Typography>
           <Button variant="outlined" size="small">
             匯出報表
@@ -475,7 +475,7 @@ export function ProductList(): React.JSX.Element {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((product) => {
                 const id =
-                  product.type === "model" ? product.itemID : product.materialID
+                  product.type === 'model' ? product.itemID : product.materialID
                 const isSelected = selected.has(id)
 
                 return (
@@ -490,21 +490,21 @@ export function ProductList(): React.JSX.Element {
                       />
                     </TableCell> */}
                     <TableCell>
-                      {product.type === "model" ? "物品" : "材質"}
+                      {product.type === 'model' ? '物品' : '材質'}
                     </TableCell>
                     <TableCell>
-                      {product.type === "model"
+                      {product.type === 'model'
                         ? product.itemName
                         : product.materialName}
                     </TableCell>
                     <TableCell>
                       $
-                      {product.type === "model"
+                      {product.type === 'model'
                         ? product.price
                         : product.materialPrice}
                     </TableCell>
                     <TableCell>
-                      {product.isPublished ? "已上架" : "未上架"}
+                      {product.isPublished ? '已上架' : '未上架'}
                     </TableCell>
                     <TableCell>
                       {product.createdDate?.toLocaleDateString()}

@@ -1,5 +1,5 @@
-import "reflect-metadata"
-import bcrypt from "bcryptjs"
+import 'reflect-metadata'
+import bcrypt from 'bcryptjs'
 import {
   type User as FirebaseUser,
   type Auth,
@@ -16,8 +16,8 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
   confirmPasswordReset as firebaseConfirmPasswordReset,
-} from "firebase/auth"
-import firebaseApp from "../firebase/firebase-config"
+} from 'firebase/auth'
+import firebaseApp from '../firebase/firebase-config'
 import {
   type Firestore,
   getFirestore,
@@ -33,14 +33,14 @@ import {
   where,
   setDoc,
   getDoc,
-} from "firebase/firestore"
+} from 'firebase/firestore'
 import {
   FirebaseStorage,
   getStorage,
   ref,
   uploadBytes,
   getDownloadURL,
-} from "firebase/storage"
+} from 'firebase/storage'
 
 import type {
   ResetPasswordConfirmParams,
@@ -49,14 +49,14 @@ import type {
   SignUpParams,
   UpdatePasswordParams,
   UpdateEmailParams,
-} from "./client"
-import type { User, UserData } from "@/types/user"
-import { FirebaseError } from "firebase/app"
-import { injectable } from "inversify"
+} from './client'
+import type { User, UserData } from '@/types/user'
+import { FirebaseError } from 'firebase/app'
+import { injectable } from 'inversify'
 
 @injectable()
 class AuthApi {
-  userCollectionName = "users"
+  userCollectionName = 'users'
   auth: Auth
   user: User | null
   db: Firestore
@@ -86,17 +86,17 @@ class AuthApi {
 
       const roleSpecificInfo = (() => {
         switch (params.role) {
-          case "supplier":
+          case 'supplier':
             return { supplierInfo: params.supplierInfo }
-          case "designer":
+          case 'designer':
             return { designerInfo: params.designerInfo }
-          case "superAdmin":
+          case 'superAdmin':
             return {
               supplierInfo: params.supplierInfo,
               designerInfo: params.designerInfo,
             }
           default:
-            throw new Error("Invalid role specified")
+            throw new Error('Invalid role specified')
         }
       })()
 
@@ -115,7 +115,7 @@ class AuthApi {
           ...params.preferences,
         },
         tags: [],
-        profileImageUrl: "",
+        profileImageUrl: '',
         createdDate: serverTimestamp(),
         lastUpdated: serverTimestamp(),
         lastLoginDate: serverTimestamp(),
@@ -127,7 +127,7 @@ class AuthApi {
         userData
       )
 
-      this.auth.languageCode = userData.preferences?.language || "zh-TW"
+      this.auth.languageCode = userData.preferences?.language || 'zh-TW'
 
       sendEmailVerification(userCredential.user)
     } catch (error) {
@@ -147,7 +147,7 @@ class AuthApi {
 
       const userQuery = query(
         collection(this.db, this.userCollectionName),
-        where("email", "==", email)
+        where('email', '==', email)
       )
       const userQuerySnapshot = await getDocs(userQuery)
 
@@ -167,7 +167,7 @@ class AuthApi {
 
   async updateProfile(data: Partial<User>): Promise<{ error?: string }> {
     if (!this.auth.currentUser) {
-      return { error: "Not logged in" }
+      return { error: 'Not logged in' }
     }
 
     try {
@@ -219,7 +219,7 @@ class AuthApi {
       )
 
       if (!userDoc.exists()) {
-        return { error: "User not found" }
+        return { error: 'User not found' }
       }
 
       const userRole = userDoc.data()?.role
@@ -245,27 +245,27 @@ class AuthApi {
     email,
   }: ResetPasswordParams): Promise<{ error?: string }> {
     try {
-      this.auth.languageCode = "zh-TW"
+      this.auth.languageCode = 'zh-TW'
 
       try {
         const userQuery = query(
           collection(this.db, this.userCollectionName),
-          where("email", "==", email)
+          where('email', '==', email)
         )
         const querySnapshot = await getDocs(userQuery)
 
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data()
-          this.auth.languageCode = userData.preferences?.language || "zh-TW"
+          this.auth.languageCode = userData.preferences?.language || 'zh-TW'
         }
       } catch (dbError) {
-        console.warn("Could not fetch user language preference:", dbError)
+        console.warn('Could not fetch user language preference:', dbError)
       }
 
       await firebaseSendPasswordResetEmail(this.auth, email)
       return {}
     } catch (error) {
-      console.error("ResetPassword error:", error)
+      console.error('ResetPassword error:', error)
       return { error: this.getErrorMessage(error) }
     }
   }
@@ -276,32 +276,32 @@ class AuthApi {
   }: UpdatePasswordParams): Promise<{ error?: string }> {
     try {
       if (!oldPassword || !newPassword) {
-        return { error: "Both old and new passwords are required" }
+        return { error: 'Both old and new passwords are required' }
       }
 
       const user = this.auth.currentUser
       if (!user || !user.email) {
-        return { error: "User not found" }
+        return { error: 'User not found' }
       }
 
       try {
         const credential = EmailAuthProvider.credential(user.email, oldPassword)
         await reauthenticateWithCredential(user, credential)
       } catch (reAuthError) {
-        console.error("Reauthentication failed:", reAuthError)
+        console.error('Reauthentication failed:', reAuthError)
         if (reAuthError instanceof FirebaseError) {
           switch (reAuthError.code) {
-            case "auth/wrong-password":
-              return { error: "Current password is incorrect" }
-            case "auth/missing-password":
-              return { error: "Please enter your current password" }
-            case "auth/too-many-requests":
-              return { error: "Too many attempts. Please try again later" }
+            case 'auth/wrong-password':
+              return { error: 'Current password is incorrect' }
+            case 'auth/missing-password':
+              return { error: 'Please enter your current password' }
+            case 'auth/too-many-requests':
+              return { error: 'Too many attempts. Please try again later' }
             default:
-              return { error: "Authentication failed. Please try again" }
+              return { error: 'Authentication failed. Please try again' }
           }
         }
-        return { error: "Authentication failed. Please try again" }
+        return { error: 'Authentication failed. Please try again' }
       }
 
       await updatePassword(user, newPassword)
@@ -324,7 +324,7 @@ class AuthApi {
     try {
       const user = this.auth.currentUser
       if (!user) {
-        return { error: "User not found" }
+        return { error: 'User not found' }
       }
 
       const userDoc = await getDoc(
@@ -333,7 +333,7 @@ class AuthApi {
 
       if (userDoc.exists()) {
         const userData = userDoc.data()
-        this.auth.languageCode = userData.preferences?.language || "zh-TW"
+        this.auth.languageCode = userData.preferences?.language || 'zh-TW'
       }
 
       await updateEmail(user, newEmail)
@@ -346,7 +346,7 @@ class AuthApi {
 
       return {}
     } catch (error) {
-      console.error("UpdateEmail error:", error)
+      console.error('UpdateEmail error:', error)
       return { error: this.getErrorMessage(error) }
     }
   }
@@ -363,8 +363,8 @@ class AuthApi {
   }
 
   private mapFirebaseUserToUser(firebaseUser: FirebaseUser): User {
-    const email = firebaseUser.email ?? ""
-    const name = firebaseUser.displayName ?? ""
+    const email = firebaseUser.email ?? ''
+    const name = firebaseUser.displayName ?? ''
     const avatar = firebaseUser.photoURL || undefined
 
     return {
@@ -383,39 +383,39 @@ class AuthApi {
       return error.message
     }
 
-    return "Something went wrong"
+    return 'Something went wrong'
   }
 
   private formatFirebaseErrorCode(errorCode: string): string {
     switch (errorCode) {
-      case "auth/invalid-credential":
-        return "Email or password is invalid"
-      case "auth/email-already-in-use":
-        return "Email already in use"
-      case "auth/invalid-email":
-        return "Invalid email"
-      case "auth/operation-not-allowed":
-        return "Operation not allowed"
-      case "auth/weak-password":
-        return "Weak password"
-      case "auth/user-disabled":
-        return "User disabled"
-      case "auth/user-not-found":
-        return "User not found"
-      case "auth/wrong-password":
-        return "Wrong password"
-      case "auth/invalid-action-code":
-        return "Password reset link has expired or been used"
-      case "auth/expired-action-code":
-        return "Password reset link has expired"
-      case "auth/user-disabled":
-        return "This account has been disabled"
-      case "auth/user-not-found":
-        return "No account found for this email"
-      case "auth/weak-password":
-        return "Password strength is insufficient"
+      case 'auth/invalid-credential':
+        return 'Email or password is invalid'
+      case 'auth/email-already-in-use':
+        return 'Email already in use'
+      case 'auth/invalid-email':
+        return 'Invalid email'
+      case 'auth/operation-not-allowed':
+        return 'Operation not allowed'
+      case 'auth/weak-password':
+        return 'Weak password'
+      case 'auth/user-disabled':
+        return 'User disabled'
+      case 'auth/user-not-found':
+        return 'User not found'
+      case 'auth/wrong-password':
+        return 'Wrong password'
+      case 'auth/invalid-action-code':
+        return 'Password reset link has expired or been used'
+      case 'auth/expired-action-code':
+        return 'Password reset link has expired'
+      case 'auth/user-disabled':
+        return 'This account has been disabled'
+      case 'auth/user-not-found':
+        return 'No account found for this email'
+      case 'auth/weak-password':
+        return 'Password strength is insufficient'
       default:
-        return "An error occurred, please try again later"
+        return 'An error occurred, please try again later'
     }
   }
 
@@ -442,17 +442,17 @@ class AuthApi {
     try {
       const user = this.auth.currentUser
       if (!user) {
-        return { error: "User not found" }
+        return { error: 'User not found' }
       }
 
       const queryUserRef = query(
         collection(this.db, this.userCollectionName),
-        where("userID", "==", user.uid)
+        where('userID', '==', user.uid)
       )
       const querySnapshot = await getDocs(queryUserRef)
 
       if (querySnapshot.empty) {
-        return { error: "User not found" }
+        return { error: 'User not found' }
       }
 
       const userData = querySnapshot.docs[0].data() as UserData
@@ -483,22 +483,22 @@ class AuthApi {
     const user = this.auth.currentUser
 
     if (!user) {
-      return { error: "User not found" }
+      return { error: 'User not found' }
     }
 
     try {
       const queryUserRef = query(
         collection(this.db, this.userCollectionName),
-        where("userID", "==", user.uid)
+        where('userID', '==', user.uid)
       )
       const querySnapshot = await getDocs(queryUserRef)
 
       if (querySnapshot.empty) {
-        return { error: "User not found" }
+        return { error: 'User not found' }
       }
 
       const currentUserData = querySnapshot.docs[0].data()
-      let avatarUrl = ""
+      let avatarUrl = ''
 
       // Handle profile image upload if it's a File
       if (userData.profileImageUrl instanceof File) {
@@ -529,7 +529,7 @@ class AuthApi {
       // Handle role-specific updates
       if (userData.role) {
         switch (userData.role) {
-          case "supplier":
+          case 'supplier':
             if (userData.supplierInfo) {
               updateData.supplierInfo = {
                 ...currentUserData.supplierInfo,
@@ -537,7 +537,7 @@ class AuthApi {
               }
             }
             break
-          case "designer":
+          case 'designer':
             if (userData.designerInfo) {
               updateData.designerInfo = {
                 ...currentUserData.designerInfo,
@@ -545,7 +545,7 @@ class AuthApi {
               }
             }
             break
-          case "superAdmin":
+          case 'superAdmin':
             if (userData.supplierInfo) {
               updateData.supplierInfo = {
                 ...currentUserData.supplierInfo,
@@ -560,7 +560,7 @@ class AuthApi {
             }
             break
           default:
-            throw new Error("Invalid role specified")
+            throw new Error('Invalid role specified')
         }
       }
 
@@ -586,13 +586,13 @@ class AuthApi {
       if (userData.username || avatarUrl) {
         await updateProfile(user, {
           displayName: userData.username || user.displayName,
-          photoURL: typeof avatarUrl === "string" ? avatarUrl : user.photoURL,
+          photoURL: typeof avatarUrl === 'string' ? avatarUrl : user.photoURL,
         })
       }
 
       return {}
     } catch (error) {
-      console.error("UpdateUser error:", error)
+      console.error('UpdateUser error:', error)
       return { error: this.getErrorMessage(error) }
     }
   }
@@ -601,12 +601,12 @@ class AuthApi {
     try {
       const queryUserRef = query(
         collection(this.db, this.userCollectionName),
-        where("userID", "==", userId)
+        where('userID', '==', userId)
       )
       const querySnapshot = await getDocs(queryUserRef)
 
       if (querySnapshot.empty) {
-        return { error: "User not found" }
+        return { error: 'User not found' }
       }
 
       await deleteDoc(querySnapshot.docs[0].ref)
@@ -634,7 +634,7 @@ class AuthApi {
 
       return {}
     } catch (error) {
-      console.error("ConfirmPasswordReset error:", error)
+      console.error('ConfirmPasswordReset error:', error)
       return { error: this.getErrorMessage(error) }
     }
   }

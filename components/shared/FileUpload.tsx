@@ -1,7 +1,7 @@
-import React from "react"
-import { Button, Typography, Box } from "@mui/material"
-import { CloudArrowUp as CloudUploadIcon } from "@phosphor-icons/react/dist/ssr/CloudArrowUp"
-import { useFormContext } from "react-hook-form"
+import React from 'react'
+import { Button, Typography, Box } from '@mui/material'
+import { CloudArrowUp as CloudUploadIcon } from '@phosphor-icons/react/dist/ssr/CloudArrowUp'
+import { useFormContext } from 'react-hook-form'
 
 interface FileUploadProps {
   name: string
@@ -44,8 +44,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   return (
     <Box>
       <input
-        {...(accept !== "*" ? { accept } : {})}
-        style={{ display: "none" }}
+        {...(accept !== '*' ? { accept } : {})}
+        style={{ display: 'none' }}
         id={`file-upload-${name}`}
         type="file"
         onChange={handleFileChange}

@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { ProductList } from "@/components/dashboard/products/productList"
-import withAuthRequired from "@/components/hoc/with-auth-required"
+import { ProductList } from '@/components/dashboard/products/productList'
+import withAuthRequired from '@/components/hoc/with-auth-required'
 
 function Home() {
   return (

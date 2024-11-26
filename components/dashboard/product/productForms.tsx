@@ -1,15 +1,15 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
-import { useForm, FormProvider } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import * as React from 'react'
+import { useRouter } from 'next/navigation'
+import { useForm, FormProvider } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
   createProduct,
   updateProduct,
   deleteProduct,
-} from "@/lib/actions/product"
-import { enqueueSnackbar } from "notistack"
+} from '@/lib/actions/product'
+import { enqueueSnackbar } from 'notistack'
 import {
   Button,
   Card,
@@ -22,27 +22,27 @@ import {
   InputLabel,
   MenuItem,
   Select,
-} from "@mui/material"
-import Grid from "@mui/material/Unstable_Grid2"
-import MaterialImage from "./materialImage"
-import MaterialFile from "./materialFile"
-import { MaterialForm } from "./materialForm"
-import { ModelImage } from "./ModelImage"
-import { ModelForm } from "./ModelForm"
-import { ModelFile } from "./ModelFile"
+} from '@mui/material'
+import Grid from '@mui/material/Unstable_Grid2'
+import MaterialImage from './materialImage'
+import MaterialFile from './materialFile'
+import { MaterialForm } from './materialForm'
+import { ModelImage } from './ModelImage'
+import { ModelForm } from './ModelForm'
+import { ModelFile } from './ModelFile'
 import {
   ProductFormValues,
   materialFormSchema,
   modelFormSchema,
   modelInitialData,
   materialInitialData,
-} from "@/lib/validations/product"
-import { paths } from "@/paths"
-import { useUser } from "@/hooks/use-user"
+} from '@/lib/validations/product'
+import { paths } from '@/paths'
+import { useUser } from '@/hooks/use-user'
 
 const CATEGORIES = [
-  { value: "item", label: "物品" },
-  { value: "material", label: "材質" },
+  { value: 'item', label: '物品' },
+  { value: 'material', label: '材質' },
 ] as const
 
 interface ProductFormProps {
@@ -57,7 +57,7 @@ export default function ProductForms({
   readOnly = false,
 }: ProductFormProps): React.JSX.Element {
   const [category, setCategory] = React.useState(
-    productId && initialData?.type === "materials" ? "material" : "item"
+    productId && initialData?.type === 'materials' ? 'material' : 'item'
   )
   const router = useRouter()
   const { user } = useUser()
@@ -66,7 +66,7 @@ export default function ProductForms({
     const baseData =
       productId && initialData
         ? initialData
-        : category === "item"
+        : category === 'item'
           ? modelInitialData
           : materialInitialData
     return { ...baseData, userId: user?.id }
@@ -74,7 +74,7 @@ export default function ProductForms({
 
   const methods = useForm<ProductFormValues>({
     resolver: zodResolver(
-      category === "item" ? modelFormSchema : materialFormSchema
+      category === 'item' ? modelFormSchema : materialFormSchema
     ),
     defaultValues: getDefaultValue(category),
   })
@@ -86,13 +86,13 @@ export default function ProductForms({
       const result = await deleteProduct(productId)
 
       if (result.success) {
-        enqueueSnackbar("產品刪除成功！", { variant: "success" })
+        enqueueSnackbar('產品刪除成功！', { variant: 'success' })
         router.push(paths.dashboard.products)
       }
     } catch (error) {
-      console.error("Error deleting product:", error)
-      enqueueSnackbar(error instanceof Error ? error.message : "刪除失敗", {
-        variant: "error",
+      console.error('Error deleting product:', error)
+      enqueueSnackbar(error instanceof Error ? error.message : '刪除失敗', {
+        variant: 'error',
       })
     }
   }
@@ -109,11 +109,11 @@ export default function ProductForms({
   }, [initialData, methods])
 
   const renderFormSection = (title: string, content: React.ReactNode) => (
-    <Grid sx={{ width: "100%" }}>
+    <Grid sx={{ width: '100%' }}>
       <Card>
         <CardHeader title={title} />
         <Divider />
-        <CardContent sx={{ paddingX: title === "圖片" ? "30px" : undefined }}>
+        <CardContent sx={{ paddingX: title === '圖片' ? '30px' : undefined }}>
           {content}
         </CardContent>
       </Card>
@@ -121,8 +121,8 @@ export default function ProductForms({
   )
 
   const renderActionButtons = () => (
-    <Grid sx={{ width: "100%" }}>
-      <CardActions sx={{ justifyContent: "flex-end" }}>
+    <Grid sx={{ width: '100%' }}>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         {productId && (
           <Button
             variant="outlined"
@@ -134,7 +134,7 @@ export default function ProductForms({
           </Button>
         )}
         <Button type="submit" variant="contained">
-          {productId ? "更新" : "新增"}
+          {productId ? '更新' : '新增'}
         </Button>
       </CardActions>
     </Grid>
@@ -143,9 +143,9 @@ export default function ProductForms({
   const onFormSubmit = async () => {
     try {
       const formData = methods.getValues()
-      const collectionType = category === "item" ? "models" : "materials"
+      const collectionType = category === 'item' ? 'models' : 'materials'
 
-      if (collectionType === "models") {
+      if (collectionType === 'models') {
         modelFormSchema.parse(formData)
       } else {
         materialFormSchema.parse(formData)
@@ -155,7 +155,7 @@ export default function ProductForms({
         // Update existing product
         const result = await updateProduct(productId, collectionType, formData)
         if (result.success) {
-          enqueueSnackbar("產品更新成功！", { variant: "success" })
+          enqueueSnackbar('產品更新成功！', { variant: 'success' })
           /* router.push(paths.dashboard.product + `/${productId}`) */
           router.push(paths.dashboard.products)
         }
@@ -163,15 +163,15 @@ export default function ProductForms({
         // Create new product
         const result = await createProduct(collectionType, formData)
         if (result.id) {
-          enqueueSnackbar("產品上架成功！", { variant: "success" })
+          enqueueSnackbar('產品上架成功！', { variant: 'success' })
           router.push(paths.dashboard.products)
         }
       }
     } catch (error) {
-      console.error("Error handling product:", error)
+      console.error('Error handling product:', error)
       console.log(methods.getValues())
-      enqueueSnackbar(error instanceof Error ? error.message : "操作失敗", {
-        variant: "error",
+      enqueueSnackbar(error instanceof Error ? error.message : '操作失敗', {
+        variant: 'error',
       })
     }
   }
@@ -200,23 +200,23 @@ export default function ProductForms({
 
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onFormSubmit)}>
-          {category === "item" ? (
+          {category === 'item' ? (
             <>
               {renderFormSection(
-                "家具模型屬性",
+                '家具模型屬性',
                 <ModelForm readOnly={readOnly} />
               )}
-              {renderFormSection("圖片", <ModelImage readOnly={readOnly} />)}
-              {renderFormSection("檔案", <ModelFile readOnly={readOnly} />)}
+              {renderFormSection('圖片', <ModelImage readOnly={readOnly} />)}
+              {renderFormSection('檔案', <ModelFile readOnly={readOnly} />)}
             </>
           ) : (
             <>
               {renderFormSection(
-                "材質屬性",
+                '材質屬性',
                 <MaterialForm readOnly={readOnly} />
               )}
-              {renderFormSection("圖片", <MaterialImage readOnly={readOnly} />)}
-              {renderFormSection("檔案", <MaterialFile readOnly={readOnly} />)}
+              {renderFormSection('圖片', <MaterialImage readOnly={readOnly} />)}
+              {renderFormSection('檔案', <MaterialFile readOnly={readOnly} />)}
             </>
           )}
           {!readOnly && renderActionButtons()}

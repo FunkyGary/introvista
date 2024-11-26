@@ -1,4 +1,4 @@
-import type { PaletteRange } from '@mui/material/styles/createPalette';
+import type { PaletteRange } from '@mui/material/styles/createPalette'
 
 export const california = {
   50: '#fffaea',
@@ -12,7 +12,7 @@ export const california = {
   800: '#953b0b',
   900: '#7b310c',
   950: '#471701',
-} satisfies PaletteRange;
+} satisfies PaletteRange
 
 export const kepple = {
   50: '#f0fdfa',
@@ -26,7 +26,7 @@ export const kepple = {
   800: '#115e56',
   900: '#134e48',
   950: '#042f2c',
-} satisfies PaletteRange;
+} satisfies PaletteRange
 
 export const neonBlue = {
   50: '#ecf0ff',
@@ -40,7 +40,7 @@ export const neonBlue = {
   800: '#3725ae',
   900: '#302689',
   950: '#1e1650',
-} satisfies PaletteRange;
+} satisfies PaletteRange
 
 export const nevada = {
   50: '#fbfcfe',
@@ -54,7 +54,7 @@ export const nevada = {
   800: '#202427',
   900: '#121517',
   950: '#090a0b',
-} satisfies PaletteRange;
+} satisfies PaletteRange
 
 export const redOrange = {
   50: '#fef3f2',
@@ -68,7 +68,7 @@ export const redOrange = {
   800: '#9a221a',
   900: '#80231c',
   950: '#460d09',
-} satisfies PaletteRange;
+} satisfies PaletteRange
 
 export const shakespeare = {
   50: '#ecfdff',
@@ -82,7 +82,7 @@ export const shakespeare = {
   800: '#145876',
   900: '#154964',
   950: '#082f44',
-} satisfies PaletteRange;
+} satisfies PaletteRange
 
 export const stormGrey = {
   50: '#f9fafb',
@@ -96,4 +96,4 @@ export const stormGrey = {
   800: '#313749',
   900: '#212636',
   950: '#121621',
-} satisfies PaletteRange;
+} satisfies PaletteRange

@@ -1,13 +1,13 @@
-"use client"
+'use client'
 
-import { useSearchParams, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useSearchParams, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import {
   verifyPasswordResetCode,
   applyActionCode,
   checkActionCode,
-} from "firebase/auth"
-import { auth } from "@/lib/firebase/firebase-config"
+} from 'firebase/auth'
+import { auth } from '@/lib/firebase/firebase-config'
 
 type ActionStatus = {
   message: string
@@ -19,19 +19,19 @@ const ActionHandler: React.FC = () => {
   const router = useRouter()
   const [isProcessing, setIsProcessing] = useState(true)
   const [status, setStatus] = useState<ActionStatus>({
-    message: "Processing...",
+    message: 'Processing...',
   })
 
   useEffect(() => {
-    const mode = searchParams.get("mode")
-    const oobCode = searchParams.get("oobCode")
+    const mode = searchParams.get('mode')
+    const oobCode = searchParams.get('oobCode')
 
     if (!mode || !oobCode) {
       setStatus({
-        message: "Invalid or missing parameters. Redirecting...",
+        message: 'Invalid or missing parameters. Redirecting...',
         isError: true,
       })
-      setTimeout(() => router.push("/"), 2000)
+      setTimeout(() => router.push('/'), 2000)
       setIsProcessing(false)
       return
     }
@@ -39,47 +39,47 @@ const ActionHandler: React.FC = () => {
     const processAction = async () => {
       try {
         switch (mode) {
-          case "resetPassword":
+          case 'resetPassword':
             // Verify the code first
             await verifyPasswordResetCode(auth, oobCode)
-            setStatus({ message: "Redirecting to password reset..." })
+            setStatus({ message: 'Redirecting to password reset...' })
             await router.push(`/reset-password?oobCode=${oobCode}`)
             break
 
-          case "verifyEmail":
+          case 'verifyEmail':
             await applyActionCode(auth, oobCode)
             setStatus({
-              message: "Email verified successfully! Redirecting...",
+              message: 'Email verified successfully! Redirecting...',
             })
-            setTimeout(() => router.push("/login"), 2000)
+            setTimeout(() => router.push('/login'), 2000)
             break
 
-          case "recoverEmail":
+          case 'recoverEmail':
             const info = await checkActionCode(auth, oobCode)
             await applyActionCode(auth, oobCode)
             setStatus({
               message: `Email recovery successful: ${info.data.email}. Redirecting...`,
             })
-            setTimeout(() => router.push("/login"), 2000)
+            setTimeout(() => router.push('/login'), 2000)
             break
 
           default:
             setStatus({
-              message: "Invalid action type. Redirecting...",
+              message: 'Invalid action type. Redirecting...',
               isError: true,
             })
-            setTimeout(() => router.push("/"), 2000)
+            setTimeout(() => router.push('/'), 2000)
         }
       } catch (error) {
         const errorMessage =
           error instanceof Error
             ? error.message
-            : "An unexpected error occurred"
+            : 'An unexpected error occurred'
         setStatus({
           message: `Action failed: ${errorMessage}`,
           isError: true,
         })
-        setTimeout(() => router.push("/"), 2000)
+        setTimeout(() => router.push('/'), 2000)
       } finally {
         setIsProcessing(false)
       }
@@ -105,8 +105,8 @@ const ActionHandler: React.FC = () => {
             <div
               className={`p-4 rounded ${
                 status.isError
-                  ? "bg-red-100 text-red-700"
-                  : "bg-green-100 text-green-700"
+                  ? 'bg-red-100 text-red-700'
+                  : 'bg-green-100 text-green-700'
               }`}
             >
               {status.message}

@@ -1,7 +1,7 @@
-import * as React from "react"
-import type { Metadata } from "next"
+import * as React from 'react'
+import type { Metadata } from 'next'
 
-import { Layout } from "@/components/auth/layout"
+import { Layout } from '@/components/auth/layout'
 
 export const metadata = {
   title: `Sign up | introvista`,

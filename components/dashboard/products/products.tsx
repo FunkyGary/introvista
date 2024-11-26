@@ -1,31 +1,31 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import Box from "@mui/material/Box"
-import Card from "@mui/material/Card"
-import Checkbox from "@mui/material/Checkbox"
-import Divider from "@mui/material/Divider"
-import Table from "@mui/material/Table"
-import TableBody from "@mui/material/TableBody"
-import TableCell from "@mui/material/TableCell"
-import TableHead from "@mui/material/TableHead"
-import TablePagination from "@mui/material/TablePagination"
-import TableRow from "@mui/material/TableRow"
-import mockData from "./PriceTable.json"
-import Button from "@mui/material/Button"
-import ButtonGroup from "@mui/material/ButtonGroup"
-import { useSelection } from "@/hooks/use-selection"
-import CardContent from "@mui/material/CardContent"
-import Typography from "@mui/material/Typography"
-import Tabs from "@mui/material/Tabs"
-import Tab from "@mui/material/Tab"
-import InputAdornment from "@mui/material/InputAdornment"
-import { MagnifyingGlass as MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr/MagnifyingGlass"
-import OutlinedInput from "@mui/material/OutlinedInput"
-import InputLabel from "@mui/material/InputLabel"
-import MenuItem from "@mui/material/MenuItem"
-import Select, { SelectChangeEvent } from "@mui/material/Select"
-import { useFurnitureModels } from "@/hooks/use-furniture-models"
+import * as React from 'react'
+import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
+import Checkbox from '@mui/material/Checkbox'
+import Divider from '@mui/material/Divider'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TablePagination from '@mui/material/TablePagination'
+import TableRow from '@mui/material/TableRow'
+import mockData from './PriceTable.json'
+import Button from '@mui/material/Button'
+import ButtonGroup from '@mui/material/ButtonGroup'
+import { useSelection } from '@/hooks/use-selection'
+import CardContent from '@mui/material/CardContent'
+import Typography from '@mui/material/Typography'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
+import InputAdornment from '@mui/material/InputAdornment'
+import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import { useFurnitureModels } from '@/hooks/use-furniture-models'
 
 // Types for mock data structure
 interface Model {
@@ -67,7 +67,7 @@ interface CustomersTableProps {
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   }
 }
 
@@ -97,19 +97,19 @@ export function Products({
     setValue(newValue)
   }
 
-  const [age, setAge] = React.useState<string>("1")
+  const [age, setAge] = React.useState<string>('1')
 
   const handleSelectChange = (event: SelectChangeEvent) => {
     setAge(event.target.value)
   }
 
   return (
-    <Card sx={{ maxWidth: "1000px", width: "100%" }}>
+    <Card sx={{ maxWidth: '1000px', width: '100%' }}>
       <Box
         sx={{
           borderBottom: 1,
-          borderColor: "divider",
-          paddingX: "25px",
+          borderColor: 'divider',
+          paddingX: '25px',
         }}
       >
         <Tabs value={value} onChange={handleChange}>
@@ -121,10 +121,10 @@ export function Products({
       <CardContent>
         <Box
           sx={{
-            paddingBottom: "10px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            paddingBottom: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
           <OutlinedInput
@@ -136,18 +136,18 @@ export function Products({
                 <MagnifyingGlassIcon fontSize="var(--icon-fontSize-md)" />
               </InputAdornment>
             }
-            sx={{ maxWidth: "400px" }}
+            sx={{ maxWidth: '400px' }}
             size="small"
           />
           <Box
             sx={{
-              display: "flex",
-              alignItems: "center",
-              width: "100%",
-              paddingLeft: "20px",
+              display: 'flex',
+              alignItems: 'center',
+              width: '100%',
+              paddingLeft: '20px',
             }}
           >
-            <InputLabel sx={{ minWidth: "55px" }} id="main-category">
+            <InputLabel sx={{ minWidth: '55px' }} id="main-category">
               主分類
             </InputLabel>
             <Select
@@ -156,14 +156,14 @@ export function Products({
               onChange={handleSelectChange}
               size="small"
               fullWidth
-              sx={{ maxWidth: "200px", marginRight: "10px" }}
+              sx={{ maxWidth: '200px', marginRight: '10px' }}
             >
               <MenuItem value="1">全選</MenuItem>
               <MenuItem value="2">沙發</MenuItem>
               <MenuItem value="3">椅子</MenuItem>
               <MenuItem value="4">桌子</MenuItem>
             </Select>
-            <InputLabel sx={{ minWidth: "55px" }} id="sub-category">
+            <InputLabel sx={{ minWidth: '55px' }} id="sub-category">
               子分類
             </InputLabel>
             <Select
@@ -172,7 +172,7 @@ export function Products({
               onChange={handleSelectChange}
               size="small"
               fullWidth
-              sx={{ maxWidth: "200px", marginRight: "10px" }}
+              sx={{ maxWidth: '200px', marginRight: '10px' }}
             >
               <MenuItem value="1">全選</MenuItem>
               <MenuItem value="2">沙發</MenuItem>
@@ -183,17 +183,17 @@ export function Products({
               <Button
                 variant="outlined"
                 sx={{
-                  width: "80px",
-                  marginRight: "5px",
-                  color: "#9900FF",
-                  borderColor: "#9900FF",
+                  width: '80px',
+                  marginRight: '5px',
+                  color: '#9900FF',
+                  borderColor: '#9900FF',
                 }}
               >
                 搜尋
               </Button>
             </Box>
             <Box>
-              <Button variant="outlined" color="info" sx={{ width: "80px" }}>
+              <Button variant="outlined" color="info" sx={{ width: '80px' }}>
                 重設
               </Button>
             </Box>
@@ -201,10 +201,10 @@ export function Products({
         </Box>
         <Box
           sx={{
-            paddingY: "10px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            paddingY: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
           <Typography variant="body1" gutterBottom>
@@ -213,12 +213,12 @@ export function Products({
           <Button
             variant="outlined"
             size="small"
-            sx={{ color: "#9900FF", borderColor: "#9900FF" }}
+            sx={{ color: '#9900FF', borderColor: '#9900FF' }}
           >
             匯出報表
           </Button>
         </Box>
-        <Box sx={{ overflowX: "auto" }}>
+        <Box sx={{ overflowX: 'auto' }}>
           <Table sx={{ minWidth: 800 }}>
             <TableHead>
               <TableRow>
@@ -276,8 +276,8 @@ export function Products({
                                                 >
                                                     預覽
                                                 </Button> */}
-                        <Button sx={{ color: "#9900FF" }}>編輯</Button>
-                        <Button sx={{ color: "#9900FF" }}>推廣</Button>
+                        <Button sx={{ color: '#9900FF' }}>編輯</Button>
+                        <Button sx={{ color: '#9900FF' }}>推廣</Button>
                       </ButtonGroup>
                     </TableCell>
                   </TableRow>

@@ -1,8 +1,8 @@
-import * as React from "react"
-import { useFormContext, Controller } from "react-hook-form"
-import { Upload } from "antd"
-import type { UploadFile, UploadProps } from "antd"
-import { message } from "antd"
+import * as React from 'react'
+import { useFormContext, Controller } from 'react-hook-form'
+import { Upload } from 'antd'
+import type { UploadFile, UploadProps } from 'antd'
+import { message } from 'antd'
 
 interface ImageUploadProps {
   name: string
@@ -27,16 +27,16 @@ export default function UploadImage({
     if (formValues && formValues.url) {
       setFileList([
         {
-          uid: "-1",
+          uid: '-1',
           name: formValues.name,
-          status: "done",
+          status: 'done',
           url: formValues.url,
         },
       ])
     }
   }, [formValues])
 
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setFileList(newFileList)
 
     const files = newFileList.map((file) => ({
@@ -46,15 +46,15 @@ export default function UploadImage({
   }
 
   const beforeUpload = (file: File) => {
-    const isImage = file.type.startsWith("image/")
+    const isImage = file.type.startsWith('image/')
     if (!isImage) {
-      message.error("You can only upload image files!")
+      message.error('You can only upload image files!')
       return false
     }
 
     const isLt5M = file.size / 1024 / 1024 < 5
     if (!isLt5M) {
-      message.error("Image must be smaller than 5MB!")
+      message.error('Image must be smaller than 5MB!')
       return false
     }
 
@@ -92,7 +92,7 @@ export default function UploadImage({
             }
 
             const image = new Image()
-            image.src = file.url || file.preview || ""
+            image.src = file.url || file.preview || ''
             const imgWindow = window.open(file.url || file.preview)
             imgWindow?.document.write(image.outerHTML)
           }}

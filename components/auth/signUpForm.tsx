@@ -1,31 +1,31 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import RouterLink from "next/link"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import Alert from "@mui/material/Alert"
-import Button from "@mui/material/Button"
-import MenuItem from "@mui/material/MenuItem"
-import FormControl from "@mui/material/FormControl"
-import Select from "@mui/material/Select"
-import FormHelperText from "@mui/material/FormHelperText"
-import InputLabel from "@mui/material/InputLabel"
-import Link from "@mui/material/Link"
-import OutlinedInput from "@mui/material/OutlinedInput"
-import Stack from "@mui/material/Stack"
-import Typography from "@mui/material/Typography"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import Checkbox from "@mui/material/Checkbox"
-import { Controller, FormProvider, useForm } from "react-hook-form"
+import * as React from 'react'
+import RouterLink from 'next/link'
+import { useRouter } from 'next/navigation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import Alert from '@mui/material/Alert'
+import Button from '@mui/material/Button'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import FormHelperText from '@mui/material/FormHelperText'
+import InputLabel from '@mui/material/InputLabel'
+import Link from '@mui/material/Link'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Checkbox from '@mui/material/Checkbox'
+import { Controller, FormProvider, useForm } from 'react-hook-form'
 import {
   signUpSchema,
   SignUpValues,
   defaultSignUpValues,
-} from "@/lib/auth/schemas"
+} from '@/lib/auth/schemas'
 
-import { paths } from "@/paths"
-import { useAuthClient } from "@/hooks/use-auth-client"
+import { paths } from '@/paths'
+import { useAuthClient } from '@/hooks/use-auth-client'
 
 export function SignUpForm(): React.JSX.Element {
   const router = useRouter()
@@ -50,7 +50,7 @@ export function SignUpForm(): React.JSX.Element {
       const { error } = await authClient.signUp(data)
 
       if (error) {
-        setError("root", { type: "server", message: error })
+        setError('root', { type: 'server', message: error })
         setIsPending(false)
         return
       }
@@ -67,7 +67,7 @@ export function SignUpForm(): React.JSX.Element {
       <Stack spacing={1}>
         <Typography variant="h4">註冊帳號</Typography>
         <Typography color="text.secondary" variant="body2">
-          已經有帳號了？{" "}
+          已經有帳號了？{' '}
           <Link
             component={RouterLink}
             href={paths.auth.signIn}
@@ -150,7 +150,7 @@ export function SignUpForm(): React.JSX.Element {
               </FormControl>
             )}
           />
-          {watch("role") === "supplier" && (
+          {watch('role') === 'supplier' && (
             <>
               <Controller
                 control={control}

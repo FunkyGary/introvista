@@ -1,35 +1,31 @@
-import { FurnitureModel as Model } from "@/lib/product/model.entity";
-import FurnitureModelsFetchUseCase from "@/lib/product/furniture-models-fetch-use-case";
-import { useInjection } from "inversify-react";
-import React from "react";
+import { FurnitureModel as Model } from '@/lib/product/model.entity'
+import FurnitureModelsFetchUseCase from '@/lib/product/furniture-models-fetch-use-case'
+import { useInjection } from 'inversify-react'
+import React from 'react'
 
 export const useFurnitureModels = () => {
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false)
 
-  const [furnitureModels, setFurnitureModels] = React.useState<
-    Model[]
-  >([]);
-  const fetchFurnitureModelsUseCase = useInjection(
-    FurnitureModelsFetchUseCase
-  );
+  const [furnitureModels, setFurnitureModels] = React.useState<Model[]>([])
+  const fetchFurnitureModelsUseCase = useInjection(FurnitureModelsFetchUseCase)
   const fetchFurnitureModels = React.useCallback(async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const furnitureModels = await fetchFurnitureModelsUseCase.execute();
-      setFurnitureModels(furnitureModels);
+      const furnitureModels = await fetchFurnitureModelsUseCase.execute()
+      setFurnitureModels(furnitureModels)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-    setIsLoading(false);
-  }, []);
+    setIsLoading(false)
+  }, [])
 
   React.useEffect(() => {
-    fetchFurnitureModels();
-  }, [fetchFurnitureModels]);
+    fetchFurnitureModels()
+  }, [fetchFurnitureModels])
 
   return {
     loadingFurnitureModels: isLoading,
     fetchFurnitureModels,
     furnitureModels,
-  };
-};
+  }
+}

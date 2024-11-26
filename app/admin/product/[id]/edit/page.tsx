@@ -1,12 +1,12 @@
-"use client"
+'use client'
 
-import withAuthRequired from "@/components/hoc/with-auth-required"
-import { notFound } from "next/navigation"
-import { getProductByProductId } from "@/lib/actions/product"
-import { useEffect, useState } from "react"
-import { useUser } from "@/hooks/use-user"
-import ProductForms from "@/components/dashboard/product/productForms"
-import { CircularProgress, Box } from "@mui/material"
+import withAuthRequired from '@/components/hoc/with-auth-required'
+import { notFound } from 'next/navigation'
+import { getProductByProductId } from '@/lib/actions/product'
+import { useEffect, useState } from 'react'
+import { useUser } from '@/hooks/use-user'
+import ProductForms from '@/components/dashboard/product/productForms'
+import { CircularProgress, Box } from '@mui/material'
 function ProductPage({ params }: { params: { id: string } }) {
   const productId = params.id
   const { user } = useUser()

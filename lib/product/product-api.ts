@@ -287,7 +287,10 @@ class ProductApi {
   ): Promise<{ success: boolean; error?: string }> {
     const docRef = doc(this.db, colelctionName, ProductId)
     try {
-      await updateDoc(docRef, { ...updatedData, LastUpdated: serverTimestamp() })
+      await updateDoc(docRef, {
+        ...updatedData,
+        LastUpdated: serverTimestamp(),
+      })
       return { success: true }
     } catch (error) {
       console.error(error)
@@ -297,7 +300,6 @@ class ProductApi {
       return { success: false, error: 'Something went wrong' }
     }
   }
-
 
   private async uploadProductImage(file: File): Promise<string> {
     const filename = file.name

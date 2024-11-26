@@ -1,24 +1,24 @@
-"use client";
+'use client'
 
-import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/styles";
+import * as React from 'react'
+import CssBaseline from '@mui/material/CssBaseline'
+import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles'
 
-import { createTheme } from "@/styles/theme/create-theme";
+import { createTheme } from '@/styles/theme/create-theme'
 
 export interface ThemeProviderProps {
-    children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export function ThemeProvider({
-    children,
+  children,
 }: ThemeProviderProps): React.JSX.Element {
-    const theme = createTheme();
+  const theme = createTheme()
 
-    return (
-        <CssVarsProvider theme={theme}>
-            <CssBaseline />
-            {children}
-        </CssVarsProvider>
-    );
+  return (
+    <CssVarsProvider theme={theme}>
+      <CssBaseline />
+      {children}
+    </CssVarsProvider>
+  )
 }

@@ -1,33 +1,33 @@
-"use client"
+'use client'
 
-import * as React from "react"
+import * as React from 'react'
 import {
   useForm,
   Controller,
   FormProvider,
   useFormContext,
-} from "react-hook-form"
-import Button from "@mui/material/Button"
-import Card from "@mui/material/Card"
-import CardActions from "@mui/material/CardActions"
-import CardContent from "@mui/material/CardContent"
-import CardHeader from "@mui/material/CardHeader"
-import Divider from "@mui/material/Divider"
-import FormControl from "@mui/material/FormControl"
-import InputLabel from "@mui/material/InputLabel"
-import MenuItem from "@mui/material/MenuItem"
-import OutlinedInput from "@mui/material/OutlinedInput"
-import Select, { SelectChangeEvent } from "@mui/material/Select"
-import Grid from "@mui/material/Unstable_Grid2"
-import Typography from "@mui/material/Typography"
-import Stack from "@mui/material/Stack"
-import Avatar from "@mui/material/Avatar"
-import { paths } from "@/paths"
-import { ResetPasswordCard } from "./resetPasswordCard"
-import { useAuthClient } from "@/hooks/use-auth-client"
-import { useRouter } from "next/navigation"
-import { enqueueSnackbar } from "notistack"
-import { AccountValues, defaultAccountValues } from "@/lib/auth/schemas"
+} from 'react-hook-form'
+import Button from '@mui/material/Button'
+import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
+import CardContent from '@mui/material/CardContent'
+import CardHeader from '@mui/material/CardHeader'
+import Divider from '@mui/material/Divider'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import Grid from '@mui/material/Unstable_Grid2'
+import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
+import Avatar from '@mui/material/Avatar'
+import { paths } from '@/paths'
+import { ResetPasswordCard } from './resetPasswordCard'
+import { useAuthClient } from '@/hooks/use-auth-client'
+import { useRouter } from 'next/navigation'
+import { enqueueSnackbar } from 'notistack'
+import { AccountValues, defaultAccountValues } from '@/lib/auth/schemas'
 
 export default function Account(): React.JSX.Element {
   const [isPending, setIsPending] = React.useState<boolean>(false)
@@ -68,8 +68,8 @@ export default function Account(): React.JSX.Element {
           })
         }
       } catch (error) {
-        enqueueSnackbar("Failed to load user data", { variant: "error" })
-        console.error("Error loading user data:", error)
+        enqueueSnackbar('Failed to load user data', { variant: 'error' })
+        console.error('Error loading user data:', error)
       }
     }
 
@@ -84,23 +84,23 @@ export default function Account(): React.JSX.Element {
       const result = await authClient.updateUserData(data)
 
       if (!result) {
-        throw new Error("Failed to update user data")
+        throw new Error('Failed to update user data')
       }
 
-      enqueueSnackbar("更新資料成功！", { variant: "success" })
+      enqueueSnackbar('更新資料成功！', { variant: 'success' })
       router.push(paths.dashboard.account)
     } catch (err) {
       const errorMessage =
         err instanceof Error
           ? err.message
-          : "An error occurred while updating your profile"
+          : 'An error occurred while updating your profile'
 
-      setError("root", {
-        type: "server",
+      setError('root', {
+        type: 'server',
         message: errorMessage,
       })
 
-      enqueueSnackbar(errorMessage, { variant: "error" })
+      enqueueSnackbar(errorMessage, { variant: 'error' })
     } finally {
       setIsPending(false)
     }
@@ -154,7 +154,7 @@ export function AccountDetailsForm({
               <Controller
                 name="username"
                 control={control}
-                rules={{ required: "Username is required" }}
+                rules={{ required: 'Username is required' }}
                 render={({ field }) => (
                   <OutlinedInput
                     {...field}
@@ -222,7 +222,7 @@ export function AccountDetailsForm({
           </Grid>
 
           {/* Supplier 特定欄位 */}
-          {watch("role") === "supplier" && (
+          {watch('role') === 'supplier' && (
             <>
               <Grid md={6} xs={12}>
                 <FormControl fullWidth>
@@ -281,7 +281,7 @@ export function AccountDetailsForm({
         </Grid>
       </CardContent>
       <Divider />
-      <CardActions sx={{ justifyContent: "flex-end" }}>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button type="submit" variant="contained" disabled={isPending}>
           Save details
         </Button>
@@ -291,9 +291,9 @@ export function AccountDetailsForm({
 }
 
 const user = {
-  avatar: "/assets/avatar.png",
-  email: "mock@gmail.com",
-  role: "designer",
+  avatar: '/assets/avatar.png',
+  email: 'mock@gmail.com',
+  role: 'designer',
 } as const
 
 export function AccountInfo(): React.JSX.Element {
@@ -310,8 +310,8 @@ export function AccountInfo(): React.JSX.Element {
         const data = await authClient.getUserData()
         setUserData(data)
       } catch (error) {
-        enqueueSnackbar("Failed to load user data", { variant: "error" })
-        console.error("Error fetching user data:", error)
+        enqueueSnackbar('Failed to load user data', { variant: 'error' })
+        console.error('Error fetching user data:', error)
       } finally {
         setIsLoading(false)
       }
@@ -322,7 +322,7 @@ export function AccountInfo(): React.JSX.Element {
 
   const handleFileUpload = async (file: File) => {
     try {
-      setValue("profileImageUrl", file)
+      setValue('profileImageUrl', file)
 
       const previewUrl = URL.createObjectURL(file)
       setUserData((prev: any) => ({
@@ -333,15 +333,15 @@ export function AccountInfo(): React.JSX.Element {
         },
       }))
     } catch (error) {
-      enqueueSnackbar("Failed to process image", { variant: "error" })
-      console.error("Error processing file:", error)
+      enqueueSnackbar('Failed to process image', { variant: 'error' })
+      console.error('Error processing file:', error)
     }
   }
 
   return (
     <Card>
       <CardContent>
-        <Stack spacing={2} sx={{ alignItems: "center" }}>
+        <Stack spacing={2} sx={{ alignItems: 'center' }}>
           <div>
             <Controller
               name="profileImageUrl"
@@ -353,12 +353,12 @@ export function AccountInfo(): React.JSX.Element {
                       ? URL.createObjectURL(field.value)
                       : field.value || userData?.data?.profileImageUrl
                   }
-                  sx={{ height: "80px", width: "80px" }}
+                  sx={{ height: '80px', width: '80px' }}
                 />
               )}
             />
           </div>
-          <Stack spacing={1} sx={{ textAlign: "center" }}>
+          <Stack spacing={1} sx={{ textAlign: 'center' }}>
             <Typography variant="h5">{userData?.data?.email}</Typography>
             <Typography color="text.secondary" variant="body2">
               {userData?.data?.role}

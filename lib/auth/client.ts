@@ -1,21 +1,21 @@
-"use client"
+'use client'
 
-import type { UserRole, User, UserData } from "@/types/user"
-import { inject, injectable } from "inversify"
-import AuthApi from "./auth-api"
+import type { UserRole, User, UserData } from '@/types/user'
+import { inject, injectable } from 'inversify'
+import AuthApi from './auth-api'
 
 function generateToken(): string {
   const arr = new Uint8Array(12)
   window.crypto.getRandomValues(arr)
-  return Array.from(arr, (v) => v.toString(16).padStart(2, "0")).join("")
+  return Array.from(arr, (v) => v.toString(16).padStart(2, '0')).join('')
 }
 
 const user = {
-  id: "USR-000",
-  avatar: "/assets/avatar.png",
-  firstName: "Sofia",
-  lastName: "Rivers",
-  email: "sofia@devias.io",
+  id: 'USR-000',
+  avatar: '/assets/avatar.png',
+  firstName: 'Sofia',
+  lastName: 'Rivers',
+  email: 'sofia@devias.io',
 } satisfies User
 
 export interface SignUpParams {
@@ -43,7 +43,7 @@ export interface SignUpParams {
 }
 
 export interface SignInWithOAuthParams {
-  provider: "google" | "discord"
+  provider: 'google' | 'discord'
 }
 
 export interface SignInWithPasswordParams {
@@ -82,16 +82,16 @@ class AuthClient {
         error: result.error,
       }
     } catch (error) {
-      console.error("SignUp error:", error)
+      console.error('SignUp error:', error)
       return {
         error:
-          error instanceof Error ? error.message : "Unknown error occurred",
+          error instanceof Error ? error.message : 'Unknown error occurred',
       }
     }
   }
 
   async signInWithOAuth(_: SignInWithOAuthParams): Promise<{ error?: string }> {
-    return { error: "Social authentication not implemented" }
+    return { error: 'Social authentication not implemented' }
   }
 
   async signInWithPassword(
@@ -119,12 +119,12 @@ class AuthClient {
         error: result.error,
       }
     } catch (error) {
-      console.error("SendPasswordResetEmail error:", error)
+      console.error('SendPasswordResetEmail error:', error)
       return {
         error:
           error instanceof Error
             ? error.message
-            : "An error occurred while sending the password reset email",
+            : 'An error occurred while sending the password reset email',
       }
     }
   }
@@ -142,12 +142,12 @@ class AuthClient {
         error: result.error,
       }
     } catch (error) {
-      console.error("ConfirmPasswordReset error:", error)
+      console.error('ConfirmPasswordReset error:', error)
       return {
         error:
           error instanceof Error
             ? error.message
-            : "An error occurred while confirming the password reset",
+            : 'An error occurred while confirming the password reset',
       }
     }
   }
@@ -221,10 +221,10 @@ class AuthClient {
         error: result.error,
       }
     } catch (error) {
-      console.error("UpdateUserData error:", error)
+      console.error('UpdateUserData error:', error)
       return {
         error:
-          error instanceof Error ? error.message : "Unknown error occurred",
+          error instanceof Error ? error.message : 'Unknown error occurred',
       }
     }
   }
@@ -245,7 +245,7 @@ class AuthClient {
       console.error(`Failed to get user data:`, error)
       return {
         error:
-          error instanceof Error ? error.message : "Unknown error occurred",
+          error instanceof Error ? error.message : 'Unknown error occurred',
       }
     }
   }

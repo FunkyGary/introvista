@@ -1,4 +1,4 @@
-import type { Shadows } from '@mui/material/styles/shadows';
+import type { Shadows } from '@mui/material/styles/shadows'
 
 export const shadows = [
   'none',
@@ -26,4 +26,4 @@ export const shadows = [
   '0px 8px 42px rgba(0, 0, 0, 0.08)',
   '0px 9px 44px rgba(0, 0, 0, 0.08)',
   '0px 9px 46px rgba(0, 0, 0, 0.08)',
-] satisfies Shadows;
+] satisfies Shadows

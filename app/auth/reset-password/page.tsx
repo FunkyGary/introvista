@@ -1,8 +1,8 @@
-import * as React from "react"
-import type { Metadata } from "next"
+import * as React from 'react'
+import type { Metadata } from 'next'
 
-import { Layout } from "@/components/auth/layout"
-import { ResetPasswordForm } from "@/components/auth/resetPasswordForm"
+import { Layout } from '@/components/auth/layout'
+import { ResetPasswordForm } from '@/components/auth/resetPasswordForm'
 
 export const metadata = {
   title: `Forget password | Innova`,

@@ -1,29 +1,29 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import Alert from "@mui/material/Alert"
-import Button from "@mui/material/Button"
-import FormControl from "@mui/material/FormControl"
-import FormHelperText from "@mui/material/FormHelperText"
-import InputLabel from "@mui/material/InputLabel"
-import OutlinedInput from "@mui/material/OutlinedInput"
-import Stack from "@mui/material/Stack"
-import Typography from "@mui/material/Typography"
-import { enqueueSnackbar } from "notistack"
-import { Controller, useForm } from "react-hook-form"
-import { z as zod } from "zod"
-import { useAuthClient } from "@/hooks/use-auth-client"
-import { useRouter } from "next/navigation"
-import { paths } from "@/paths"
+import * as React from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import Alert from '@mui/material/Alert'
+import Button from '@mui/material/Button'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
+import InputLabel from '@mui/material/InputLabel'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import { enqueueSnackbar } from 'notistack'
+import { Controller, useForm } from 'react-hook-form'
+import { z as zod } from 'zod'
+import { useAuthClient } from '@/hooks/use-auth-client'
+import { useRouter } from 'next/navigation'
+import { paths } from '@/paths'
 
 const schema = zod.object({
-  email: zod.string().min(1, { message: "Email is required" }).email(),
+  email: zod.string().min(1, { message: 'Email is required' }).email(),
 })
 
 type Values = zod.infer<typeof schema>
 
-const defaultValues = { email: "" } satisfies Values
+const defaultValues = { email: '' } satisfies Values
 
 export function ForgetPasswordForm(): React.JSX.Element {
   const [isPending, setIsPending] = React.useState<boolean>(false)
@@ -45,13 +45,13 @@ export function ForgetPasswordForm(): React.JSX.Element {
         const result = await authClient.sendPasswordResetEmail(values)
 
         if (result) {
-          enqueueSnackbar("Password reset email sent", { variant: "success" })
+          enqueueSnackbar('Password reset email sent', { variant: 'success' })
           router.push(paths.auth.signIn)
         }
       } catch (err) {
-        setError("root", {
-          type: "server",
-          message: "An error occurred while processing your request",
+        setError('root', {
+          type: 'server',
+          message: 'An error occurred while processing your request',
         })
       } finally {
         setIsPending(false)

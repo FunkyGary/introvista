@@ -1,24 +1,24 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { useFormContext, Controller } from "react-hook-form"
-import FormControl from "@mui/material/FormControl"
-import InputLabel from "@mui/material/InputLabel"
-import MenuItem from "@mui/material/MenuItem"
-import OutlinedInput from "@mui/material/OutlinedInput"
-import Select from "@mui/material/Select"
-import Grid from "@mui/material/Unstable_Grid2"
-import TextField from "@mui/material/TextField"
+import * as React from 'react'
+import { useFormContext, Controller } from 'react-hook-form'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import Select from '@mui/material/Select'
+import Grid from '@mui/material/Unstable_Grid2'
+import TextField from '@mui/material/TextField'
 import {
   stringValidation,
   numberValidation,
-} from "../../../utils/validationRules"
-import Checkbox from "@mui/material/Checkbox"
-import { FormControlLabel } from "@mui/material"
-import { Autocomplete, Chip, FormHelperText } from "@mui/material"
-import InputAdornment from "@mui/material/InputAdornment"
-import { useState } from "react"
-import { categories, MainCategory } from "@/utils/categories"
+} from '../../../utils/validationRules'
+import Checkbox from '@mui/material/Checkbox'
+import { FormControlLabel } from '@mui/material'
+import { Autocomplete, Chip, FormHelperText } from '@mui/material'
+import InputAdornment from '@mui/material/InputAdornment'
+import { useState } from 'react'
+import { categories, MainCategory } from '@/utils/categories'
 
 export function ModelForm({
   readOnly = false,
@@ -39,7 +39,7 @@ export function ModelForm({
   }, [])
 
   React.useEffect(() => {
-    const categoryId = getValues("categoryID")
+    const categoryId = getValues('categoryID')
     if (categoryId) {
       mainCategoryFromId(categoryId)
     }
@@ -68,7 +68,7 @@ export function ModelForm({
         <FormControl fullWidth required>
           <InputLabel>主分類</InputLabel>
           <Select
-            value={mainCategory || ""}
+            value={mainCategory || ''}
             onChange={(e) => setMainCategory(e.target.value)}
             label="主分類"
             inputProps={{
@@ -89,7 +89,7 @@ export function ModelForm({
             name="categoryID"
             control={control}
             defaultValue=""
-            rules={{ required: "請選擇子分類" }}
+            rules={{ required: '請選擇子分類' }}
             render={({ field, fieldState: { error } }) => (
               <>
                 <InputLabel>子分類</InputLabel>
@@ -213,7 +213,7 @@ export function ModelForm({
                 label="重量 (kg)"
                 type="number"
                 inputProps={{
-                  min: "0",
+                  min: '0',
                   readOnly: readOnly,
                 }}
                 onChange={(e) => field.onChange(Number(e.target.value))}
@@ -254,7 +254,7 @@ export function ModelForm({
                     {...params}
                     variant="outlined"
                     label="標籤"
-                    placeholder={readOnly ? "" : "新增標籤"}
+                    placeholder={readOnly ? '' : '新增標籤'}
                   />
                 )}
               />
@@ -276,7 +276,7 @@ export function ModelForm({
                 label="價格 (TWD)"
                 type="number"
                 inputProps={{
-                  min: "1",
+                  min: '1',
                   readOnly: readOnly,
                 }}
                 onChange={(e) => field.onChange(Number(e.target.value))}

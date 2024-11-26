@@ -1,83 +1,83 @@
-import type { NavItemConfig } from "@/types/nav"
-import { paths } from "@/paths"
+import type { NavItemConfig } from '@/types/nav'
+import { paths } from '@/paths'
 
 export const getNavItems = (role: string): NavItemConfig[] => {
   switch (role) {
-    case "designer":
+    case 'designer':
       return [
         {
-          key: "cart",
-          title: "購物車",
+          key: 'cart',
+          title: '購物車',
           href: paths.dashboard.cart,
-          icon: "shoppingCart",
+          icon: 'shoppingCart',
         },
         {
-          key: "order",
-          title: "訂單",
+          key: 'order',
+          title: '訂單',
           href: paths.dashboard.overview,
-          icon: "fileText",
+          icon: 'fileText',
         },
         {
-          key: "orderReviews",
-          title: "評價",
+          key: 'orderReviews',
+          title: '評價',
           href: paths.dashboard.reviews,
-          icon: "star",
+          icon: 'star',
         },
         {
-          key: "accountSettings",
-          title: "帳號設定",
+          key: 'accountSettings',
+          title: '帳號設定',
           href: paths.dashboard.account,
-          icon: "user",
+          icon: 'user',
         },
       ]
 
-    case "seller":
+    case 'seller':
       return [
         {
-          key: "createProduct",
-          title: "產品上架",
+          key: 'createProduct',
+          title: '產品上架',
           href: paths.dashboard.product,
-          icon: "boxArrowUp",
+          icon: 'boxArrowUp',
         },
         {
-          key: "products",
-          title: "產品列表",
+          key: 'products',
+          title: '產品列表',
           href: paths.dashboard.products,
-          icon: "bagSimple",
+          icon: 'bagSimple',
         },
         {
-          key: "orders",
-          title: "訂單",
+          key: 'orders',
+          title: '訂單',
           href: paths.dashboard.orders,
-          icon: "fileText",
+          icon: 'fileText',
         },
         {
-          key: "sellerReview",
-          title: "評價",
+          key: 'sellerReview',
+          title: '評價',
           href: paths.dashboard.integrations,
-          icon: "star",
+          icon: 'star',
         },
         {
-          key: "accountSettings",
-          title: "帳號設定",
+          key: 'accountSettings',
+          title: '帳號設定',
           href: paths.dashboard.account,
-          icon: "user",
+          icon: 'user',
         },
       ]
 
-    case "admin":
+    case 'admin':
       return [
         {
-          key: "systemOrder",
-          title: "系統訂單",
+          key: 'systemOrder',
+          title: '系統訂單',
           href: paths.dashboard.settings,
-          icon: "fileText",
+          icon: 'fileText',
         },
         {
-          key: "settings",
-          title: "系統設定",
+          key: 'settings',
+          title: '系統設定',
           href: paths.dashboard.settings,
-          icon: "gear-six",
+          icon: 'gear-six',
         },
       ]
 
@@ -88,63 +88,63 @@ export const getNavItems = (role: string): NavItemConfig[] => {
 
 export const navItems = [
   {
-    key: "cart",
-    title: "購物車",
+    key: 'cart',
+    title: '購物車',
     href: paths.dashboard.cart,
-    icon: "shoppingCart",
+    icon: 'shoppingCart',
   },
   {
-    key: "order",
-    title: "訂單",
+    key: 'order',
+    title: '訂單',
     href: paths.dashboard.overview,
-    icon: "fileText",
+    icon: 'fileText',
   },
   {
-    key: "orderReviews",
-    title: "評價",
+    key: 'orderReviews',
+    title: '評價',
     href: paths.dashboard.reviews,
-    icon: "star",
+    icon: 'star',
   },
   {
-    key: "createProduct",
-    title: "產品上架",
+    key: 'createProduct',
+    title: '產品上架',
     href: paths.dashboard.product,
-    icon: "boxArrowUp",
+    icon: 'boxArrowUp',
   },
   {
-    key: "products",
-    title: "產品列表",
+    key: 'products',
+    title: '產品列表',
     href: paths.dashboard.products,
-    icon: "bagSimple",
+    icon: 'bagSimple',
   },
   {
-    key: "orders",
-    title: "訂單",
+    key: 'orders',
+    title: '訂單',
     href: paths.dashboard.orders,
-    icon: "fileText",
+    icon: 'fileText',
   },
   {
-    key: "sellerReview",
-    title: "評價",
+    key: 'sellerReview',
+    title: '評價',
     href: paths.dashboard.integrations,
-    icon: "star",
+    icon: 'star',
   },
   {
-    key: "accountSettings",
-    title: "帳號設定",
+    key: 'accountSettings',
+    title: '帳號設定',
     href: paths.dashboard.account,
-    icon: "user",
+    icon: 'user',
   },
   {
-    key: "settings",
-    title: "系統設定",
+    key: 'settings',
+    title: '系統設定',
     href: paths.dashboard.settings,
-    icon: "gear-six",
+    icon: 'gear-six',
   },
   {
-    key: "systemOrder",
-    title: "系統訂單",
+    key: 'systemOrder',
+    title: '系統訂單',
     href: paths.dashboard.settings,
-    icon: "fileText",
+    icon: 'fileText',
   },
 ] satisfies NavItemConfig[]

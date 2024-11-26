@@ -1,36 +1,36 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { enqueueSnackbar } from "notistack"
-import Alert from "@mui/material/Alert"
-import Button from "@mui/material/Button"
-import FormControl from "@mui/material/FormControl"
-import Grid from "@mui/material/Grid"
-import InputLabel from "@mui/material/InputLabel"
-import OutlinedInput from "@mui/material/OutlinedInput"
-import Divider from "@mui/material/Divider"
-import Typography from "@mui/material/Typography"
-import Card from "@mui/material/Card"
-import CardActions from "@mui/material/CardActions"
-import CardContent from "@mui/material/CardContent"
-import CardHeader from "@mui/material/CardHeader"
-import { Stack } from "@mui/material"
-import { Controller, useForm } from "react-hook-form"
-import { z as zod } from "zod"
-import { useAuthClient } from "@/hooks/use-auth-client"
-import { useRouter } from "next/navigation"
+import * as React from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { enqueueSnackbar } from 'notistack'
+import Alert from '@mui/material/Alert'
+import Button from '@mui/material/Button'
+import FormControl from '@mui/material/FormControl'
+import Grid from '@mui/material/Grid'
+import InputLabel from '@mui/material/InputLabel'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import Divider from '@mui/material/Divider'
+import Typography from '@mui/material/Typography'
+import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
+import CardContent from '@mui/material/CardContent'
+import CardHeader from '@mui/material/CardHeader'
+import { Stack } from '@mui/material'
+import { Controller, useForm } from 'react-hook-form'
+import { z as zod } from 'zod'
+import { useAuthClient } from '@/hooks/use-auth-client'
+import { useRouter } from 'next/navigation'
 
 const schema = zod.object({
-  oldPassword: zod.string().min(1, { message: "請輸入舊密碼" }),
-  newPassword: zod.string().min(6, { message: "密碼至少需要 6 個字元" }),
+  oldPassword: zod.string().min(1, { message: '請輸入舊密碼' }),
+  newPassword: zod.string().min(6, { message: '密碼至少需要 6 個字元' }),
 })
 
 type Values = zod.infer<typeof schema>
 
 const defaultValues = {
-  oldPassword: "",
-  newPassword: "",
+  oldPassword: '',
+  newPassword: '',
 } satisfies Values
 
 export function ResetPasswordCard(): React.JSX.Element {
@@ -54,14 +54,14 @@ export function ResetPasswordCard(): React.JSX.Element {
         const result = await authClient.updatePassword(values)
 
         if (result) {
-          enqueueSnackbar("更新密碼成功！", { variant: "success" })
+          enqueueSnackbar('更新密碼成功！', { variant: 'success' })
           reset(defaultValues)
           router.refresh()
         }
       } catch (err) {
-        setError("root", {
-          type: "server",
-          message: "An error occurred while processing your request",
+        setError('root', {
+          type: 'server',
+          message: 'An error occurred while processing your request',
         })
       } finally {
         setIsPending(false)
@@ -110,7 +110,7 @@ export function ResetPasswordCard(): React.JSX.Element {
           </Grid>
         </CardContent>
         <Divider />
-        <CardActions sx={{ justifyContent: "flex-end" }}>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button type="submit" variant="contained">
             更新密碼
           </Button>

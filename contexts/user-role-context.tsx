@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import * as React from "react"
+import * as React from 'react'
 
-import type { UserRole } from "@/types/user-role"
-import { useAuthClient } from "@/hooks/use-auth-client"
+import type { UserRole } from '@/types/user-role'
+import { useAuthClient } from '@/hooks/use-auth-client'
 
 export interface UserRoleContextValue {
   userRole: string | null
@@ -42,7 +42,7 @@ export function UserRoleProvider({
         setState((prev) => ({
           ...prev,
           userRole: null,
-          error: "Something went wrong",
+          error: 'Something went wrong',
           isLoading: false,
         }))
         return
@@ -58,7 +58,7 @@ export function UserRoleProvider({
       setState((prev) => ({
         ...prev,
         userRole: null,
-        error: "Something went wrong",
+        error: 'Something went wrong',
         isLoading: false,
       }))
     }

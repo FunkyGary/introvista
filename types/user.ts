@@ -1,4 +1,4 @@
-import { FieldValue, Timestamp } from "firebase/firestore"
+import { FieldValue, Timestamp } from 'firebase/firestore'
 
 export interface User {
   id: string
@@ -29,7 +29,7 @@ interface DesignerInfo {
   lastUpdated: Date
 }
 
-export type UserRole = "designer" | "supplier" | "superAdmin"
+export type UserRole = 'designer' | 'supplier' | 'superAdmin'
 
 export interface UserData {
   userID: string

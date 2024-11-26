@@ -25,45 +25,44 @@ export interface Model {
 }
 
 export interface ModelDto {
-  modelID: string;
-  modelName: string;
-  categoryID: string;
-  brand: string;
-  modelDescription: string;
-  modelFileGLB: string | null;
-  modelFileUSD: string | null;
-  thumbnailImage: string | null;
+  modelID: string
+  modelName: string
+  categoryID: string
+  brand: string
+  modelDescription: string
+  modelFileGLB: string | null
+  modelFileUSD: string | null
+  thumbnailImage: string | null
   dimensions: {
-    length: number;
-    width: number;
-    height: number;
-  };
-  weight: number;
-  materialIDs: string[];
-  price: number;
-  stockQuantity: number;
-  createdDate: Date;
-  lastUpdated: Date;
-  publishedAt: Date | null;
-  userID: string;
+    length: number
+    width: number
+    height: number
+  }
+  weight: number
+  materialIDs: string[]
+  price: number
+  stockQuantity: number
+  createdDate: Date
+  lastUpdated: Date
+  publishedAt: Date | null
+  userID: string
 }
 export interface FurnitureModel {
-    ModelID: string;
-    ModelName: string;
-    CategoryID: string;
-    Brand: string;
-    ModelDescription: string;
-    ModelFileGLB: string | null;
-    ModelFileUSD: string | null;
-    ThumbnailImage: string | null;
-    Dimensions: string;
-    Weight: number;
-    MaterialIDs: string | null;
-    Price: number;
-    StockQuantity: number;
-    CreatedDate: Date;
-    LastUpdated: Date;
-    PublishedAt: Date | null;
-    UserID: string;
+  ModelID: string
+  ModelName: string
+  CategoryID: string
+  Brand: string
+  ModelDescription: string
+  ModelFileGLB: string | null
+  ModelFileUSD: string | null
+  ThumbnailImage: string | null
+  Dimensions: string
+  Weight: number
+  MaterialIDs: string | null
+  Price: number
+  StockQuantity: number
+  CreatedDate: Date
+  LastUpdated: Date
+  PublishedAt: Date | null
+  UserID: string
 }
-

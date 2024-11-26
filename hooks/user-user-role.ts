@@ -1,15 +1,15 @@
-import * as React from "react";
+import * as React from 'react'
 import {
   type UserRoleContextValue,
   UserRoleContext,
-} from "@/contexts/user-role-context";
+} from '@/contexts/user-role-context'
 
 export function useUserRole(): UserRoleContextValue {
-  const context = React.useContext(UserRoleContext);
+  const context = React.useContext(UserRoleContext)
 
   if (!context) {
-    throw new Error("useUser must be used within a UserRoleProvider");
+    throw new Error('useUser must be used within a UserRoleProvider')
   }
 
-  return context;
+  return context
 }

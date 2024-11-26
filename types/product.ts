@@ -1,5 +1,5 @@
 export interface ModelProduct {
-  type: "model"
+  type: 'model'
   itemID: string
   itemName: string
   price: number
@@ -8,7 +8,7 @@ export interface ModelProduct {
 }
 
 export interface MaterialProduct {
-  type: "material"
+  type: 'material'
   materialID: string
   materialName: string
   materialPrice: number
@@ -18,12 +18,12 @@ export interface MaterialProduct {
 
 export type Product = ModelProduct | MaterialProduct
 
-export type ProductType = "models" | "materials"
+export type ProductType = 'models' | 'materials'
 
 type FileData = { name: string; url: string }
 
 export interface ModelData {
-  type: "models"
+  type: 'models'
   itemName: string
   itemDescription: string
   brand: string
@@ -46,7 +46,7 @@ export interface ModelData {
 }
 
 export interface MaterialData {
-  type: "materials"
+  type: 'materials'
   materialName: string
   materialDescription: string
   materialPrice: number

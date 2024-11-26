@@ -1,38 +1,38 @@
-import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
+import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 
-import { colorSchemes } from './color-schemes';
-import { components } from './components/components';
-import { shadows } from './shadows';
-import type { Theme } from './types';
-import { typography } from './typography';
+import { colorSchemes } from './color-schemes'
+import { components } from './components/components'
+import { shadows } from './shadows'
+import type { Theme } from './types'
+import { typography } from './typography'
 
 declare module '@mui/material/styles/createPalette' {
   interface PaletteRange {
-    50: string;
-    100: string;
-    200: string;
-    300: string;
-    400: string;
-    500: string;
-    600: string;
-    700: string;
-    800: string;
-    900: string;
-    950: string;
+    50: string
+    100: string
+    200: string
+    300: string
+    400: string
+    500: string
+    600: string
+    700: string
+    800: string
+    900: string
+    950: string
   }
 
   interface Palette {
-    neutral: PaletteRange;
+    neutral: PaletteRange
   }
 
   interface PaletteOptions {
-    neutral?: PaletteRange;
+    neutral?: PaletteRange
   }
 
   interface TypeBackground {
-    level1: string;
-    level2: string;
-    level3: string;
+    level1: string
+    level2: string
+    level3: string
   }
 }
 
@@ -44,7 +44,7 @@ export function createTheme(): Theme {
     shadows,
     shape: { borderRadius: 8 },
     typography,
-  });
+  })
 
-  return theme;
+  return theme
 }
