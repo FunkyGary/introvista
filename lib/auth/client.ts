@@ -194,7 +194,7 @@ class AuthClient {
     }
   }
 
-  async getUserRole(): Promise<{ data?: UserRole | null; error?: string }> {
+  async getUserRole(): Promise<{ data?: string | null; error?: string }> {
     const result = await this.authApi.getUserRole()
     return {
       data: result.data,

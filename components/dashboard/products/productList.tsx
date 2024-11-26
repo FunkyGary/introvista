@@ -122,7 +122,7 @@ export function ProductList(): React.JSX.Element {
       }
 
       const filteredProducts = await filterProducts(filterParams)
-      setProducts(filteredProducts)
+      setProducts(filteredProducts as Product[])
     } catch (error) {
       console.error("Error filtering products:", error)
     } finally {

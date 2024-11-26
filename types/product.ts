@@ -1,39 +1,19 @@
-interface BaseProduct {
-  isPublished: boolean
-  createdDate: Date
-  lastUpdated: Date
-  supplierID: string
-}
-
-export interface ModelProduct extends BaseProduct {
+export interface ModelProduct {
   type: "model"
   itemID: string
   itemName: string
   price: number
-  modelDescription: string
-  thumbnailImage: string | null
-  itemFiles: {
-    modelFileGLB: string | null
-    modelFileUSD: string | null
-    additionalFiles?: string | null
-  }
+  isPublished: boolean
+  createdDate: Date
 }
 
-export interface MaterialProduct extends BaseProduct {
+export interface MaterialProduct {
   type: "material"
   materialID: string
   materialName: string
   materialPrice: number
-  materialDescription: string
-  previewImage: string | null
-  textureMaps: {
-    baseColorMap: string | null
-    normalMap: string | null
-    roughnessMap: string | null
-    heightMap: string | null
-    metallicMap: string | null
-    ambientOcclusionMap: string | null
-  }
+  isPublished: boolean
+  createdDate: Date
 }
 
 export type Product = ModelProduct | MaterialProduct
