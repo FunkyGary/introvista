@@ -190,7 +190,7 @@ class AuthApi {
     }
   }
 
-  async getUserRole(): Promise<{ data?: UserRole | null; error?: string }> {
+  async getUserRole(): Promise<{ data?: string | null; error?: string }> {
     try {
       const currentFirebaseUser = await new Promise<FirebaseUser | null>(
         (resolve, reject) => {
@@ -204,15 +204,12 @@ class AuthApi {
       }
 
       const idTokenResult = await currentFirebaseUser.getIdTokenResult()
-      const userRole = {
-        superAdmin: !!idTokenResult.claims.superAdmin,
-        supplier: !!idTokenResult.claims.supplier,
-        designer: !!idTokenResult.claims.designer,
-      } satisfies UserRole
 
-      return {
-        data: userRole,
-      }
+      if (idTokenResult.claims.superAdmin) return { data: "superAdmin" }
+      if (idTokenResult.claims.supplier) return { data: "supplier" }
+      if (idTokenResult.claims.designer) return { data: "designer" }
+
+      return { data: "user" }
     } catch (error) {
       console.error(error)
       return { error: this.getErrorMessage(error) }
