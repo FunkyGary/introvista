@@ -1,7 +1,6 @@
 "use client"
 
-import type { User, UserData } from "@/types/user"
-import { UserRole } from "@/types/user-role"
+import type { UserRole, User, UserData } from "@/types/user"
 import { inject, injectable } from "inversify"
 import AuthApi from "./auth-api"
 
@@ -23,7 +22,7 @@ export interface SignUpParams {
   username: string
   email: string
   password: string
-  role: "supplier" | "designer"
+  role: UserRole
   contactInfo: {
     phone: string
     address?: string

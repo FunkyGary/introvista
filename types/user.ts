@@ -1,3 +1,5 @@
+import { FieldValue, Timestamp } from "firebase/firestore"
+
 export interface User {
   id: string
   name?: string
@@ -27,9 +29,11 @@ interface DesignerInfo {
   lastUpdated: Date
 }
 
+export type UserRole = "designer" | "supplier" | "superAdmin"
+
 export interface UserData {
   userID: string
-  role: string
+  role: UserRole
   tags: string[]
   username: string
   email: string
@@ -43,14 +47,15 @@ export interface UserData {
   supplierInfo?: SupplierInfo
   designerInfo?: DesignerInfo
   preferences?: {
-    language: string
+    language?: string
     currency?: string
     notificationSettings?: {
       emailNotifications: boolean
       smsNotifications: boolean
     }
   }
-  createdDate: Date
-  lastLoginDate?: Date
-  lastUpdated: Date
+  createdDate: Date | Timestamp | FieldValue
+  lastLoginDate?: Date | Timestamp | FieldValue
+  lastUpdated: Date | Timestamp | FieldValue
+  emailVerified?: boolean
 }

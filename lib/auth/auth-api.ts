@@ -52,7 +52,6 @@ import type {
 } from "./client"
 import type { User, UserData } from "@/types/user"
 import { FirebaseError } from "firebase/app"
-import { UserRole } from "@/types/user-role"
 import { injectable } from "inversify"
 
 @injectable()
@@ -85,10 +84,21 @@ class AuthApi {
         displayName: params.username,
       })
 
-      const roleSpecificInfo =
-        params.role === "supplier"
-          ? { supplierInfo: params.supplierInfo }
-          : { designerInfo: params.designerInfo }
+      const roleSpecificInfo = (() => {
+        switch (params.role) {
+          case "supplier":
+            return { supplierInfo: params.supplierInfo }
+          case "designer":
+            return { designerInfo: params.designerInfo }
+          case "superAdmin":
+            return {
+              supplierInfo: params.supplierInfo,
+              designerInfo: params.designerInfo,
+            }
+          default:
+            throw new Error("Invalid role specified")
+        }
+      })()
 
       const userData = {
         userID: userCredential.user.uid,
@@ -116,6 +126,10 @@ class AuthApi {
         doc(this.db, this.userCollectionName, userCredential.user.uid),
         userData
       )
+
+      this.auth.languageCode = userData.preferences?.language || "zh-TW"
+
+      sendEmailVerification(userCredential.user)
     } catch (error) {
       console.error(error)
       return { error: this.getErrorMessage(error) }
@@ -483,32 +497,102 @@ class AuthApi {
         return { error: "User not found" }
       }
 
-      let avatarUrl = userData.profileImageUrl ?? ""
+      const currentUserData = querySnapshot.docs[0].data()
+      let avatarUrl = ""
 
+      // Handle profile image upload if it's a File
       if (userData.profileImageUrl instanceof File) {
         const storageRef = ref(this.storage, `profile-images/${user.uid}`)
         await uploadBytes(storageRef, userData.profileImageUrl)
         avatarUrl = await getDownloadURL(storageRef)
-      } else {
-        avatarUrl = userData.profileImageUrl || ""
       }
 
-      await updateDoc(querySnapshot.docs[0].ref, {
+      // Prepare the update object with type safety
+      const updateData: Partial<UserData> = {
         ...userData,
-        profileImageUrl: avatarUrl,
+        profileImageUrl: avatarUrl || currentUserData.profileImageUrl,
         lastUpdated: serverTimestamp(),
-      })
+      }
 
+      // Update nested objects correctly
+      if (userData.preferences) {
+        updateData.preferences = {
+          ...currentUserData.preferences,
+          ...userData.preferences,
+          notificationSettings: {
+            ...currentUserData.preferences?.notificationSettings,
+            ...userData.preferences?.notificationSettings,
+          },
+        }
+      }
+
+      // Handle role-specific updates
+      if (userData.role) {
+        switch (userData.role) {
+          case "supplier":
+            if (userData.supplierInfo) {
+              updateData.supplierInfo = {
+                ...currentUserData.supplierInfo,
+                ...userData.supplierInfo,
+              }
+            }
+            break
+          case "designer":
+            if (userData.designerInfo) {
+              updateData.designerInfo = {
+                ...currentUserData.designerInfo,
+                ...userData.designerInfo,
+              }
+            }
+            break
+          case "superAdmin":
+            if (userData.supplierInfo) {
+              updateData.supplierInfo = {
+                ...currentUserData.supplierInfo,
+                ...userData.supplierInfo,
+              }
+            }
+            if (userData.designerInfo) {
+              updateData.designerInfo = {
+                ...currentUserData.designerInfo,
+                ...userData.designerInfo,
+              }
+            }
+            break
+          default:
+            throw new Error("Invalid role specified")
+        }
+      }
+
+      // Handle contact info updates
+      if (userData.contactInfo) {
+        updateData.contactInfo = {
+          ...currentUserData.contactInfo,
+          ...userData.contactInfo,
+        }
+      }
+
+      // Handle tags updates (if provided)
+      if (userData.tags) {
+        updateData.tags = Array.from(
+          new Set([...currentUserData.tags, ...userData.tags])
+        )
+      }
+
+      // Update Firestore
+      await updateDoc(querySnapshot.docs[0].ref, updateData)
+
+      // Update Firebase Auth profile if necessary
       if (userData.username || avatarUrl) {
         await updateProfile(user, {
           displayName: userData.username || user.displayName,
-          photoURL: avatarUrl || user.photoURL,
+          photoURL: typeof avatarUrl === "string" ? avatarUrl : user.photoURL,
         })
       }
 
       return {}
     } catch (error) {
-      console.error(error)
+      console.error("UpdateUser error:", error)
       return { error: this.getErrorMessage(error) }
     }
   }

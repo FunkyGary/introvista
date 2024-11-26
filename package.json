@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky"
+    "prepare": "husky",
+    "pretty": "prettier --write \"**/*.{ts,tsx,js,jsx}\""
   },
   "husky": {
     "hooks": {
