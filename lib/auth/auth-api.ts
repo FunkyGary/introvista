@@ -214,15 +214,19 @@ class AuthApi {
         return { data: null }
       }
 
-      const userDoc = await getDoc(
-        doc(this.db, this.userCollectionName, currentFirebaseUser.uid)
+      const userQuery = query(
+        collection(this.db, this.userCollectionName),
+        where('userID', '==', currentFirebaseUser.uid)
       )
+      const querySnapshot = await getDocs(userQuery)
 
-      if (!userDoc.exists()) {
+      if (querySnapshot.empty) {
         return { error: 'User not found' }
       }
 
-      const userRole = userDoc.data()?.role
+      const userData = querySnapshot.docs[0].data()
+      const userRole = userData.role
+
       return { data: userRole }
     } catch (error) {
       console.error(error)
