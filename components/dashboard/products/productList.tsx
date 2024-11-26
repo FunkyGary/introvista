@@ -71,7 +71,7 @@ export function ProductList(): React.JSX.Element {
 
   const { control, handleSubmit, watch, reset } = useForm<SearchFormData>({
     defaultValues: {
-      mainCategory: 'all',
+      mainCategory: '',
       categoryID: '',
       searchQuery: '',
       priceStart: '',
@@ -511,7 +511,7 @@ export function ProductList(): React.JSX.Element {
                     </TableCell>
                     <TableCell>
                       <ButtonGroup variant="text" size="small">
-                        <Button href={`/admin/product/${id}`}>預覽</Button>
+                        {/* <Button href={`/admin/product/${id}`}>預覽</Button> */}
                         <Button>
                           <Link href={`/admin/product/${id}/edit`}>編輯</Link>
                         </Button>

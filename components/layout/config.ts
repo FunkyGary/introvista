@@ -5,24 +5,24 @@ export const getNavItems = (role: string): NavItemConfig[] => {
   switch (role) {
     case 'designer':
       return [
-        {
-          key: 'cart',
-          title: '購物車',
-          href: paths.dashboard.cart,
-          icon: 'shoppingCart',
-        },
+        // {
+        //   key: 'cart',
+        //   title: '購物車',
+        //   href: paths.dashboard.cart,
+        //   icon: 'shoppingCart',
+        // },
         {
           key: 'order',
           title: '訂單',
           href: paths.dashboard.overview,
           icon: 'fileText',
         },
-        {
-          key: 'orderReviews',
-          title: '評價',
-          href: paths.dashboard.reviews,
-          icon: 'star',
-        },
+        // {
+        //   key: 'orderReviews',
+        //   title: '評價',
+        //   href: paths.dashboard.reviews,
+        //   icon: 'star',
+        // },
         {
           key: 'accountSettings',
           title: '帳號設定',
@@ -31,7 +31,7 @@ export const getNavItems = (role: string): NavItemConfig[] => {
         },
       ]
 
-    case 'seller':
+    case 'supplier':
       return [
         {
           key: 'createProduct',
@@ -45,18 +45,18 @@ export const getNavItems = (role: string): NavItemConfig[] => {
           href: paths.dashboard.products,
           icon: 'bagSimple',
         },
-        {
-          key: 'orders',
-          title: '訂單',
-          href: paths.dashboard.orders,
-          icon: 'fileText',
-        },
-        {
-          key: 'sellerReview',
-          title: '評價',
-          href: paths.dashboard.integrations,
-          icon: 'star',
-        },
+        // {
+        //   key: 'orders',
+        //   title: '訂單',
+        //   href: paths.dashboard.orders,
+        //   icon: 'fileText',
+        // },
+        // {
+        //   key: 'sellerReview',
+        //   title: '評價',
+        //   href: paths.dashboard.integrations,
+        //   icon: 'star',
+        // },
         {
           key: 'accountSettings',
           title: '帳號設定',
@@ -65,7 +65,7 @@ export const getNavItems = (role: string): NavItemConfig[] => {
         },
       ]
 
-    case 'admin':
+    case 'superAdmin':
       return [
         {
           key: 'systemOrder',

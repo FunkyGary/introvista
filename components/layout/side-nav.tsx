@@ -42,11 +42,6 @@ export function SideNav(): React.JSX.Element {
 
   const sessionRole = useUserRole()
 
-  console.log(sessionRole)
-
-  // TODO: Implement user role related logic
-  // sessionRole.userRole
-
   return (
     <Box
       sx={{
@@ -142,22 +137,22 @@ function renderNavItems({
       index: number
     ): React.ReactNode[] => {
       const { key, ...item } = curr
-      if (index === 0 || index === 3 || index === 7) {
-        acc.push(
-          <Box
-            sx={{
-              display: 'flex',
-            }}
-            key={index}
-          >
-            <Typography sx={{ color: grey[700] }} variant="body2">
-              {index === 0 && '購買清單'}
-              {index === 3 && '廠商後台'}
-              {index === 7 && '系統設定'}
-            </Typography>
-          </Box>
-        )
-      }
+      // if (index === 0 || index === 3 || index === 7) {
+      //   acc.push(
+      //     <Box
+      //       sx={{
+      //         display: 'flex',
+      //       }}
+      //       key={index}
+      //     >
+      //       <Typography sx={{ color: grey[700] }} variant="body2">
+      //         {index === 0 && '購買清單'}
+      //         {index === 3 && '廠商後台'}
+      //         {index === 7 && '系統設定'}
+      //       </Typography>
+      //     </Box>
+      //   )
+      // }
 
       acc.push(<NavItem key={key} pathname={pathname} {...item} />)
 
