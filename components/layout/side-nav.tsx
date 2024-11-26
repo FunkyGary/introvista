@@ -90,7 +90,10 @@ export function SideNav(): React.JSX.Element {
         </Box>
       </Stack>
       <Box component="nav" sx={{ flex: "1 1 auto", p: "12px" }}>
-        {renderNavItems({ pathname, items: getNavItems(sessionRole.userRole) })}
+        {renderNavItems({
+          pathname,
+          items: getNavItems(sessionRole?.userRole as string),
+        })}
       </Box>
       <Stack sx={{ px: "15px", py: "20px" }}>
         <FormControl fullWidth>
