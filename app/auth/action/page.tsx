@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import {
   verifyPasswordResetCode,
   applyActionCode,
@@ -14,7 +14,7 @@ type ActionStatus = {
   isError?: boolean
 }
 
-const ActionHandler: React.FC = () => {
+const ActionContent: React.FC = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [isProcessing, setIsProcessing] = useState(true)
@@ -115,6 +115,14 @@ const ActionHandler: React.FC = () => {
         </div>
       </div>
     </div>
+  )
+}
+
+const ActionHandler: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ActionContent />
+    </Suspense>
   )
 }
 

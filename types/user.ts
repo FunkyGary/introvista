@@ -33,7 +33,7 @@ export type UserRole = 'designer' | 'supplier' | 'superAdmin'
 
 export interface UserData {
   userID: string
-  role: UserRole
+  role: string
   tags: string[]
   username: string
   email: string
