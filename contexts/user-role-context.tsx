@@ -1,8 +1,6 @@
 'use client'
 
 import * as React from 'react'
-
-import type { UserRole } from '@/types/user-role'
 import { useAuthClient } from '@/hooks/use-auth-client'
 
 export interface UserRoleContextValue {
@@ -62,24 +60,24 @@ export function UserRoleProvider({
         isLoading: false,
       }))
     }
-  }, [])
+  }, [authClient])
 
   React.useEffect(() => {
-    checkSessionRole().catch((err: unknown) => {
-      console.log(err)
+    const unsubscribe = authClient.onUserChange(async (user) => {
+      if (user) {
+        await checkSessionRole()
+      } else {
+        setState((prev) => ({
+          ...prev,
+          userRole: null,
+          error: null,
+          isLoading: false,
+        }))
+      }
     })
-  }, [checkSessionRole])
 
-  React.useEffect(() => {
-    authClient.onUserChange((user) => {
-      setState((prev) => ({
-        ...prev,
-        user,
-        error: null,
-        isLoading: false,
-      }))
-    })
-  }, [])
+    return unsubscribe
+  }, [authClient, checkSessionRole])
 
   return (
     <UserRoleContext.Provider value={{ ...state, checkSessionRole }}>

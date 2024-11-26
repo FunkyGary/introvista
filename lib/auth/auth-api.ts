@@ -234,15 +234,15 @@ class AuthApi {
     }
   }
 
-  onUserChange(callback: (user: User | null) => void): void {
-    onAuthStateChanged(this.auth, (user) => {
+  onUserChange(callback: (user: User | null) => void): () => void {
+    const unsubscribe = onAuthStateChanged(this.auth, (user) => {
       if (!user) {
         callback(null)
         return
       }
-
       callback(this.mapFirebaseUserToUser(user))
     })
+    return unsubscribe
   }
 
   async sendPasswordResetEmail({
