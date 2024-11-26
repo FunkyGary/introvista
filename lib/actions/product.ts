@@ -132,16 +132,8 @@ export const getUserProducts = async (userId: string) => {
         type: "model",
         itemName: data.itemName || "",
         price: data.price || 0,
-        modelDescription: data.modelDescription || "",
-        thumbnailImage: data.thumbnailImage || null,
-        itemFiles: {
-          modelFileGLB: data.modelFiles?.modelFileGLB || null,
-          modelFileUSD: data.modelFiles?.modelFileUSD || null,
-        },
         isPublished: data.isPublished || false,
         createdDate: (data.createdDate as Timestamp)?.toDate() || new Date(),
-        lastUpdated: (data.lastUpdated as Timestamp)?.toDate() || new Date(),
-        supplierID: data.supplierID,
       }
     })
 
@@ -153,20 +145,8 @@ export const getUserProducts = async (userId: string) => {
         type: "material",
         materialName: data.materialName || "",
         materialPrice: data.materialPrice || 0,
-        materialDescription: data.materialDescription || "",
-        previewImage: data.previewImage || null,
-        textureMaps: {
-          baseColorMap: data.textureMaps?.baseColorMap || null,
-          normalMap: data.textureMaps?.normalMap || null,
-          roughnessMap: data.textureMaps?.roughnessMap || null,
-          heightMap: data.textureMaps?.heightMap || null,
-          metallicMap: data.textureMaps?.metallicMap || null,
-          ambientOcclusionMap: data.textureMaps?.ambientOcclusionMap || null,
-        },
         isPublished: data.isPublished || false,
         createdDate: (data.createdDate as Timestamp)?.toDate() || new Date(),
-        lastUpdated: (data.lastUpdated as Timestamp)?.toDate() || new Date(),
-        supplierID: data.supplierID,
       }
     })
 
@@ -607,7 +587,7 @@ export const filterProducts = async (filters: ProductFilters) => {
 
     // Transform and filter results
     const models = modelsSnapshot.docs.map((doc) => ({
-      modelID: doc.id,
+      itemID: doc.id,
       type: "model",
       itemName: doc.data().itemName,
       isPublished: doc.data().isPublished,
