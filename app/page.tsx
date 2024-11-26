@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
-  redirect('/admin/products')
+  redirect('/admin/account')
 }
