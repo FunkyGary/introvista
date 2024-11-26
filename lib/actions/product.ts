@@ -1,6 +1,8 @@
 import firebaseApp from "../firebase/firebase-config"
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import {
+  type Query,
+  type DocumentData,
   getDoc,
   collection,
   writeBatch,
@@ -38,6 +40,36 @@ const COLLECTIONS = {
   models: "models",
   materials: "materials",
 } as const
+
+export interface ProductFilters {
+  userId: string
+  searchFilters: SearchFilters
+}
+
+interface SearchFilters {
+  categoryID?: string | null
+  searchQuery?: string
+  priceRange?: PriceRange
+  tags?: string
+  brands?: string
+  dimensions?: DimensionFilters
+}
+
+interface PriceRange {
+  min?: string
+  max?: string
+}
+
+interface DimensionFilters {
+  length?: DimensionRange
+  width?: DimensionRange
+  height?: DimensionRange
+}
+
+interface DimensionRange {
+  min?: string
+  max?: string
+}
 
 export const getUserProductsFromSingleCollection = async (userId: string) => {
   try {
@@ -544,4 +576,167 @@ export const createProductWithoutFiles = async (
     console.error("Error creating product:", error)
     throw error
   }
+}
+
+// Updated function with new interface
+export const filterProducts = async (filters: ProductFilters) => {
+  try {
+    // Base queries for both collections
+    const modelsBaseQuery = query(
+      collection(db, COLLECTIONS.models),
+      where("userId", "==", filters.userId)
+    )
+    const materialsBaseQuery = query(
+      collection(db, COLLECTIONS.materials),
+      where("userId", "==", filters.userId)
+    )
+
+    // Build queries using the helper function
+    const modelsQuery = buildQuery(modelsBaseQuery, filters, {
+      nameField: "itemName",
+    })
+    const materialsQuery = buildQuery(materialsBaseQuery, filters, {
+      nameField: "materialName",
+    })
+
+    // Fetch data
+    const [modelsSnapshot, materialsSnapshot] = await Promise.all([
+      getDocs(modelsQuery),
+      getDocs(materialsQuery),
+    ])
+
+    // Transform and filter results
+    const models = modelsSnapshot.docs.map((doc) => ({
+      modelID: doc.id,
+      type: "model",
+      itemName: doc.data().itemName,
+      isPublished: doc.data().isPublished,
+      price: doc.data().price,
+      createdDate:
+        (doc.data().createdDate as Timestamp)?.toDate() || new Date(),
+    }))
+
+    const materials = materialsSnapshot.docs.map((doc) => ({
+      materialID: doc.id,
+      type: "material",
+      materialName: doc.data().materialName,
+      isPublished: doc.data().isPublished,
+      materialPrice: doc.data().materialPrice,
+      createdDate:
+        (doc.data().createdDate as Timestamp)?.toDate() || new Date(),
+    }))
+
+    const products = [...models, ...materials]
+
+    console.log(products)
+
+    return products
+  } catch (error) {
+    console.error("Error filtering products:", error)
+    throw error
+  }
+}
+
+const buildQuery = (
+  baseQuery: Query<DocumentData>,
+  filters: ProductFilters,
+  fieldMappings: { nameField: string }
+): Query<DocumentData> => {
+  let queryRef = baseQuery
+
+  // Name filter
+  if (filters.searchFilters.searchQuery !== "") {
+    queryRef = query(
+      queryRef,
+      where(fieldMappings.nameField, "==", filters.searchFilters.searchQuery)
+    )
+  }
+
+  // Tags filter
+  if (filters.searchFilters.tags !== "") {
+    queryRef = query(
+      queryRef,
+      where("tags", "array-contains", filters.searchFilters.tags)
+    )
+  }
+
+  // Brand filter
+  if (filters.searchFilters.brands !== "") {
+    queryRef = query(
+      queryRef,
+      where("brand", "==", filters.searchFilters.brands)
+    )
+  }
+
+  // Category ID filter
+  if (filters.searchFilters.categoryID !== "") {
+    queryRef = query(
+      queryRef,
+      where("categoryID", "==", filters.searchFilters.categoryID)
+    )
+  }
+
+  // Price range filter
+  if (filters.searchFilters.priceRange) {
+    const { min, max } = filters.searchFilters.priceRange
+    const priceField =
+      fieldMappings.nameField === "itemName" ? "price" : "materialPrice"
+
+    if (min !== "" && min !== undefined) {
+      queryRef = query(queryRef, where(priceField, ">=", Number(min)))
+    }
+
+    if (max !== "" && max !== undefined) {
+      queryRef = query(queryRef, where(priceField, "<=", Number(max)))
+    }
+  }
+
+  // Dimensions filter
+  if (filters.searchFilters.dimensions) {
+    const { length, width, height } = filters.searchFilters.dimensions
+
+    // Length filter
+    if (length?.min !== undefined && length?.min !== "") {
+      queryRef = query(
+        queryRef,
+        where("dimensions.length", ">=", Number(length.min))
+      )
+    }
+    if (length?.max !== undefined && length?.max !== "") {
+      queryRef = query(
+        queryRef,
+        where("dimensions.length", "<=", Number(length.max))
+      )
+    }
+
+    // Width filter
+    if (width?.min !== undefined && width?.min !== "") {
+      queryRef = query(
+        queryRef,
+        where("dimensions.width", ">=", Number(width.min))
+      )
+    }
+    if (width?.max !== undefined && width?.max !== "") {
+      queryRef = query(
+        queryRef,
+        where("dimensions.width", "<=", Number(width.max))
+      )
+    }
+
+    // Height filter
+    if (height?.min !== undefined && height?.min !== "") {
+      queryRef = query(
+        queryRef,
+        where("dimensions.height", ">=", Number(height.min))
+      )
+    }
+    if (height?.max !== undefined && height?.max !== "") {
+      queryRef = query(
+        queryRef,
+        where("dimensions.height", "<=", Number(height.max))
+      )
+    }
+  }
+
+  return queryRef
 }

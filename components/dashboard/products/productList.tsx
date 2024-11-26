@@ -36,6 +36,7 @@ import { ProductData, Product } from "@/types/product"
 import { useUser } from "@/hooks/use-user" // Adjust based on your auth setup
 import { categories, MainCategory } from "@/utils/categories"
 import { useForm, Controller } from "react-hook-form"
+import { filterProducts, ProductFilters } from "@/lib/actions/product"
 
 const tabs = [
   { value: "all", label: "全部商品" },
@@ -44,8 +45,8 @@ const tabs = [
 ] as const
 
 interface SearchFormData {
-  mainCategory: string
-  categoryID: string
+  mainCategory?: string | null
+  categoryID?: string | null
   searchQuery: string
   priceStart: string
   priceEnd: string
@@ -88,9 +89,45 @@ export function ProductList(): React.JSX.Element {
 
   const mainCategoryWatch = watch("mainCategory")
 
-  const onSubmit = (data: SearchFormData) => {
-    console.log("Search form data:", data)
-    // 實現搜索邏輯
+  const onSubmit = async (data: SearchFormData) => {
+    if (!user?.id) return
+    try {
+      setLoading(true)
+      const filterParams: ProductFilters = {
+        userId: user.id,
+        searchFilters: {
+          categoryID: data.categoryID,
+          searchQuery: data.searchQuery,
+          priceRange: {
+            min: data.priceStart,
+            max: data.priceEnd,
+          },
+          tags: data.tags,
+          brands: data.brands,
+          dimensions: {
+            length: {
+              min: data.minLength,
+              max: data.maxLength,
+            },
+            width: {
+              min: data.minWidth,
+              max: data.maxWidth,
+            },
+            height: {
+              min: data.minHeight,
+              max: data.maxHeight,
+            },
+          },
+        },
+      }
+
+      const filteredProducts = await filterProducts(filterParams)
+      setProducts(filteredProducts)
+    } catch (error) {
+      console.error("Error filtering products:", error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleReset = () => {
@@ -100,7 +137,7 @@ export function ProductList(): React.JSX.Element {
 
   // Selection handling
   const productIds = React.useMemo(
-    () => products.map((p) => (p.type === "model" ? p.itemID : p.materialID)),
+    () => products?.map((p) => (p.type === "model" ? p.itemID : p.materialID)),
     [products]
   )
   const { selectAll, deselectAll, selectOne, deselectOne, selected } =
@@ -245,7 +282,7 @@ export function ProductList(): React.JSX.Element {
             <Controller
               name="categoryID"
               control={control}
-              rules={{ required: "請選擇子分類" }}
+              /* rules={{ required: "請選擇子分類" }} */
               render={({ field, fieldState: { error } }) => (
                 <>
                   <Select
@@ -470,7 +507,7 @@ export function ProductList(): React.JSX.Element {
                       {product.isPublished ? "已上架" : "未上架"}
                     </TableCell>
                     <TableCell>
-                      {product.createdDate.toLocaleDateString()}
+                      {product.createdDate?.toLocaleDateString()}
                     </TableCell>
                     <TableCell>
                       <ButtonGroup variant="text" size="small">
