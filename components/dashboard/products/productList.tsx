@@ -130,9 +130,19 @@ export function ProductList(): React.JSX.Element {
     }
   }
 
-  const handleReset = () => {
-    reset()
-    // 重置搜索結果
+  const handleReset = async () => {
+    reset() // Reset form fields
+    if (!user?.id) return
+
+    try {
+      setLoading(true)
+      const fetchedProducts = await getUserProducts(user.id)
+      setProducts(fetchedProducts)
+    } catch (error) {
+      console.error('Error fetching products:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   // Selection handling
@@ -282,7 +292,12 @@ export function ProductList(): React.JSX.Element {
             <Controller
               name="categoryID"
               control={control}
-              /* rules={{ required: "請選擇子分類" }} */
+              rules={{
+                required:
+                  mainCategoryWatch && mainCategoryWatch !== 'all'
+                    ? '請選擇子分類'
+                    : false,
+              }}
               render={({ field, fieldState: { error } }) => (
                 <>
                   <Select
@@ -415,7 +430,7 @@ export function ProductList(): React.JSX.Element {
               />
             )}
           />
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', gap: 1 }}>
             <Button
               variant="outlined"
               onClick={handleSubmit(onSubmit)}
@@ -427,16 +442,18 @@ export function ProductList(): React.JSX.Element {
             >
               搜尋
             </Button>
+            <Button
+              variant="outlined"
+              onClick={handleReset}
+              sx={{
+                width: '80px',
+                color: '#9900FF',
+                borderColor: '#9900FF',
+              }}
+            >
+              重設
+            </Button>
           </Box>
-
-          {/* <Button
-                variant="outlined"
-                color="info"
-                onClick={handleReset}
-                sx={{ width: "80px" }}
-              >
-                重設
-              </Button> */}
         </Box>
         {/* Products Count and Export */}
         <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
