@@ -17,7 +17,8 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import OutlinedInput from '@mui/material/OutlinedInput'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
+import Select from '@mui/material/Select'
+import Backdrop from '@mui/material/Backdrop'
 import Grid from '@mui/material/Unstable_Grid2'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
@@ -28,9 +29,11 @@ import { useAuthClient } from '@/hooks/use-auth-client'
 import { useRouter } from 'next/navigation'
 import { enqueueSnackbar } from 'notistack'
 import { AccountValues, defaultAccountValues } from '@/lib/auth/schemas'
+import { Loading } from '@/components/shared/Loading'
 
 export default function Account(): React.JSX.Element {
-  const [isPending, setIsPending] = React.useState<boolean>(false)
+  const [isLoading, setIsLoading] = React.useState<boolean>(true)
+  const [isSubmitLoading, setIsSubmitLoading] = React.useState<boolean>(false)
   const authClient = useAuthClient()
   const router = useRouter()
 
@@ -70,6 +73,8 @@ export default function Account(): React.JSX.Element {
       } catch (error) {
         enqueueSnackbar('Failed to load user data', { variant: 'error' })
         console.error('Error loading user data:', error)
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -77,9 +82,9 @@ export default function Account(): React.JSX.Element {
   }, [authClient, reset])
 
   const onSubmit = async (data: AccountValues) => {
-    if (isPending) return
+    if (isLoading || isSubmitLoading) return
 
-    setIsPending(true)
+    setIsSubmitLoading(true)
     try {
       const result = await authClient.updateUserData(data)
 
@@ -102,7 +107,7 @@ export default function Account(): React.JSX.Element {
 
       enqueueSnackbar(errorMessage, { variant: 'error' })
     } finally {
-      setIsPending(false)
+      setIsSubmitLoading(false)
     }
   }
 
@@ -115,7 +120,10 @@ export default function Account(): React.JSX.Element {
               <AccountInfo />
             </Grid>
             <Grid lg={8} md={6} xs={12}>
-              <AccountDetailsForm isPending={isPending} />
+              <AccountDetailsForm
+                isLoading={isLoading}
+                isSubmitLoading={isSubmitLoading}
+              />
             </Grid>
           </Grid>
         </form>
@@ -131,9 +139,11 @@ export default function Account(): React.JSX.Element {
 }
 
 export function AccountDetailsForm({
-  isPending,
+  isLoading,
+  isSubmitLoading,
 }: {
-  isPending: boolean
+  isLoading: boolean
+  isSubmitLoading: boolean
 }): React.JSX.Element {
   const {
     control,
@@ -141,8 +151,18 @@ export function AccountDetailsForm({
     formState: { errors },
   } = useFormContext<AccountValues>()
 
+  if (isLoading) {
+    return <Loading />
+  }
+
   return (
     <Card>
+      {isSubmitLoading && (
+        <Backdrop open>
+          <Loading />
+        </Backdrop>
+      )}
+
       <CardHeader title="Profile" />
       <Divider />
       <CardContent>
@@ -282,19 +302,13 @@ export function AccountDetailsForm({
       </CardContent>
       <Divider />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Button type="submit" variant="contained" disabled={isPending}>
+        <Button type="submit" variant="contained" disabled={isLoading}>
           Save details
         </Button>
       </CardActions>
     </Card>
   )
 }
-
-const user = {
-  avatar: '/assets/avatar.png',
-  email: 'mock@gmail.com',
-  role: 'designer',
-} as const
 
 export function AccountInfo(): React.JSX.Element {
   const { control, setValue } = useFormContext<AccountValues>()
@@ -336,6 +350,10 @@ export function AccountInfo(): React.JSX.Element {
       enqueueSnackbar('Failed to process image', { variant: 'error' })
       console.error('Error processing file:', error)
     }
+  }
+
+  if (isLoading) {
+    return <Loading />
   }
 
   return (

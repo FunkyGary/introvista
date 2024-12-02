@@ -10,12 +10,12 @@ import Grid from '@mui/material/Grid'
 import InputLabel from '@mui/material/InputLabel'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import Divider from '@mui/material/Divider'
-import Typography from '@mui/material/Typography'
+import Backdrop from '@mui/material/Backdrop'
+import { Loading } from '@/components/shared/Loading'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
-import { Stack } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import { z as zod } from 'zod'
 import { useAuthClient } from '@/hooks/use-auth-client'
@@ -34,7 +34,7 @@ const defaultValues = {
 } satisfies Values
 
 export function ResetPasswordCard(): React.JSX.Element {
-  const [isPending, setIsPending] = React.useState<boolean>(false)
+  const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const authClient = useAuthClient()
   const router = useRouter()
 
@@ -48,7 +48,7 @@ export function ResetPasswordCard(): React.JSX.Element {
 
   const onSubmit = React.useCallback(
     async (values: Values): Promise<void> => {
-      setIsPending(true)
+      setIsLoading(true)
 
       try {
         const result = await authClient.updatePassword(values)
@@ -64,11 +64,19 @@ export function ResetPasswordCard(): React.JSX.Element {
           message: 'An error occurred while processing your request',
         })
       } finally {
-        setIsPending(false)
+        setIsLoading(false)
       }
     },
     [setError, authClient, router, reset]
   )
+
+  if (isLoading) {
+    return (
+      <Backdrop open>
+        <Loading />
+      </Backdrop>
+    )
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
