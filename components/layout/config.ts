@@ -12,9 +12,9 @@ export const getNavItems = (role: string): NavItemConfig[] => {
         //   icon: 'shoppingCart',
         // },
         {
-          key: 'order',
+          key: 'orders',
           title: '訂單',
-          href: paths.dashboard.overview,
+          href: paths.dashboard.orders,
           icon: 'fileText',
         },
         // {

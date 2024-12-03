@@ -5,8 +5,6 @@ import Link from 'next/link'
 import {
   Box,
   Card,
-  Checkbox,
-  Divider,
   Table,
   TableBody,
   TableCell,
@@ -24,7 +22,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  CircularProgress,
   FormControl,
   FormHelperText,
   Grid,
@@ -32,11 +29,12 @@ import {
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass'
 import { useSelection } from '@/hooks/use-selection'
 import { getUserProducts } from '@/lib/actions/product'
-import { ProductData, Product } from '@/types/product'
+import { Product } from '@/types/product'
 import { useUser } from '@/hooks/use-user' // Adjust based on your auth setup
 import { categories, MainCategory } from '@/utils/categories'
 import { useForm, Controller } from 'react-hook-form'
 import { filterProducts, ProductFilters } from '@/lib/actions/product'
+import { Loading } from '@/components/shared/Loading'
 
 const tabs = [
   { value: 'all', label: '全部商品' },
@@ -193,11 +191,7 @@ export function ProductList(): React.JSX.Element {
   }
 
   if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" p={4}>
-        <CircularProgress />
-      </Box>
-    )
+    return <Loading />
   }
 
   return (
@@ -430,7 +424,7 @@ export function ProductList(): React.JSX.Element {
               />
             )}
           />
-          <Box sx={{ display: 'flex', gap: 1 }}>
+          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
             <Button
               variant="outlined"
               onClick={handleSubmit(onSubmit)}
@@ -445,10 +439,9 @@ export function ProductList(): React.JSX.Element {
             <Button
               variant="outlined"
               onClick={handleReset}
+              color="secondary"
               sx={{
                 width: '80px',
-                color: '#9900FF',
-                borderColor: '#9900FF',
               }}
             >
               重設
@@ -458,9 +451,9 @@ export function ProductList(): React.JSX.Element {
         {/* Products Count and Export */}
         <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
           <Typography>{filteredProducts.length} 件商品</Typography>
-          <Button variant="outlined" size="small">
+          {/* <Button variant="outlined" size="small">
             匯出報表
-          </Button>
+          </Button> */}
         </Box>
 
         {/* Products Table */}

@@ -16,12 +16,12 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  CircularProgress,
   Divider,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
+  Backdrop,
 } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
 import MaterialImage from './materialImage'
@@ -39,6 +39,7 @@ import {
 } from '@/lib/validations/product'
 import { paths } from '@/paths'
 import { useUser } from '@/hooks/use-user'
+import { Loading } from '@/components/shared/Loading'
 
 const CATEGORIES = [
   { value: 'item', label: '物品' },
@@ -61,6 +62,7 @@ export default function ProductForms({
   )
   const router = useRouter()
   const { user } = useUser()
+  const [isLoading, setIsLoading] = React.useState(false)
 
   const getDefaultValue = (category: string) => {
     const baseData =
@@ -81,7 +83,7 @@ export default function ProductForms({
 
   const handleDelete = async () => {
     if (!productId) return
-
+    setIsLoading(true)
     try {
       const result = await deleteProduct(productId)
 
@@ -94,6 +96,8 @@ export default function ProductForms({
       enqueueSnackbar(error instanceof Error ? error.message : '刪除失敗', {
         variant: 'error',
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -128,12 +132,13 @@ export default function ProductForms({
             variant="outlined"
             color="error"
             onClick={handleDelete}
+            disabled={isLoading}
             sx={{ mr: 2 }}
           >
             刪除
           </Button>
         )}
-        <Button type="submit" variant="contained">
+        <Button type="submit" variant="contained" disabled={isLoading}>
           {productId ? '更新' : '新增'}
         </Button>
       </CardActions>
@@ -141,6 +146,7 @@ export default function ProductForms({
   )
 
   const onFormSubmit = async () => {
+    setIsLoading(true)
     try {
       const formData = methods.getValues()
       const collectionType = category === 'item' ? 'models' : 'materials'
@@ -156,7 +162,6 @@ export default function ProductForms({
         const result = await updateProduct(productId, collectionType, formData)
         if (result.success) {
           enqueueSnackbar('產品更新成功！', { variant: 'success' })
-          /* router.push(paths.dashboard.product + `/${productId}`) */
           router.push(paths.dashboard.products)
         }
       } else {
@@ -173,11 +178,18 @@ export default function ProductForms({
       enqueueSnackbar(error instanceof Error ? error.message : '操作失敗', {
         variant: 'error',
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
     <Grid container spacing={4}>
+      {isLoading && (
+        <Backdrop open>
+          <Loading />
+        </Backdrop>
+      )}
       <Grid md={4} xs={12}>
         <FormControl fullWidth>
           <InputLabel>品類</InputLabel>
