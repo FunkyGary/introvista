@@ -23,8 +23,9 @@ export const NEW_PATHS = {
   AUTH: {
     LOGIN: '/login',
     LOGOUT: '/logout',
-    FORGOT_PASSWORD: '/forgot-password',
-    RESET_PASSWORD: '/reset-password',
+    FORGOT_PASSWORD: '/auth/forgot-password',
+    RESET_PASSWORD: '/auth/reset-password',
+    PROFILE: '/auth/profile',
   },
   DESIGNER: {
     DASHBOARD: '/designer/dashboard',
@@ -36,8 +37,6 @@ export const NEW_PATHS = {
     },
     MATERIALS: '/designer/materials',
     OBJECTS: '/designer/objects',
-    SUBSCRIPTIONS: '/designer/subscriptions',
-    LIMITS: '/designer/limits',
   },
   SUPPLIER: {
     DASHBOARD: '/supplier/dashboard',
@@ -47,8 +46,6 @@ export const NEW_PATHS = {
       DETAILS: (id: string) => `/supplier/products/${id}`,
       EDIT: (id: string) => `/supplier/products/${id}/edit`,
     },
-    SUBSCRIPTIONS: '/supplier/subscriptions',
-    LIMITS: '/supplier/limits',
   },
   ADMIN: {
     DASHBOARD: '/admin/dashboard',
