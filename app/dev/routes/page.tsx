@@ -9,7 +9,7 @@ export default function RoutePage() {
     { name: 'PROJECT DETAILS', path: '/designer/projects/testid' },
     { name: 'EDIT PROJECT', path: '/designer/projects/testid/edit' },
 
-    { name: 'OBJECTS', path: '/designer/objects' },
+    { name: '3d', path: '/designer/3d-editor' },
     { name: 'MATERIALS', path: '/designer/materials' },
   ]
 
