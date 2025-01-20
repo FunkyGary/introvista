@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useAuthClient } from '@/hooks/use-auth-client'
 import Link from 'next/link'
 import Typography from '@mui/material/Typography'
+import ProjectSelector from './project-select'
 
 const HeaderBar = () => {
   const session = useUser()
@@ -19,13 +20,18 @@ const HeaderBar = () => {
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-slate-300">
       <div className="flex justify-between items-center h-16">
-        <Link
-          href={'/'}
-          className="inline-flex gap-4 justify-center items-center w-60"
-        >
-          <img className="size-8" src="/assets/logo.svg" alt="logo" />
-          <h1 className="text-3xl font-medium text-primary-main">IntroVista</h1>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href={'/'}
+            className="inline-flex gap-4 justify-center items-center w-60"
+          >
+            <img className="size-8" src="/assets/logo.svg" alt="logo" />
+            <h1 className="text-3xl font-medium text-primary-main">
+              IntroVista
+            </h1>
+          </Link>
+          <ProjectSelector />
+        </div>
         <div className="pr-4">
           <button
             type="button"
