@@ -37,6 +37,7 @@ export const ROUTES = {
     },
     MATERIALS: '/designer/materials',
     OBJECTS: '/designer/objects',
+    EDITOR: '/designer/3d-editor',
   },
   SUPPLIER: {
     DASHBOARD: '/supplier/dashboard',
