@@ -9,9 +9,9 @@ function ProtectedLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="flex relative flex-col min-h-full bg-background">
+    <div className="min-h-full bg-background">
       <HeaderBar />
-      {children}
+      <div className="flex">{children}</div>
     </div>
   )
 }

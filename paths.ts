@@ -19,7 +19,7 @@ export const paths = {
   errors: { notFound: '/errors/not-found' },
 } as const
 
-export const NEW_PATHS = {
+export const ROUTES = {
   AUTH: {
     LOGIN: '/login',
     LOGOUT: '/logout',
