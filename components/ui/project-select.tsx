@@ -15,7 +15,7 @@ const ProjectSelector = () => {
 
   return (
     <Select>
-      <SelectTrigger className="w-[180px] rounded-sm">
+      <SelectTrigger className="rounded-sm w-[180px]">
         <SelectValue placeholder="所有專案" />
       </SelectTrigger>
       <SelectContent>

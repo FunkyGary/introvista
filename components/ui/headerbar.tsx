@@ -7,6 +7,7 @@ import { useAuthClient } from '@/hooks/use-auth-client'
 import Link from 'next/link'
 import Typography from '@mui/material/Typography'
 import ProjectSelector from './project-select'
+import BreadcrumbWithDropdown from '@/components/ui/breadcrumb-with-dropdown'
 
 const HeaderBar = () => {
   const session = useUser()
@@ -32,6 +33,7 @@ const HeaderBar = () => {
           </Link>
           <ProjectSelector />
         </div>
+        <BreadcrumbWithDropdown />
         <div className="pr-4">
           <button
             type="button"

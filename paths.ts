@@ -28,7 +28,10 @@ export const ROUTES = {
     PROFILE: '/auth/profile',
   },
   DESIGNER: {
-    HOME: '/designer/home',
+    PRODUCTS: {
+      LIST: '/designer/products',
+      DETAILS: (id: string) => `/designer/products/${id}`,
+    },
     PROJECTS: {
       LIST: '/designer/projects',
       NEW: '/designer/projects/new',
@@ -36,7 +39,6 @@ export const ROUTES = {
       EDIT: (id: string) => `/designer/projects/${id}/edit`,
     },
     MATERIALS: '/designer/materials',
-    OBJECTS: '/designer/objects',
     EDITOR: '/designer/3d-editor',
   },
   SUPPLIER: {

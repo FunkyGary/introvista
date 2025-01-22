@@ -5,7 +5,6 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
-import BreadcrumbWithDropdown from '@/components/ui/breadcrumb-with-dropdown'
 
 import {
   NavigationMenu,
@@ -54,8 +53,7 @@ export default function DefaultLayout({
           isCollapsed ? 'ml-0' : 'ml-60'
         )}
       >
-        <BreadcrumbWithDropdown />
-        <div className="px-6 pt-16">{children}</div>
+        <div className="mx-auto px-4 max-w-7xl">{children}</div>
       </main>
     </>
   )
