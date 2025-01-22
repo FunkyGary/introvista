@@ -5,6 +5,18 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
+import BreadcrumbWithDropdown from '@/components/ui/breadcrumb-with-dropdown'
+
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from '@/components/ui/navigation-menu'
 
 export default function DefaultLayout({
   children,
@@ -38,11 +50,12 @@ export default function DefaultLayout({
       <Sidebar isCollapsed={isCollapsed} />
       <main
         className={cn(
-          'w-full flex-1 px-6 pt-16 transition-all duration-300 ease-in-out delay-100',
+          'w-full flex-1 transition-all duration-300 ease-in-out delay-100 relative',
           isCollapsed ? 'ml-0' : 'ml-60'
         )}
       >
-        {children}
+        <BreadcrumbWithDropdown />
+        <div className="px-6 pt-16">{children}</div>
       </main>
     </>
   )
