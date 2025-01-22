@@ -53,7 +53,7 @@ export default function DefaultLayout({
           isCollapsed ? 'ml-0' : 'ml-60'
         )}
       >
-        <div className="mx-auto px-4 max-w-7xl">{children}</div>
+        <div className="mx-auto px-4 max-w-[1440px]">{children}</div>
       </main>
     </>
   )

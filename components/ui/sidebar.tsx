@@ -86,7 +86,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
               return (
                 <div key={index} className="space-y-1">
                   {/* Category Header */}
-                  <div className="flex items-center py-2 px-4 text-sm font-medium text-gray-600">
+                  <div className="flex items-center py-2 px-4 text-sm font-medium text-slate-600">
                     <Icon className="mr-3 w-5 h-5" />
                     <span>{category.category}</span>
                   </div>
@@ -100,7 +100,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
                         ${
                           pathname === item.path
                             ? 'bg-primary-100/80 text-primary-500'
-                            : 'text-gray-600 hover:bg-primary-100/80 hover:text-primary-500'
+                            : 'text-slate-600 hover:bg-primary-100/80 hover:text-primary-500'
                         }`}
                       >
                         <span>{item.label}</span>
@@ -129,10 +129,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
           ) : null}
 
           {/* User profile section */}
-          <div className="absolute bottom-0 left-0 w-full p-3 border-t border-gray-200">
-            <div className="flex justify-between items-center px-2 w-full text-sm text-gray-600 rounded-lg">
+          <div className="absolute bottom-0 left-0 w-full p-3 border-t border-slate-200">
+            <div className="flex justify-between items-center px-2 w-full text-sm text-slate-600 rounded-lg">
               <div className="flex items-center">
-                <div className="flex justify-center items-center w-8 h-8 bg-gray-100 rounded-full">
+                <div className="flex justify-center items-center w-8 h-8 bg-slate-100 rounded-full">
                   {session.user?.avatar ? (
                     <div>
                       <img
@@ -142,13 +142,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
                       />
                     </div>
                   ) : (
-                    <User className="w-5 h-5 text-gray-500" />
+                    <User className="w-5 h-5 text-slate-500" />
                   )}
                 </div>
                 <span className="ml-3">{session.user?.name}</span>
               </div>
               <button>
-                <Settings className="ml-auto w-5 h-5 text-gray-500 hover:text-purple-500" />
+                <Settings className="ml-auto w-5 h-5 text-slate-500 hover:text-purple-500" />
               </button>
             </div>
           </div>
