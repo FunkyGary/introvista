@@ -55,8 +55,11 @@ const editorItem = {
   path: ROUTES.DESIGNER.EDITOR,
 }
 
-const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(true)
+type SidebarProps = {
+  isCollapsed: boolean
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
   const pathname = usePathname()
   const router = useRouter()
   const session = useUser()
@@ -66,38 +69,16 @@ const Sidebar = () => {
     category.roles.includes(userRole as string)
   )
 
-  const handleToggle = () => setIsCollapsed(!isCollapsed)
-
   return (
     <>
       <aside
         className={cn(
-          'fixed top-16 w-60 h-[calc(100vh-64px)] bg-white border-r border-slate-300',
-          isCollapsed ? 'translate-x-0' : '-translate-x-60',
+          'fixed top-0 h-full bg-white w-60 border-r border-slate-300',
+          isCollapsed ? '-translate-x-60' : 'translate-x-0',
           'transition-all duration-300 ease-in-out delay-100'
         )}
       >
-        {/* sidebar trigger */}
-        <div
-          className={cn(
-            'absolute z-50 bottom-20 transition-all duration-300 ease-in-out delay-100',
-            isCollapsed ? 'right-0 rotate-180' : 'opacity-100 -right-14 '
-          )}
-        >
-          <button
-            onClick={handleToggle}
-            className={cn(
-              'opacity-45 hover:opacity-100 flex justify-center rounded-r-2xl  items-center cursor-pointer  h-10 w-14 m-auto transition-opacity duration-100 ease-in',
-              isCollapsed
-                ? ' bg-white text-gray-600 hover:text-primary-400 hover:bg-primary-100'
-                : ' text-primary-400 bg-primary-50 hover:bg-primary-100 border border-primary-200'
-            )}
-          >
-            <ArrowRight className="size-5" />
-          </button>
-        </div>
-
-        <div className="flex overflow-auto relative flex-col h-full">
+        <div className="flex overflow-auto relative flex-col h-full pt-16">
           {/* Nav items section */}
           <nav className="flex-1 p-5 space-y-1">
             {filteredNavItems.map((category, index) => {
@@ -133,7 +114,7 @@ const Sidebar = () => {
 
           {/* Editor section */}
           {userRole === 'designer' ? (
-            <div className="absolute right-0 bottom-[16%]">
+            <div className="absolute right-0 bottom-52">
               <Link
                 href={editorItem.path}
                 className="inline-flex gap-3 items-center py-2 px-4 pr-8 rounded-l-2xl border border-r-0 shadow-sm transition-colors cursor-pointer hover:text-white shadow-primary-300/30 border-primary-200 text-primary-500 bg-primary-100 hover:bg-primary-400"
@@ -148,7 +129,7 @@ const Sidebar = () => {
           ) : null}
 
           {/* User profile section */}
-          <div className="p-3 border-t border-gray-200">
+          <div className="absolute bottom-0 left-0 w-full p-3 border-t border-gray-200">
             <div className="flex justify-between items-center px-2 w-full text-sm text-gray-600 rounded-lg">
               <div className="flex items-center">
                 <div className="flex justify-center items-center w-8 h-8 bg-gray-100 rounded-full">

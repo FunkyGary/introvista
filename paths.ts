@@ -28,7 +28,7 @@ export const ROUTES = {
     PROFILE: '/auth/profile',
   },
   DESIGNER: {
-    DASHBOARD: '/designer/dashboard',
+    HOME: '/designer/home',
     PROJECTS: {
       LIST: '/designer/projects',
       NEW: '/designer/projects/new',
@@ -40,7 +40,7 @@ export const ROUTES = {
     EDITOR: '/designer/3d-editor',
   },
   SUPPLIER: {
-    DASHBOARD: '/supplier/dashboard',
+    HOME: '/supplier/home',
     PRODUCTS: {
       LIST: '/supplier/products',
       NEW: '/supplier/products/new',
