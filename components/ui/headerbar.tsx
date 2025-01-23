@@ -8,7 +8,6 @@ import { useAuthClient } from '@/hooks/use-auth-client'
 import Link from 'next/link'
 import ProjectSelector from './project-select'
 import BreadcrumbWithMegaMenu from '@/components/ui/breadcrumb-with-mega-menu'
-import useCollapsedSidebarStore from '@/hooks/use-collapsed-sidebar-store'
 
 const HeaderBar = () => {
   const session = useUser()
@@ -19,7 +18,6 @@ const HeaderBar = () => {
     router.refresh()
   }
 
-  const { isCollapsed, toggleCollapsed } = useCollapsedSidebarStore()
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-slate-300">
       <div className="relative flex justify-center items-center w-full h-16 ">

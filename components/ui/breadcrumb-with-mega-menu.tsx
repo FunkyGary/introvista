@@ -15,7 +15,7 @@ import Link from 'next/link'
 import { ROUTES } from '@/paths'
 
 const BreadcrumbWithMegaMenu = () => {
-  const { isCollapsed, toggleCollapsed } = useCollapsedSidebarStore()
+  const { isCollapsed } = useCollapsedSidebarStore()
   return (
     <div className="absolute left-0 w-full">
       <NavigationMenu.Root delayDuration={100}>

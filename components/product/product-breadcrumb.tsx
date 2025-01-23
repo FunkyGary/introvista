@@ -14,16 +14,22 @@ import { ROUTES } from '@/paths'
 
 const ProductBreadcrumb = () => {
   return (
-    <div>
+    <div className="flex justify-between items-center">
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem>category title</BreadcrumbItem>
+          <BreadcrumbItem>main category</BreadcrumbItem>
 
           <BreadcrumbSeparator>
             <ChevronRight className="size-4" />
           </BreadcrumbSeparator>
 
-          <BreadcrumbItem>category 1</BreadcrumbItem>
+          <BreadcrumbItem>sub category</BreadcrumbItem>
+
+          <BreadcrumbSeparator>
+            <ChevronRight className="size-4" />
+          </BreadcrumbSeparator>
+
+          <BreadcrumbItem>product tags </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
     </div>
