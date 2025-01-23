@@ -48,7 +48,8 @@
     "reflect-metadata": "^0.2.2",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.6.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.1.0",

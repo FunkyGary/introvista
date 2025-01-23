@@ -12,13 +12,10 @@ import {
 } from '@/components/ui/breadcrumb'
 import Link from 'next/link'
 import { ROUTES } from '@/paths'
-import React, { useState } from 'react'
 
-const BreadcrumbWithDropdown = () => {
-  const [isOpenDropdown, setIsOpenDropdown] = useState(false)
-
+const BreadcrumbWithMegaMenu = () => {
   return (
-    <div className="fixed top-0 right-0 z-50 w-full">
+    <div className="relative w-full">
       <NavigationMenu.Root delayDuration={100}>
         <Breadcrumb className="flex justify-center">
           <BreadcrumbList>
@@ -30,7 +27,7 @@ const BreadcrumbWithDropdown = () => {
                       <NavigationMenu.Trigger className="font-medium hover:underline data-[state=open]:text-primary hover:text-primary-400 hover:text-primary">
                         所有產品
                       </NavigationMenu.Trigger>
-                      <NavigationMenu.Content className="absolute top-0 left-0 w-full border-b shadow-md shadow-slate-400/30 bg-white/70 backdrop-blur-md border-slate-300">
+                      <NavigationMenu.Content className="mt-px absolute top-0 left-0 w-full border-b shadow-md shadow-slate-400/30 bg-white/70 backdrop-blur-md border-slate-300">
                         <div className="overflow-y-auto p-4 mx-auto w-full max-w-screen h-[430px]">
                           <div className="grid grid-cols-4 gap-4">
                             <NavigationMenu.Link className="p-4 rounded-lg hover:bg-slate-50">
@@ -64,4 +61,4 @@ const BreadcrumbWithDropdown = () => {
   )
 }
 
-export default BreadcrumbWithDropdown
+export default BreadcrumbWithMegaMenu
