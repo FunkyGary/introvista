@@ -5,14 +5,14 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
+import useCollapsedSidebarStore from '@/hooks/use-collapsed-sidebar-store'
 
 export default function DefaultLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const [isCollapsed, setIsCollapsed] = useState(false)
-  const handleToggle = () => setIsCollapsed(!isCollapsed)
+  const { isCollapsed, toggleCollapsed } = useCollapsedSidebarStore()
 
   return (
     <>
@@ -24,7 +24,7 @@ export default function DefaultLayout({
         )}
       >
         <button
-          onClick={handleToggle}
+          onClick={toggleCollapsed}
           className={cn(
             'opacity-45 hover:opacity-100 flex justify-center rounded-r-2xl  items-center cursor-pointer  h-10 w-12 m-auto transition-opacity duration-100 ease-in',
             isCollapsed

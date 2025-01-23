@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function ProductsPage() {
   return (
-    <main className="flex flex-col items-center p-1">
+    <main className="flex flex-col space-y-4 p-1">
       <ProductFilterBar />
       <ProductBreadcrumb />
       <ProductList />

@@ -4,7 +4,7 @@ import { fakeData } from './libs'
 
 const ProductList = () => {
   return (
-    <div className="grid grid-cols-5 gap-2 md:gap-4 py-4 w-full">
+    <div className="grid grid-cols-5 gap-3 md:gap-4 py-4 w-full">
       {fakeData.map((product) => (
         <div key={product.id}>
           <ProductCard data={product} />

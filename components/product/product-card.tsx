@@ -24,27 +24,27 @@ const ProductCard: React.FC<ProductProp> = ({ data }) => {
   }
 
   return (
-    <div className="flex flex-col justify-between items-center p-4 space-y-1 rounded border-2 shadow-md border-slate-100 shadow-slate-200">
+    <div className="w-52 mx-auto p-4 space-y-3">
       <div className="flex relative flex-grow justify-center items-center">
         <div className="absolute top-4 right-4">
           <button onClick={handleFavorite}>
             <Heart
               className={cn(
-                'size-6 hover:text-rose-500/70 fill-white text-slate-400 hover:fill-rose-500/70',
+                'size-6 hover:text-rose-500/70 fill-white text-slate-600 hover:fill-rose-500/70',
                 isFavorite ? 'fill-rose-600 text-rose-600' : ''
               )}
             />
           </button>
         </div>
-        <div className="overflow-hidden size-52 aspect-square 2xl:size-60">
+        <div className="overflow-hidden w-full aspect-square ">
           <img alt="prodcut image" src="https://fakeimg.pl/240/" />
         </div>
       </div>
 
-      <div className="inline-flex justify-between items-center w-full text-slate-600">
+      <div className="inline-flex justify-between items-center w-full text-slate-600 px-px">
         <div>
           <h3 className="font-medium">{name}</h3>
-          <p className="text-sm">NT ${price} /片</p>
+          <p className="text-sm text-slate-500">NT ${price} /片</p>
         </div>
         <Link href={ROUTES.DESIGNER.PRODUCTS.DETAILS(id)}>
           <CircleArrowRight className="size-6 hover:text-primary-400" />
