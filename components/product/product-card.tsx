@@ -24,7 +24,7 @@ const ProductCard: React.FC<ProductProp> = ({ data }) => {
   }
 
   return (
-    <div className="flex flex-col justify-between items-center p-4 space-y-1 rounded-sm border shadow-md border-slate-100 shadow-slate-100">
+    <div className="flex flex-col justify-between items-center p-4 space-y-1 rounded border-2 shadow-md border-slate-100 shadow-slate-200">
       <div className="flex relative flex-grow justify-center items-center">
         <div className="absolute top-4 right-4">
           <button onClick={handleFavorite}>
@@ -36,7 +36,7 @@ const ProductCard: React.FC<ProductProp> = ({ data }) => {
             />
           </button>
         </div>
-        <div className="overflow-hidden size-60">
+        <div className="overflow-hidden size-52 aspect-square 2xl:size-60">
           <img alt="prodcut image" src="https://fakeimg.pl/240/" />
         </div>
       </div>

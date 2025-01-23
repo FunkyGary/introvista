@@ -6,17 +6,6 @@ import { cn } from '@/lib/utils'
 import { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from '@/components/ui/navigation-menu'
-
 export default function DefaultLayout({
   children,
 }: Readonly<{
@@ -47,13 +36,15 @@ export default function DefaultLayout({
         </button>
       </div>
       <Sidebar isCollapsed={isCollapsed} />
+
       <main
         className={cn(
-          'w-full flex-1 transition-all duration-300 ease-in-out delay-100 relative',
+          ' w-full flex-1 transition-all duration-300 ease-in-out delay-100 relative',
           isCollapsed ? 'ml-0' : 'ml-60'
         )}
       >
-        <div className="mx-auto px-4 max-w-[1440px]">{children}</div>
+        {/* <BreadcrumbWithDropdown /> */}
+        <div className="px-4 mx-auto max-w-screen-xl">{children}</div>
       </main>
     </>
   )

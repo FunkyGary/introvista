@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html>
+    <html className="overscroll-none">
       <body>
         <DIProvider>
           <ThemeProvider>
