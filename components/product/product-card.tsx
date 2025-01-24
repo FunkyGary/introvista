@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { Heart, CircleArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { ROUTES } from '@/paths'
+
 import { cn } from '@/lib/utils'
 
 interface ProductProp {
@@ -24,7 +25,7 @@ const ProductCard: React.FC<ProductProp> = ({ data }) => {
   }
 
   return (
-    <div className="w-52 mx-auto p-4 space-y-3">
+    <div className="w-fit mx-auto space-y-3">
       <div className="flex relative flex-grow justify-center items-center">
         <div className="absolute top-4 right-4">
           <button onClick={handleFavorite}>
