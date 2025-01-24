@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
     <>
       <aside
         className={cn(
-          'fixed top-0 h-full bg-white w-60 border-r border-slate-300',
+          'fixed top-0 h-full bg-slate-50 w-60 border-r border-slate-300',
           isCollapsed ? '-translate-x-60' : 'translate-x-0',
           'transition-all duration-300 ease-in-out delay-100'
         )}

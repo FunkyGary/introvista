@@ -36,7 +36,7 @@ const HeaderBar = () => {
           <button
             type="button"
             onClick={handleLogout}
-            className="py-1 w-24 font-semibold tracking-widest rounded-lg border hover:text-white text-primary-main border-primary-main hover:bg-primary-main"
+            className="py-1 w-24 font-semibold tracking-widest rounded-lg border text-white hover:opacity-85 border-primary-main bg-primary-main"
           >
             登出
           </button>

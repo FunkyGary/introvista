@@ -42,13 +42,13 @@ const ProjectTitleInput: React.FC<InputProps> = ({
   }
 
   return (
-    <div className="flex overflow-auto justify-center items-center m-auto w-full text-4xl antialiased font-semibold truncate">
+    <div className=" flex justify-center items-center m-auto w-full text-4xl antialiased font-semibold truncate">
       <TextareaAutosize
         ref={inputRef}
         onBlur={onBlur}
         onChange={(e) => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="text-center break-words resize-none focus:border-b-2 focus:ring-0 focus:ring-opacity-0 focus:outline-none"
+        className="overflow-x-auto text-center break-words resize-none focus:border-b-2 focus:ring-0 focus:ring-opacity-0 focus:outline-none"
         value={value}
       />
     </div>
