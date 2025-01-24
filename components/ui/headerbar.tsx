@@ -19,7 +19,7 @@ const HeaderBar = () => {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white border-b border-slate-300">
+    <header className="sticky top-0 z-50 w-full bg-white border-b border-slate-300 shadow-md shadow-slate-400/15">
       <div className="relative flex justify-center items-center w-full h-16 ">
         <BreadcrumbWithMegaMenu />
         <Link

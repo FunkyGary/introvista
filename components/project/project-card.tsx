@@ -5,6 +5,12 @@ import Link from 'next/link'
 import { ROUTES } from '@/paths'
 import { Star, Ellipsis } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 type ProjectData = {
   id: string
@@ -47,8 +53,26 @@ const ProjectCard: React.FC<ProjectProp> = ({ data }) => {
           <h3 className="font-medium">{name}</h3>
           <p className="text-sm text-slate-500">{lastUpdated}</p>
         </div>
-        <div>
-          <Ellipsis className="size-6" />
+        <div className="relative mt-1">
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Ellipsis className="w-4 h-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="top" align="end" className="bg-white">
+              <DropdownMenuItem>
+                <button>重新命名</button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <button>修改專案狀態</button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <button>查看價格細節</button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <button>刪除專案</button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>

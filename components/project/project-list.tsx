@@ -10,7 +10,7 @@ import { ROUTES } from '@/paths'
 const ProjectsList = () => {
   const projects = fakeData
   return (
-    <div className="grid grid-cols-4 gap-4 w-full">
+    <div className="grid grid-cols-4 gap-8 w-full">
       <div className="mx-auto w-60 border border-slate-600">
         <div className="flex justify-center items-center h-full">
           <Link
