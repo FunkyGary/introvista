@@ -66,7 +66,9 @@ const ProjectCard: React.FC<ProjectProp> = ({ data }) => {
                 <button>修改專案狀態</button>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <button>查看價格細節</button>
+                <Link href={ROUTES.DESIGNER.PROJECTS.DETAILS(id)}>
+                  查看價格細節
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <button>刪除專案</button>
