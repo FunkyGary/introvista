@@ -30,7 +30,10 @@ const navItems = [
     category: '工具與材料',
     icon: Wrench,
     roles: ['designer'],
-    items: [{ label: '常用材料', path: ROUTES.DESIGNER.MATERIALS }],
+    items: [
+      { label: '材料挑選器', path: ROUTES.DESIGNER.PRODUCTS.LIST },
+      { label: '常用材料', path: ROUTES.DESIGNER.MATERIALS },
+    ],
   },
   {
     category: '推薦與教學',
@@ -78,7 +81,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
           'transition-all duration-300 ease-in-out delay-100'
         )}
       >
-        <div className="flex overflow-auto relative flex-col h-full pt-16">
+        <div className="flex overflow-auto relative flex-col pt-16 h-full">
           {/* Nav items section */}
           <nav className="flex-1 p-5 space-y-1">
             {filteredNavItems.map((category, index) => {
@@ -129,10 +132,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
           ) : null}
 
           {/* User profile section */}
-          <div className="absolute bottom-0 left-0 w-full p-3 border-t border-slate-200">
-            <div className="flex justify-between items-center px-2 w-full text-sm text-slate-600 rounded-lg">
+          <div className="absolute bottom-0 left-0 p-3 w-full border-t border-slate-200">
+            <div className="flex justify-between items-center px-2 w-full text-sm rounded-lg text-slate-600">
               <div className="flex items-center">
-                <div className="flex justify-center items-center w-8 h-8 bg-slate-100 rounded-full">
+                <div className="flex justify-center items-center w-8 h-8 rounded-full bg-slate-100">
                   {session.user?.avatar ? (
                     <div>
                       <img
@@ -148,7 +151,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
                 <span className="ml-3">{session.user?.name}</span>
               </div>
               <button>
-                <Settings className="ml-auto w-5 h-5 text-slate-500 hover:text-purple-500" />
+                <Settings className="ml-auto w-5 h-5 hover:text-purple-500 text-slate-500" />
               </button>
             </div>
           </div>

@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import { Heart, CircleArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { ROUTES } from '@/paths'
-
 import { cn } from '@/lib/utils'
 
 interface ProductProp {

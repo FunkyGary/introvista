@@ -1,4 +1,6 @@
 import { Metadata } from 'next'
+import ProjectsList from '@/components/project/project-list'
+import ProjectFilter from '@/components/project/project-filter'
 
 export const metadata: Metadata = {
   title: 'IntroVista',
@@ -7,8 +9,9 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-1">
-      <h1 className="text-4xl">projects list</h1>
+    <main className="space-y-10 p-1 mb-20">
+      <ProjectFilter />
+      <ProjectsList />
     </main>
   )
 }
