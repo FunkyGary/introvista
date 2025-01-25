@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import UploadProjectImageArea from '@/components/project/upload-project-image-area'
 import EstimatedDetailsForm from '@/components/project/estimated-details-form'
 import ProjectTitleInput from '@/components/project/project-title-input'

@@ -30,9 +30,12 @@ const formFields = [
 const ProjectInfoForm = () => {
   const { register, handleSubmit, control } = useForm<ProjectFormProps>()
 
-  const renderInput = (field: any) => {
+  const renderInput = (field: any, index: number) => {
     return (
-      <div className="inline-flex gap-4 justify-center items-center w-full">
+      <div
+        key={index}
+        className="inline-flex gap-4 justify-center items-center w-full"
+      >
         <label htmlFor={field.name}>{field.label}</label>
         {field.type === 'textarea' ? (
           <textarea
@@ -56,7 +59,7 @@ const ProjectInfoForm = () => {
     <div className="p-5 pt-10 pb-20 w-full rounded-md border shadow-md shadow-slate-300/50 border-slate-300">
       <div className="pb-6 text-2xl font-medium text-center">專案概要</div>
       <div className="flex flex-col gap-4 justify-center items-center w-full">
-        {formFields.map((field) => renderInput(field))}
+        {formFields.map((field, index) => renderInput(field, index))}
       </div>
     </div>
   )
