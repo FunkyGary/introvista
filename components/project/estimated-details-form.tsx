@@ -1,6 +1,9 @@
 'use client'
 
 import React from 'react'
+import ProductTable from './products-table'
+import { ArrowRight, Mail } from 'lucide-react'
+import { fakeProductAndBrandData } from './libs'
 
 interface EstimatedDetailsFormProps {
   totalSupplies: number
@@ -38,7 +41,20 @@ const EstimatedDetailsForm = () => {
           <div className="overflow-hidden p-2 m-auto w-4/5 h-60 rounded border bg-slate-100" />
         </div>
       </div>
-      <div></div>
+      <div className="pb-8 mt-10 space-y-10 w-full">
+        {fakeProductAndBrandData.map((company, idx) => (
+          <div key={company.brand + idx} className="border border-slate-300 ">
+            <div className="flex justify-between items-center px-4 w-full h-14 shadow">
+              <div>{company.brand}</div>
+              <button className="flex gap-2 justify-center items-center py-1 px-2 text-xs font-semibold bg-white rounded-md border hover:text-white text-primary-500 border-primary-500 hover:bg-primary-500">
+                <Mail className="size-5" />
+                聯絡廠商
+              </button>
+            </div>
+            <ProductTable data={company.productsdata} />
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

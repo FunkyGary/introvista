@@ -40,7 +40,7 @@ const CollapsedFilter = () => {
             key={label}
             value={label.toLowerCase()}
             className={cn(
-              'border-r border-slate-500',
+              'border-r border-slate-400',
               index == 3 && 'border-none'
             )}
           >
@@ -53,7 +53,7 @@ const CollapsedFilter = () => {
         <TabsContent
           key={label}
           value={label.toLowerCase()}
-          className="p-2 border border-slate-500 rounded"
+          className="p-2 rounded border border-slate-100 shadow-md"
         >
           {input ? (
             <div className="mb-4">

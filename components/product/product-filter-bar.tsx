@@ -16,7 +16,7 @@ const ProductFilterBar = () => {
           <input
             type="text"
             placeholder="關鍵字查詢"
-            className="p-2 w-52 h-7 rounded-full  border-2 border-slate-400"
+            className="p-2 w-52 h-7 rounded-full  border border-slate-400"
           />
         </div>
       </div>
