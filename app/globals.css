@@ -59,11 +59,11 @@
   }
 }
 
-
 @layer base {
   html {
     @apply scroll-smooth;
   }
+
   body {
     @apply overscroll-none;
     font-synthesis-weight: none;
@@ -86,4 +86,3 @@
     scrollbar-color: hsl(var(--border)) transparent;
   }
 }
-

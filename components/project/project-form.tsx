@@ -26,20 +26,27 @@ const ProjectForm = () => {
   return (
     <div className="py-10 px-4 space-y-5">
       <div className="grid grid-cols-3 gap-3 pb-10">
-        <div>
-          <div className="inline-flex items-center">製圖日期: createdtime</div>
+        <div className="flex flex-col justify-center text-sm">
+          <div>製圖日期: createdtime</div>
           <div>製作者: username</div>
         </div>
         <ProjectTitleInput initialValue="Untitled Project" projectId="2" />
       </div>
       <ProjectNavigationButton />
-      <div className="flex gap-4 justify-between items-center">
+      <div className="grid grid-cols-2 gap-4">
         <ProjectInfoForm />
         <UploadProjectImageArea />
+        <div className="col-span-2">
+          <EstimatedDetailsForm />
+        </div>
       </div>
-
-      <div>
-        <EstimatedDetailsForm />
+      <div className="flex gap-5 justify-end pt-10 pb-20">
+        <button className="py-1 w-24 font-semibold tracking-widest text-rose-500 bg-white rounded-lg border border-rose-500 hover:text-rose-50 hover:bg-rose-500">
+          取消
+        </button>
+        <button className="py-1 w-24 font-semibold tracking-widest text-white rounded-lg border border-primary-main bg-primary-main hover:opacity-85">
+          新增
+        </button>
       </div>
     </div>
   )

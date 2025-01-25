@@ -19,8 +19,8 @@ const HeaderBar = () => {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white border-b border-slate-300 shadow-md shadow-slate-400/15">
-      <div className="relative flex justify-center items-center w-full h-16 ">
+    <header className="sticky top-0 z-50 w-full bg-white border-b shadow-md border-slate-300 shadow-slate-400/15">
+      <div className="flex relative justify-center items-center w-full h-16">
         <BreadcrumbWithMegaMenu />
         <Link
           href={'/'}
@@ -29,14 +29,14 @@ const HeaderBar = () => {
           <img className="size-8" src="/assets/logo.svg" alt="logo" />
           <h1 className="text-3xl font-medium text-primary-main">IntroVista</h1>
         </Link>
-        <div className="fixed left-60 z-50">
+        <div className="absolute left-60 z-50">
           <ProjectSelector />
         </div>
-        <div className="fixed right-4 z-50">
+        <div className="absolute right-4 z-50">
           <button
             type="button"
             onClick={handleLogout}
-            className="py-1 w-24 font-semibold tracking-widest rounded-lg border text-white hover:opacity-85 border-primary-main bg-primary-main"
+            className="py-1 w-24 font-semibold tracking-widest text-white rounded-lg border border-primary-main bg-primary-main hover:opacity-85"
           >
             登出
           </button>

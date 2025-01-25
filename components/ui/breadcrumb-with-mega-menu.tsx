@@ -29,19 +29,19 @@ const BreadcrumbWithMegaMenu = () => {
                       <NavigationMenu.Trigger className="font-medium hover:underline data-[state=open]:text-primary hover:text-primary-400 hover:text-primary">
                         所有產品
                       </NavigationMenu.Trigger>
-                      <NavigationMenu.Content className="absolute top-0 left-0 mt-px w-full border-b shadow-md shadow-slate-400/30 bg-white/70 backdrop-blur-md border-slate-300">
+                      <NavigationMenu.Content className="absolute top-0 left-0 mt-px w-full border-b shadow-md shadow-slate-400/30 bg-white/60 backdrop-blur-lg border-slate-300">
                         <div className="overflow-y-auto p-4 mx-auto w-full max-w-screen h-[430px]">
                           <div className="grid grid-cols-4 gap-4">
-                            <NavigationMenu.Link className="p-4 rounded-lg hover:bg-slate-50">
+                            <NavigationMenu.Link className="p-4 rounded-lg">
                               col1
                             </NavigationMenu.Link>
-                            <NavigationMenu.Link className="p-4 rounded-lg hover:bg-slate-50">
+                            <NavigationMenu.Link className="p-4 rounded-lg">
                               col2
                             </NavigationMenu.Link>
-                            <NavigationMenu.Link className="p-4 rounded-lg hover:bg-slate-50">
+                            <NavigationMenu.Link className="p-4 rounded-lg">
                               col3
                             </NavigationMenu.Link>
-                            <NavigationMenu.Link className="p-4 rounded-lg hover:bg-slate-50">
+                            <NavigationMenu.Link className="p-4 rounded-lg">
                               col4
                             </NavigationMenu.Link>
                           </div>
