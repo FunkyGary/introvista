@@ -38,7 +38,7 @@ export default function DefaultLayout({
       <Sidebar isCollapsed={isCollapsed} />
       <main
         className={cn(
-          ' w-full flex-1 transition-all duration-300 ease-in-out delay-100 relative',
+          'w-full flex-1 transition-all duration-300 ease-in-out delay-100 relative',
           isCollapsed ? 'ml-0' : 'ml-60'
         )}
       >
