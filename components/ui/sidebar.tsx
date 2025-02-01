@@ -36,12 +36,6 @@ const navItems = [
     ],
   },
   {
-    category: '推薦與教學',
-    icon: GraduationCap,
-    roles: ['designer'],
-    items: [{ label: '平台教學', path: '/' }],
-  },
-  {
     category: '商家中心',
     icon: Store,
     roles: ['supplier'],
