@@ -11,7 +11,7 @@ const ProductList = () => {
 
   return (
     <div>
-      <div className="w-full flex justify-end gap-3">
+      <div className="flex gap-3 justify-end w-full">
         <button onClick={() => setIsListView(false)}>
           <LayoutGrid className={cn(!isListView ? 'text-primary-400' : '')} />
         </button>
@@ -25,8 +25,8 @@ const ProductList = () => {
       </div>
       <div
         className={cn(
-          'grid grid-cols-5 gap-3 py-4 w-full md:gap-4',
-          isListView ? 'grid-cols-1' : 'grid-cols-5'
+          'grid grid-cols-5 py-4 w-full',
+          isListView ? 'grid-cols-1' : 'gap-3 grid-cols-5 md:gap-6'
         )}
       >
         {fakeData.map((product) => (

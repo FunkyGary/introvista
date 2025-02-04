@@ -1,5 +1,7 @@
 import { Metadata } from 'next'
 import ProductIntro from '@/components/product/product-intro'
+import ProductFilterBar from '@/components/product/product-filter-bar'
+import ProductBreadcrumb from '@/components/product/product-breadcrumb'
 
 export const metadata: Metadata = {
   title: 'IntroVista',
@@ -8,9 +10,10 @@ export const metadata: Metadata = {
 
 export default function ProductPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-1">
+    <main className="flex flex-col px-2 pt-2 pb-20 space-y-4">
+      <ProductFilterBar />
+      <ProductBreadcrumb />
       <ProductIntro />
-      <h1 className="text-4xl">Product</h1>
     </main>
   )
 }

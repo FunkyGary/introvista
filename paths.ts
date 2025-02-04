@@ -38,7 +38,7 @@ export const ROUTES = {
       DETAILS: (id: string) => `/designer/projects/${id}`,
       EDIT: (id: string) => `/designer/projects/${id}/edit`,
     },
-    MATERIALS: '/designer/materials',
+    FAVORITES: '/designer/favorites',
     EDITOR: '/designer/3d-editor',
   },
   SUPPLIER: {

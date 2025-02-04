@@ -5,10 +5,10 @@ export const metadata: Metadata = {
   description: 'IntroVista',
 }
 
-export default function MaterialsPage() {
+export default function FavoritesPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-1">
-      <h1 className="text-4xl">Materials</h1>
+      <h1 className="text-4xl">Favorites</h1>
     </main>
   )
 }

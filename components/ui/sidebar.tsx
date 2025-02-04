@@ -32,7 +32,7 @@ const navItems = [
     roles: ['designer'],
     items: [
       { label: '材料挑選器', path: ROUTES.DESIGNER.PRODUCTS.LIST },
-      { label: '常用材料', path: ROUTES.DESIGNER.MATERIALS },
+      { label: '常用材料', path: ROUTES.DESIGNER.FAVORITES },
     ],
   },
   {
